@@ -1,8 +1,9 @@
-package org.algoritmed.ammsg001;
+package org.algoritmed.ammsg001.tabletki;
 
 import java.util.List;
 import java.util.Map;
 
+import org.algoritmed.ammsg001.XCommon;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -18,10 +19,7 @@ public class AmMsg001Rest002 extends XCommon{
 	@GetMapping("/test2")
 	public @ResponseBody Map<String, Object> test2() {
 		Map<String, Object> m = getM(123);
-		WebClient client = new WebClient();
-
-		client.getOptions().setCssEnabled(false);  
-		client.getOptions().setJavaScriptEnabled(false); 
+		WebClient client = getWebClient(false, false); 
 		try {  
 			String searchUrl = "https://tabletki.ua/uk/%D0%93%D0%B5%D0%BF%D0%B0%D1%80%D0%B8%D0%BD/";
 			//		  String searchUrl = "https://ksah.in/introduction-to-web-scraping-with-java/";
@@ -44,4 +42,6 @@ public class AmMsg001Rest002 extends XCommon{
 
 		return m;
 	}
+
+	
 }
