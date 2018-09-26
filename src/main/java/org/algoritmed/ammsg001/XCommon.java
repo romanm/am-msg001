@@ -6,6 +6,12 @@ import java.util.Map;
 import com.gargoylesoftware.htmlunit.WebClient;
 
 public class XCommon {
+	protected String getString(Map<String, Object> objectA,String string) {
+		return (String) objectA.get(string);
+	}
+	protected Map<String, Object> getMap(HashMap<String, Object> atcCode1, String string) {
+		return (Map<String, Object>) atcCode1.get(string);
+	}
 	protected WebClient getWebClient(boolean cssEnabled, boolean jsEnabled) {
 		WebClient client = new WebClient();
 		client.getOptions().setCssEnabled(cssEnabled);  
