@@ -28,10 +28,12 @@ dependencies {
 	compile('org.springframework.boot:spring-boot-starter-thymeleaf')
 	compile('org.springframework.boot:spring-boot-starter-web')
 	compile('org.springframework.boot:spring-boot-starter-webflux')
+	compile('org.springframework.boot:spring-boot-starter-jdbc')
 	compile 'net.sourceforge.htmlunit:htmlunit'
 	compile 'dom4j:dom4j'
 	compile 'org.webjars:font-awesome:4.7.0'
 	compile 'org.webjars:angularjs:1.7.4'
+	compile 'org.springframework:spring-jdbc'
 	runtime('com.h2database:h2')
 	testCompile('org.springframework.boot:spring-boot-starter-test')
 	testCompile('io.projectreactor:reactor-test')
