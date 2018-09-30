@@ -1,5 +1,7 @@
 <div data-ng-click="pageVar.openEditRow(tr)"
-	ng-class="{'w3-green':tr.row_id==pageVar.o.row_id}">{{tr.col_240}}</div>
+	data-ng-class="{'w3-green':tr.row_id==pageVar.o.row_id}"
+data-ng-bind-html="highlight(tr.col_240, patientList.seek)"	
+	></div>
 <div data-ng-style="pageVar.ngStyleModal" class="w3-modal">
 	<div class="w3-modal-content">
 
