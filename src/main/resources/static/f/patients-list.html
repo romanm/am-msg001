@@ -53,7 +53,7 @@
 					data-ng-switch="cv">{{cv}}</th>
 			</tr>
 			<tr data-ng-repeat="tr in o.pl.list">
-				<td data-ng-repeat="(ck,cv) in o.col_keys" ng-switch="ck"
+				<td data-ng-repeat="(ck,cv) in o.col_keys" data-ng-switch="ck"
 					class="w3-border w3-border-white w3-hover-border-gray">
 					<div data-ng-switch-when="col_236"
 						title="{{tr[ck] | date : 'longDate'}}">{{tr[ck] | date :
