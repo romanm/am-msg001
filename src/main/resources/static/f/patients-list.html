@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html  ng-app="myApp" ng-controller="myCtrl">
+<html  data-ng-app="myApp" data-ng-controller="myCtrl">
 <title>РІС список пацієнтів</title>
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta charset="utf-8" />
@@ -29,13 +29,13 @@
 	</div>
 	<div class="w3-container">list: {{firstName}} {{lastName}}</div>
 	<div class="w3-container">
-		<table ng-repeat="o in [patientList]" align="center">
+		<table data-ng-repeat="o in [patientList]" align="center">
 			<caption>
 				<div class="w3-row w3-section">
 					<div class="w3-col" style="width: 50px">
-						<span ng-repeat="random3 in [random3]" ng-switch="random3">
-							<i ng-switch-when="0" class="w3-xxlarge fa fa-filter"
-							aria-hidden="true"></i> <i ng-switch-when="1"
+						<span data-ng-repeat="random3 in [random3]" data-ng-switch="random3">
+							<i data-ng-switch-when="0" class="w3-xxlarge fa fa-filter"
+							aria-hidden="true"></i> <i data-ng-switch-when="1"
 							class="w3-xxlarge fa fa-search" aria-hidden="true"></i> <i
 							ng-switch-when="2" class="w3-xxlarge fa fa-pencil"></i>
 						</span>
@@ -47,20 +47,20 @@
 				</div>
 			</caption>
 			<tr class="w3-tiny w3-gray">
-				<th ng-repeat="(ck,cv) in o.col_keys" title="{{ck}}" ng-switch="cv">
+				<th data-ng-repeat="(ck,cv) in o.col_keys" title="{{ck}}" data-ng-switch="cv">
 					{{cv}}</th>
 			</tr>
-			<tr ng-repeat="tr in o.pl.list">
-				<td ng-repeat="(ck,cv) in o.col_keys"
+			<tr data-ng-repeat="tr in o.pl.list">
+				<td data-ng-repeat="(ck,cv) in o.col_keys"
 					ng-switch="ck"
 					class="w3-border w3-border-white w3-hover-border-gray">
-					<div ng-switch-when="col_236"
+					<div data-ng-switch-when="col_236"
 						title="{{tr[ck] | date : 'longDate'}}">{{tr[ck] | date :
 						'shortDate' }} {{tr[ck] | date : 'hh:mm'}}</div>
-					<div ng-switch-when="col_240">
-						<div ng-include="'/f/patient-modal.html'"></div>
+					<div data-ng-switch-when="col_240">
+						<div data-ng-include="'/f/patient-modal.html'"></div>
 					</div>
-					<div ng-switch-default
+					<div data-ng-switch-default
 						ng-bind-html="highlight(tr[ck], patientList.seek)"></div>
 				</td>
 			</tr>

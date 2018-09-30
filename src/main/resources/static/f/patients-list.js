@@ -24,6 +24,7 @@ app.controller('myCtrl', function($scope, $http) {
     			afterRead:function(){
     				console.log($scope.patientList)
     				$scope.patientList.rowMap = {}
+    				console.log($scope.patientList.pl.list.length)
     				angular.forEach($scope.patientList.pl.list, function(v){
     					$scope.patientList.rowMap[v.row_id] = v
     				})
@@ -62,7 +63,12 @@ var sql = {
 		return "SELECT * FROM ( " +
 				":read_table_sql" +
 				" ) x WHERE LOWER(col_237) LIKE LOWER(:seek)" +
-				" OR LOWER(col_240) LIKE LOWER(:seek)"
+				" OR LOWER(col_238) LIKE LOWER(:seek) " +
+				" OR LOWER(col_239) LIKE LOWER(:seek) " +
+				" OR LOWER(col_240) LIKE LOWER(:seek) " +
+				" OR LOWER(col_241) LIKE LOWER(:seek) " +
+				" OR LOWER(col_242) LIKE LOWER(:seek) " +
+				""
 	},
 	read_table_sql:function(){
 		return "SELECT * FROM docbody where docbody_id in ( \n" +
