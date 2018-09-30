@@ -2,6 +2,11 @@ app.controller('myCtrl', function($scope, $http) {
 	initApp($scope, $http)
     $scope.firstName= "John";
     $scope.lastName= "Doe";
+
+	$scope.$watch('patientList.seek',function(newValue){ if(newValue){
+		console.log(newValue)
+	}})
+
     $scope.random3=getRandomInt(3)
     $scope.patientList
     = {

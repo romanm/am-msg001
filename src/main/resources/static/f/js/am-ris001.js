@@ -1,4 +1,4 @@
-var app = angular.module('myApp', []);
+var app = angular.module('myApp', ['ngSanitize']);
 var initApp = function($scope, $http){
 	console.log('initApp')
 	exe_fn = new Exe_fn($scope, $http);
@@ -8,6 +8,12 @@ var initApp = function($scope, $http){
 			params : params,
 			then_fn : then_fn,
 		}
+	}
+
+	$scope.highlight = function(text, search){
+		if (!text) return
+		if (!search) return text;
+		return (''+text).replace(new RegExp(search, 'gi'), '<span class="w3-yellow">$&</span>');
 	}
 }
 
@@ -29,6 +35,9 @@ var readSql = function(params, obj){
 			obj.afterRead(response)
 	}))
 }
+
+
+
 
 function getRandomInt(max) {
   return Math.floor(Math.random() * Math.floor(max));

@@ -4,6 +4,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta charset="utf-8" />
 <script src="/webjars/angularjs/1.7.4/angular.min.js"></script>
+<script src="/webjars/angularjs/1.7.4/angular-sanitize.min.js"></script>
 <script src="/webjars/angularjs/1.7.4/i18n/angular-locale_uk.js"></script>
 <script src="/f/js/am-ris001.js"></script>
 <script src="/f/patients-list.js"></script>
@@ -41,7 +42,7 @@
 					</div>
 					<div class="w3-rest">
 						<input class="w3-input w3-border" name="message" type="text"
-							placeholder="Пошук">
+							ng-model="patientList.seek" placeholder="Пошук">
 					</div>
 				</div>
 			</caption>
@@ -50,12 +51,14 @@
 					{{cv}}</th>
 			</tr>
 			<tr ng-repeat="tr in o.pl.list">
-				<td ng-repeat="(ck,cv) in o.col_keys" ng-switch="ck">
+				<td ng-repeat="(ck,cv) in o.col_keys" 
+				ng-init="v=tr[ck]"
+				ng-switch="ck">
 					<div ng-switch-when="col_236"
-					title="{{tr[ck] | date : 'longDate'}}"
-					>{{tr[ck] | date : 'shortDate'
-						}} {{tr[ck] | date : 'hh:mm'}}</div>
-					<div ng-switch-default>{{tr[ck]}}</div>
+						title="{{tr[ck] | date : 'longDate'}}">{{tr[ck] | date
+						: 'shortDate' }} {{tr[ck] | date : 'hh:mm'}}</div>
+					<div ng-switch-default
+						ng-bind-html="highlight(v, patientList.seek)"></div>
 				</td>
 			</tr>
 		</table>
