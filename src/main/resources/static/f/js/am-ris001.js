@@ -1,7 +1,7 @@
 var app = angular.module('myApp', []);
 var initApp = function($scope, $http){
 	console.log('initApp')
-	var exe_fn = new Exe_fn($scope, $http);
+	exe_fn = new Exe_fn($scope, $http);
 	exe_fn.httpGet_j2c_table_db1_params_then_fn = function(params, then_fn){
 		return {
 			url : '/r/url_sql_read_db1',
