@@ -3,8 +3,15 @@ app.controller('myCtrl', function($scope, $http) {
     $scope.firstName= "John";
     $scope.lastName= "Doe";
 
-	$scope.$watch('patientList.seek',function(newValue){ if(newValue){
+	$scope.$watch('patientList.seek',function(newValue){ if(true){
 		console.log(newValue)
+		if($scope.patientList.pl){
+			var data = {
+					seek :'%'+newValue+'%',
+					sql : sql.read_table_seek().replace(':read_table_sql',$scope.patientList.pl.sql),
+			}
+			readSql(data, $scope.patientList.pl)
+		}
 	}})
 
     $scope.random3=getRandomInt(3)
@@ -16,7 +23,7 @@ app.controller('myCtrl', function($scope, $http) {
     		$scope.patientList.pl = {
     			sql:$scope.patientList.list[0].docbody,
     			afterRead:function(){
-    				console.log($scope.patientList)
+//    				console.log($scope.patientList.pl.sql)
     			}
     		}
     		readSql($scope.patientList.pl)
@@ -35,8 +42,14 @@ app.controller('myCtrl', function($scope, $http) {
 });
 
 var sql = {
+	read_table_seek:function(){
+		return "SELECT * FROM ( " +
+				":read_table_sql" +
+				" ) x WHERE LOWER(col_237) LIKE LOWER(:seek)" +
+				" OR LOWER(col_240) LIKE LOWER(:seek)"
+	},
 	read_table_sql:function(){
 		return "SELECT * FROM docbody where docbody_id in ( \n" +
 				"SELECT doc_id FROM doc where doctype=19 and parent = :tableId)"
-	}
+	},
 }

@@ -51,12 +51,12 @@
 					{{cv}}</th>
 			</tr>
 			<tr ng-repeat="tr in o.pl.list">
-				<td ng-repeat="(ck,cv) in o.col_keys" 
-				ng-init="v=tr[ck]"
-				ng-switch="ck">
+				<td ng-repeat="(ck,cv) in o.col_keys" ng-init="v=tr[ck]"
+					ng-switch="ck"
+					class="w3-border w3-border-white w3-hover-border-gray">
 					<div ng-switch-when="col_236"
-						title="{{tr[ck] | date : 'longDate'}}">{{tr[ck] | date
-						: 'shortDate' }} {{tr[ck] | date : 'hh:mm'}}</div>
+						title="{{tr[ck] | date : 'longDate'}}">{{tr[ck] | date :
+						'shortDate' }} {{tr[ck] | date : 'hh:mm'}}</div>
 					<div ng-switch-default
 						ng-bind-html="highlight(v, patientList.seek)"></div>
 				</td>
