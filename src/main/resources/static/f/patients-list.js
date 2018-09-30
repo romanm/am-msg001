@@ -2,6 +2,7 @@ app.controller('myCtrl', function($scope, $http) {
 	initApp($scope, $http)
     $scope.firstName= "John";
     $scope.lastName= "Doe";
+    $scope.random3=getRandomInt(3)
     $scope.patientList
     = {
     	tableId:235,
