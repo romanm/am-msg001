@@ -5,7 +5,6 @@ import java.util.Map;
 
 import org.algoritmed.ammsg001.XCommon;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.gargoylesoftware.htmlunit.WebClient;
@@ -16,7 +15,7 @@ import com.gargoylesoftware.htmlunit.html.HtmlTableBody;
 
 @Controller
 public class AmMsg001Rest002 extends XCommon{
-	@GetMapping("/test2")
+//	@GetMapping("/test2")
 	public @ResponseBody Map<String, Object> test2() {
 		Map<String, Object> m = getM(123);
 		WebClient client = getWebClient(false, false); 

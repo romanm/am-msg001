@@ -4,11 +4,10 @@ app.controller('myCtrl', function($scope, $http) {
     $scope.lastName= "Doe";
 
 	$scope.$watch('patientList.seek',function(newValue){ if(true){
-		console.log(newValue)
 		if($scope.patientList.pl){
 			var data = {
-					seek :'%'+newValue+'%',
-					sql : sql.read_table_seek().replace(':read_table_sql',$scope.patientList.pl.sql),
+				seek :'%'+newValue+'%',
+				sql : sql.read_table_seek().replace(':read_table_sql',$scope.patientList.pl.sql),
 			}
 			readSql(data, $scope.patientList.pl)
 		}
@@ -23,7 +22,11 @@ app.controller('myCtrl', function($scope, $http) {
     		$scope.patientList.pl = {
     			sql:$scope.patientList.list[0].docbody,
     			afterRead:function(){
-//    				console.log($scope.patientList.pl.sql)
+    				console.log($scope.patientList)
+    				$scope.patientList.rowMap = {}
+    				angular.forEach($scope.patientList.pl.list, function(v){
+    					$scope.patientList.rowMap[v.row_id] = v
+    				})
     			}
     		}
     		readSql($scope.patientList.pl)
@@ -39,6 +42,19 @@ app.controller('myCtrl', function($scope, $http) {
     	}
     }
     readSql($scope.patientList)
+    $scope.pageVar = {
+		saveUpdate:function(){
+			this.o.col_240 = this.price
+		},
+		openEditRow:function(o){
+			this.ngStyleModal = {display:'block'}
+			if(this.row_id != o.row_id){
+				this.price = o.col_240
+				this.o = o
+				this.row_id = o.row_id
+			}
+		}
+	}
 });
 
 var sql = {

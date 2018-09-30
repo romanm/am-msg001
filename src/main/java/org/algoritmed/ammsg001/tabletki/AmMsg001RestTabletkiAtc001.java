@@ -5,7 +5,6 @@ import java.net.MalformedURLException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 
 import org.algoritmed.ammsg001.XCommon;
 import org.springframework.stereotype.Controller;
@@ -81,7 +80,7 @@ public class AmMsg001RestTabletkiAtc001 extends XCommon{
 	Map<String, Object> m ;
 	String httpPrefix = "https:";
 
-	@GetMapping("/tabletki.ua/atc")
+//	@GetMapping("/tabletki.ua/atc")
 	public @ResponseBody Map<String, Object> tabletki_ua_atc() throws FailingHttpStatusCodeException, MalformedURLException, IOException {
 		m = new HashMap<>();
 

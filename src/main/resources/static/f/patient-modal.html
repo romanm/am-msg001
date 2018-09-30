@@ -1,0 +1,32 @@
+<div ng-click="pageVar.openEditRow(tr)"
+	ng-class="{'w3-green':tr.row_id==pageVar.o.row_id}">{{tr.col_240}}</div>
+<div ng-style="pageVar.ngStyleModal" class="w3-modal">
+	<div class="w3-modal-content">
+
+		<div class="w3-container">
+			<div class="w3-row-padding w3-border-bottom">
+				<div class="w3-col m4 l4 s4 ">
+					<button class="w3-border" ng-click="pageVar.saveUpdate()">OK сплата друк</button>
+					<button class="w3-border"
+						ng-click="pageVar.ngStyleModal={display:'none'}">Cancel</button>
+				</div>
+				<div class="w3-col m8 l8 s8 ">
+					<div ng-include="pageVar.o.ngIncludes.modalBottonPanel"></div>
+				</div>
+			</div>
+
+			<span ng-click="pageVar.ngStyleModal={display:'none'}"
+				class="w3-button w3-display-topright">&times;</span>
+			<p ng-if="!pageVar.o">Не вибрані дані для редагування.</p>
+			<p ng-if="pageVar.o">|{{pageVar.o.col_237}}
+				| {{pageVar.o.col_238}} | {{pageVar.o.col_239}} 
+				| {{pageVar.o.col_240}}
+				| {{pageVar.o.col_241}}
+				| {{pageVar.o.col_242}}
+				</p>
+			<p>
+				Вартість: <input ng-model="pageVar.price" class="w3-border">
+			</p>
+		</div>
+	</div>
+</div>
