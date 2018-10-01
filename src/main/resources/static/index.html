@@ -32,18 +32,15 @@
 	<div class="w3-row-padding w3-margin-top">
 		<div class="w3-third w3-justify">
 			<h2>Доброго дня!</h2>
-			на сьогодні записано
-			<u>
-			&nbsp;
-			{{patientList.pl.list.length}}
-			&nbsp;
-			</u>
+			на сьогодні записано <u> &nbsp; {{patientList.pl.list.length}}
+				&nbsp; </u>
 		</div>
 		<div class="w3-third w3-justify">
 			<div
 				class="w3-panel w3-pale-blue w3-leftbar w3-border-blue w3-animate-zoom">
 				<p>
-					<a href="/f/patients-list.html" class="w3-btn"> Список пацієнтів </a>
+					<a href="/f/patients-list.html" class="w3-btn"> Список
+						пацієнтів </a>
 				</p>
 			</div>
 			<p class="w3-border "></p>
@@ -54,6 +51,13 @@
 			<p>
 				<a href="/f/admin.html" class="w3-btn">Адмін </a>
 			</p>
+			<div class="w3-right w3-tiny">
+				{{lastDbRead.lastCallTime | date : 'medium'}}
+				<div ng-click="lastDbRead.reread()" class="w3-btn">reread DB -
+					last record</div>
+				<div ng-if="lastDbRead.maxInDB">{{lastDbRead.maxInDB | date :
+					'medium'}}</div>
+			</div>
 		</div>
 	</div>
 

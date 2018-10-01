@@ -17,7 +17,7 @@ var initApp = function($scope, $http){
 	}
 }
 
-var Exe_fn = function($scope, $http){
+function Exe_fn($scope, $http){
 	this.httpGet=function(progr_am){
 		$http
 		.get(progr_am.url, {params:progr_am.params})
@@ -25,7 +25,7 @@ var Exe_fn = function($scope, $http){
 	}
 }
 
-var readSql = function(params, obj){
+function readSql(params, obj){
 	if(!obj) obj = params
 	exe_fn.httpGet(exe_fn.httpGet_j2c_table_db1_params_then_fn(
 	params,
@@ -35,9 +35,6 @@ var readSql = function(params, obj){
 			obj.afterRead(response)
 	}))
 }
-
-
-
 
 function getRandomInt(max) {
   return Math.floor(Math.random() * Math.floor(max));

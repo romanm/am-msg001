@@ -27,7 +27,20 @@
 			</a>
 		</div>
 	</div>
-	<div class="w3-container">list: {{firstName}} {{lastName}}</div>
+	<div class="w3-container">
+		<div class="w3-row w3-tiny">
+			<div class="w3-half w3-container ">list: {{firstName}}
+				{{lastName}} | {{lastDbRead.lastCallTime | date : 'medium'}}</div>
+			<div class="w3-half w3-container">
+				<div class="w3-right">
+					<span ng-click="lastDbRead.reread()" class="w3-btn">reread DB
+						- last record <sup ng-if="lastDbRead.importCnt>0">{{lastDbRead.importCnt}}</sup></span>
+					<span ng-if="lastDbRead.maxInDB">{{lastDbRead.maxInDB | date
+						: 'medium'}}</span>
+				</div>
+			</div>
+		</div>
+	</div>
 	<div class="w3-container">
 		<table data-ng-repeat="o in [patientList]"
 			style="margin-left: auto; margin-right: auto;">

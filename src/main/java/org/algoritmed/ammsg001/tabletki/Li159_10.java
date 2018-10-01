@@ -10,14 +10,9 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Iterator;
-import java.util.LinkedHashMap;
-import java.util.List;
 import java.util.Map;
-import java.util.Set;
 
 import org.algoritmed.ammsg001.XCommon;
-import org.apache.poi.hssf.usermodel.HSSFWorkbook;
-import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
@@ -87,7 +82,10 @@ public class Li159_10  extends XCommon{
         }
         m.put("min", min);
         m.put("max", max);
-        m.put("from_to", format.format(new Date(max)) + " - " + format.format(new Date(min)));
+        m.put("from_to", format.format(new Date(max)) 
+        		+ " - " + format.format(new Date(min))
+        		+ " - " + rows.size()
+        		);
 		return m;
 	}
 	private Date putTimestamp(Map<String, Object> rowMap, String col_key, String col_value) throws ParseException {
