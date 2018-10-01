@@ -34,6 +34,8 @@ dependencies {
 	compile 'org.webjars:font-awesome:4.7.0'
 	compile 'org.webjars:angularjs:1.7.4'
 	compile 'org.springframework:spring-jdbc'
+	compile 'org.apache.poi:poi:3.17'
+	compile 'org.apache.poi:poi-ooxml:3.17'
 	runtime('com.h2database:h2')
 	testCompile('org.springframework.boot:spring-boot-starter-test')
 	testCompile('io.projectreactor:reactor-test')
