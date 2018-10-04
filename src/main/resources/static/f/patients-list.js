@@ -69,17 +69,17 @@ app.controller('myCtrl', function($scope, $http, $interval, $filter) {
     = {
     	tableId:235,
     	sql:sql.read_table_config(),
+    	config:{},
     	afterRead:function(){
-    		console.log($scope.patientList.list)
+    		console.log($scope.patientList)
     		angular.forEach($scope.patientList.list, function(v){
-    			console.log(v)
     			if(19==v.doctype)
-    				$scope.patientList.sql_read_table_data = v.docbody
+    				$scope.patientList.config.sql_read_table_data = v.docbody
     			if(20==v.doctype)
-    				$scope.patientList.json_create_table = v.docbody
+    				$scope.patientList.config.json_create_table = v.docbody
     		})
     		$scope.patientList.pl = {
-    			sql:$scope.patientList.sql_read_table_data,
+    			sql:$scope.patientList.config.sql_read_table_data,
     			afterRead:function(){
 //    				console.log($scope.patientList)
     				$scope.patientList.rowMap = {}
