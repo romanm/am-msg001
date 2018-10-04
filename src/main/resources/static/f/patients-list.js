@@ -10,14 +10,14 @@ app.controller('myCtrl', function($scope, $http, $interval, $filter) {
     	importCnt:0,
     	requestToImport:{
     		url:'/li159-10',
-			then_fn:function(response){
-				$scope.lastDbRead.importCnt++
-				if(!$scope.dataToImport || response.data.max>$scope.dataToImport.max){
-					$scope.dataToImport = response.data
-					console.log($scope.dataToImport)
-					$scope.callDbImport()
-				}
-			},
+    		then_fn:function(response){
+    			$scope.lastDbRead.importCnt++
+    			if(!$scope.dataToImport || response.data.max>$scope.dataToImport.max){
+    				$scope.dataToImport = response.data
+    				console.log($scope.dataToImport)
+    				$scope.callDbImport()
+    			}
+    		},
     	},
     	afterRead : function(){
 //    		this.importCnt++
@@ -25,6 +25,12 @@ app.controller('myCtrl', function($scope, $http, $interval, $filter) {
     		console.log($filter('date')(new Date(this.maxInDB), 'medium'))
     		if($scope.dataToImport.max>this.maxInDB){
     			console.log('--------importToDb-------------')
+    			var i = 0
+    			angular.forEach($scope.dataToImport.rows, function(v){
+    				if(i++<1){
+    					console.log(v)
+    				}
+    			})
     		}
 //    		exe_fn.httpGet($scope.lastDbRead.requestToImport)
     	},
@@ -62,12 +68,20 @@ app.controller('myCtrl', function($scope, $http, $interval, $filter) {
     $scope.patientList
     = {
     	tableId:235,
-    	sql:sql.read_table_sql(),
+    	sql:sql.read_table_config(),
     	afterRead:function(){
+    		console.log($scope.patientList.list)
+    		angular.forEach($scope.patientList.list, function(v){
+    			console.log(v)
+    			if(19==v.doctype)
+    				$scope.patientList.sql_read_table_data = v.docbody
+    			if(20==v.doctype)
+    				$scope.patientList.json_create_table = v.docbody
+    		})
     		$scope.patientList.pl = {
-    			sql:$scope.patientList.list[0].docbody,
+    			sql:$scope.patientList.sql_read_table_data,
     			afterRead:function(){
-    				console.log($scope.patientList)
+//    				console.log($scope.patientList)
     				$scope.patientList.rowMap = {}
     				console.log($scope.patientList.pl.list.length)
     				angular.forEach($scope.patientList.pl.list, function(v){
@@ -121,8 +135,8 @@ var sql = {
 				":read_table_sql" +
 				") x"
 	},
-	read_table_sql:function(){
-		return "SELECT * FROM docbody where docbody_id in ( \n" +
-				"SELECT doc_id FROM doc where doctype=19 and parent = :tableId)"
+	read_table_config:function(){
+		return "SELECT * FROM doc d, docbody s \n" +
+				"WHERE parent = :tableId AND s.docbody_id=d.doc_id AND doctype!=4"
 	},
 }
