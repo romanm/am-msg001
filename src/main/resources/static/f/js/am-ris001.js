@@ -7,22 +7,23 @@ var initApp = function($scope, $http){
 			url : '/r/url_sql_read_db1',
 			params : params,
 			then_fn : then_fn,
-		}
-	}
-
+	}	}
 	$scope.highlight = function(text, search){
 		if (!text) return
 		if (!search) return text;
 		return (''+text).replace(new RegExp(search, 'gi'), '<span class="w3-yellow">$&</span>');
-	}
-}
+}	}
 
-function Exe_fn($scope, $http){
-	this.httpGet=function(progr_am){
-		$http
-		.get(progr_am.url, {params:progr_am.params})
-		.then(progr_am.then_fn)
-	}
+var writeSql = function(data){
+	exe_fn.httpPost
+	({	url:'/r/url_sql_read_db1',
+		then_fn:function(response) {
+//			console.log(response.data)
+			if(data.dataAfterSave)
+				data.dataAfterSave(response)
+		},
+		data:data,
+	})
 }
 
 function readSql(params, obj){
@@ -36,8 +37,20 @@ function readSql(params, obj){
 	}))
 }
 
+function Exe_fn($scope, $http){
+	this.httpGet=function(progr_am){
+		$http
+		.get(progr_am.url, {params:progr_am.params})
+		.then(progr_am.then_fn)
+	}
+	this.httpPost=function(progr_am){
+		$http.post(progr_am.url, progr_am.data)
+		.then(progr_am.then_fn)
+	}
+}
+
 function getRandomInt(max) {
-  return Math.floor(Math.random() * Math.floor(max));
+	return Math.floor(Math.random() * Math.floor(max));
 }
 
 function build_sqlJ2c_row_insert(rowObj,col_data){
@@ -50,7 +63,7 @@ function build_sqlJ2c_row_insert(rowObj,col_data){
 		col_data.sql_row = col_data.sql_row.replace(':row_id', ':nextDbId1')
 	}
 	var table_id = col_data[Object.keys(col_data)[0]].table_id
-	col_data.table_id = table_id 
+	col_data.table_id = table_id
 }
 
 function build_sqlJ2c_row_write(rowObj,col_data,fn){

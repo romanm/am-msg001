@@ -1,15 +1,15 @@
 app.controller('myCtrl', function($scope, $http, $interval, $filter) {
 	initApp($scope, $http)
-    $scope.firstName= "John";
-    $scope.lastName= "Doe";
-    $scope.random3=getRandomInt(3)
+	$scope.firstName= "John";
+	$scope.lastName= "Doe";
+	$scope.random3=getRandomInt(3)
 
 $scope.lastDbRead = {
 	timeout : 5*60*1000,
 	lastCallTime : new Date(),
 	importCnt:0,
 	requestToImport:{
-//  		url:'/f/js/li159-10-test1.json',
+//		url:'/f/js/li159-10-test1.json',
 		url:'/li159-10',
 		then_fn:function(response){
 			$scope.lastDbRead.importCnt++
@@ -21,7 +21,7 @@ $scope.lastDbRead = {
 		},
 	},
 	afterRead : function(){
-//  		this.importCnt++
+//		this.importCnt++
 		this.maxInDB = this.list[0].max
 		console.log($filter('date')(new Date(this.maxInDB), 'medium'))
 		console.log($scope.dataToImport.max)
@@ -34,9 +34,15 @@ $scope.lastDbRead = {
 					var col_data = $scope.patientList.config.json_create_table
 					col_data.nextDbIdCounter = 3
 					col_data.sql_row = ''
-					console.log(col_data)
+//					console.log(col_data)
 					rowObj.col_237 = rowObj.patient_pip
 					build_sqlJ2c_row_insert(rowObj, col_data)
+					var data = {
+						sql:col_data.sql_row,
+						table_id:col_data.table_id,
+					}
+					console.log(data)
+					writeSql(data)
 				}
 			})
 		}
