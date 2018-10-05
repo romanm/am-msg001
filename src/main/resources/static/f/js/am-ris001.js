@@ -40,21 +40,51 @@ function getRandomInt(max) {
   return Math.floor(Math.random() * Math.floor(max));
 }
 
-function build_cell_sql_insert(v,k,n,col_data){
-	var cellId_v = $scope.pageVar.rowObj[k+'_id']
-	console.log(k+'/'+v+'/'+cellId_v)
+function build_sqlJ2c_row_insert(rowObj,col_data){
+	col_data.sql_row = sql_1c.table_data_row_insert()
+	console.log(col_data)
+	build_sqlJ2c_row_write(rowObj, col_data,function(v,k,n){
+		build_sqlJ2c_cell_write(v,k,n,col_data,rowObj)
+	})
+	while(col_data.sql_row.indexOf(':row_id')>0){
+		col_data.sql_row = col_data.sql_row.replace(':row_id', ':nextDbId1')
+	}
+	var table_id = col_data[Object.keys(col_data)[0]].table_id
+	col_data.table_id = table_id 
+}
+
+function build_sqlJ2c_row_write(rowObj,col_data,fn){
+	angular.forEach(rowObj, function(v,k){
+		var n = k.split('col_')[1]
+		if(!isNaN(n))
+			fn(v,k,n,col_data,rowObj)
+	})
+}
+
+function build_sqlJ2c_cell_write_parameters(col_data, v, n){
+	var cell_v 
+	if('string'==col_data[n].fieldtype){
+		cell_v = "'"+v+"'"
+	}else
+	if('timestamp'==col_data[n].fieldtype){
+		cell_v = "'"+v+":00.0'"
+	}else{
+		cell_v = v
+	}
+	col_data.sql = col_data.sql.replace(':value', cell_v)
+	col_data.sql = col_data.sql.replace(':fieldtype', col_data[n].fieldtype)
+		.replace(':fieldtype', col_data[n].fieldtype)
+	col_data.sql_row += col_data.sql
+}
+
+function build_sqlJ2c_cell_write(v,k,n,col_data, rowObj){
+	console.log(col_data[n])
+	var cellId_v = rowObj[k+'_id']
+	console.log(k+'/'+v+'/'+cellId_v+'/'+n)
 	if(cellId_v){
 		col_data.sql = sql_1c.table_data_cell_update()
 		col_data.sql = col_data.sql.replace(':cell_id', cellId_v)
-		var cell_v = ('string'==col_data[n].fieldtype)? "'"+v+"'":v
-			if('timestamp'==col_data[n].fieldtype){
-				var cell_v = "'"+v+":00.0'"
-				console.log(cell_v)
-			}
-		col_data.sql = col_data.sql.replace(':value', cell_v)
-		col_data.sql = col_data.sql.replace(':fieldtype', col_data[n].fieldtype)
-		.replace(':fieldtype', col_data[n].fieldtype)
-		col_data.sql_row += col_data.sql
+		build_sqlJ2c_cell_write_parameters(col_data, v, n)
 	}else if(v){
 		col_data.sql = sql_1c.table_data_cell_insert()
 		col_data.sql = col_data.sql.replace(':column_id', n)
@@ -62,11 +92,6 @@ function build_cell_sql_insert(v,k,n,col_data){
 			col_data.sql = col_data.sql.replace(':nextDbId2', ':nextDbId'+col_data.nextDbIdCounter)
 		}
 		col_data.nextDbIdCounter++
-		var cell_v = ('string'==col_data[n].fieldtype)? "'"+v+"'":v
-		var cell_v = ('timestamp'==col_data[n].fieldtype)? "'"+v+"'":v
-		col_data.sql = col_data.sql.replace(':value', cell_v)
-		col_data.sql = col_data.sql.replace(':fieldtype', col_data[n].fieldtype)
-		.replace(':fieldtype', col_data[n].fieldtype)
-		col_data.sql_row += col_data.sql
+		build_sqlJ2c_cell_write_parameters(col_data, v, n)
 	}
 }
