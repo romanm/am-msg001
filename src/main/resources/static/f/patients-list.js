@@ -35,6 +35,7 @@ $scope.lastDbRead = {
 					col_data.nextDbIdCounter = 3
 					col_data.sql_row = ''
 //					console.log(col_data)
+					rowObj.col_236 = $filter('date')(new Date(rowObj.visit_ts), 'yyyy-MM-ddTHH:mm')
 					rowObj.col_237 = rowObj.patient_pip
 					build_sqlJ2c_row_insert(rowObj, col_data)
 					var data = {
@@ -68,7 +69,6 @@ $scope.callDbImport = function() {
 }
 //    $interval( function(){ $scope.callDbImport(); }, $scope.lastDbRead.timeout)
 
-    
 	$scope.$watch('patientList.seek',function(newValue){ if(true){
 		if($scope.patientList.pl){
 			var data = {
@@ -79,45 +79,45 @@ $scope.callDbImport = function() {
 		}
 	}})
 
-    $scope.patientList
-    = {
-    	tableId:235,
-    	sql:sql.read_table_config(),
-    	config:{},
-    	afterRead:function(){
-    		console.log($scope.patientList)
-    		angular.forEach($scope.patientList.list, function(v){
-    			if(19==v.doctype)
-    				$scope.patientList.config.sql_read_table_data = v.docbody
-    			if(20==v.doctype)
-    				$scope.patientList.config.json_create_table = JSON.parse(v.docbody)
-    		})
-    		$scope.patientList.pl = {
-    			sql:$scope.patientList.config.sql_read_table_data,
-    			afterRead:function(){
-//    				console.log($scope.patientList)
-    				$scope.patientList.rowMap = {}
-    				console.log($scope.patientList.pl.list.length)
-    				angular.forEach($scope.patientList.pl.list, function(v){
-    					$scope.patientList.rowMap[v.row_id] = v
-    				})
-    			}
-    		}
-    		readSql($scope.patientList.pl)
-    	},
-    	col_keys:{
-    		col_236:'дата-час обстеженя',
-    		col_237:' ПІП ',
-    		col_238:' аппарат ',
-    		col_239:' дослідження ',
-    		col_240:' вартість ',
-    		col_241:' лікар ',
-    		col_242:' ЗОЗ направленя ',
-    	},
-    }
-    readSql($scope.patientList)
+	$scope.patientList
+	= {
+		tableId:235,
+		sql:sql.read_table_config(),
+		config:{},
+		afterRead:function(){
+			console.log($scope.patientList)
+			angular.forEach($scope.patientList.list, function(v){
+				if(19==v.doctype)
+					$scope.patientList.config.sql_read_table_data = v.docbody
+					if(20==v.doctype)
+						$scope.patientList.config.json_create_table = JSON.parse(v.docbody)
+			})
+			$scope.patientList.pl = {
+				sql:$scope.patientList.config.sql_read_table_data,
+				afterRead:function(){
+//					console.log($scope.patientList)
+					$scope.patientList.rowMap = {}
+					console.log($scope.patientList.pl.list.length)
+					angular.forEach($scope.patientList.pl.list, function(v){
+						$scope.patientList.rowMap[v.row_id] = v
+					})
+				}
+			}
+			readSql($scope.patientList.pl)
+		},
+		col_keys:{
+			col_236:'дата-час обстеженя',
+			col_237:' ПІП ',
+			col_238:' аппарат ',
+			col_239:' дослідження ',
+			col_240:' вартість ',
+			col_241:' лікар ',
+			col_242:' ЗОЗ направленя ',
+		},
+	}
+	readSql($scope.patientList)
 
-    $scope.pageVar = {
+	$scope.pageVar = {
 		saveUpdate:function(){
 			this.o.col_240 = this.price
 		},
