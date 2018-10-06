@@ -29,25 +29,30 @@ $scope.lastDbRead = {
 			console.log('--------importToDb-------------')
 			var i = 0
 			angular.forEach($scope.dataToImport.rows, function(rowObj){
-				if(i++<1){
-					console.log(rowObj)
+				if(true || i++<1){
+//					console.log(rowObj)
 					var col_data = $scope.patientList.config.json_create_table
 					col_data.nextDbIdCounter = 3
 					col_data.sql_row = ''
 //					console.log(col_data)
 					rowObj.col_236 = $filter('date')(new Date(rowObj.visit_ts), 'yyyy-MM-ddTHH:mm')
 					rowObj.col_237 = rowObj.patient_pip
+					rowObj.col_238 = rowObj.cabinet.split(' ')[1]
+					rowObj.col_239 = rowObj.examination
+					rowObj.col_241 = rowObj.physician
+					rowObj.col_242 = rowObj.referral
+					rowObj.col_415 = rowObj.sales
 					build_sqlJ2c_row_insert(rowObj, col_data)
 					var data = {
 						sql:col_data.sql_row,
 						table_id:col_data.table_id,
 					}
-					console.log(data)
+//					console.log(data)
 					writeSql(data)
 				}
 			})
 		}
-//  		exe_fn.httpGet($scope.lastDbRead.requestToImport)
+//		exe_fn.httpGet($scope.lastDbRead.requestToImport)
 	},
 	reread:function(){
 		console.log($filter('date')(new Date(this.maxInDB), 'medium'))
@@ -85,15 +90,18 @@ $scope.callDbImport = function() {
 		sql:sql.read_table_config(),
 		config:{},
 		afterRead:function(){
-			console.log($scope.patientList)
 			angular.forEach($scope.patientList.list, function(v){
 				if(19==v.doctype)
 					$scope.patientList.config.sql_read_table_data = v.docbody
-					if(20==v.doctype)
-						$scope.patientList.config.json_create_table = JSON.parse(v.docbody)
+				if(20==v.doctype)
+					$scope.patientList.config.json_create_table = JSON.parse(v.docbody)
 			})
+			var sql_table_data =
+				sql.read_table_date_desc().replace(':read_table_sql',
+					$scope.patientList.config.sql_read_table_data
+				)
 			$scope.patientList.pl = {
-				sql:$scope.patientList.config.sql_read_table_data,
+				sql:sql_table_data,
 				afterRead:function(){
 //					console.log($scope.patientList)
 					$scope.patientList.rowMap = {}
@@ -150,6 +158,11 @@ var sql = {
 				" OR LOWER(col_241) LIKE LOWER(:seek) " +
 				" OR LOWER(col_242) LIKE LOWER(:seek) " +
 				""
+	},
+	read_table_date_desc:function(){
+		return "SELECT * FROM ( \n" +
+				":read_table_sql" +
+				") x ORDER BY col_236 DESC"
 	},
 	read_table_max_min_date:function(){
 		return "SELECT min(col_236) min, max(col_236) max, count(*) FROM (" +
