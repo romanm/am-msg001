@@ -39,7 +39,7 @@ dependencies {
 	compile 'org.springframework:spring-jdbc'
 	compile 'org.apache.poi:poi:3.17'
 	compile 'org.apache.poi:poi-ooxml:3.17'
-	runtime('com.h2database:h2:1.4.196')
+	runtime('com.h2database:h2')
 	testCompile('org.springframework.boot:spring-boot-starter-test')
 	testCompile('io.projectreactor:reactor-test')
 }

@@ -4,6 +4,18 @@ app.controller('myCtrl', function($scope, $http, $interval, $filter) {
 	$scope.lastName= "Doe";
 	$scope.random3=getRandomInt(3)
 
+$scope.date = {
+	today : new Date(),
+	seekDay : new Date(),
+	goToday:function(){
+		this.seekDay = new Date(this.today.getTime());
+	},
+	addDay:function(addDay){
+		console.log(addDay)
+		this.seekDay.setDate(this.seekDay.getDate() + addDay);
+	}
+}
+
 $scope.lastDbRead = {
 	timeout : 5*60*1000,
 	lastCallTime : new Date(),
