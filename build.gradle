@@ -23,12 +23,15 @@ repositories {
 	mavenCentral()
 }
 
-
 dependencies {
 	compile('org.springframework.boot:spring-boot-starter-thymeleaf')
 	compile('org.springframework.boot:spring-boot-starter-web')
 	compile('org.springframework.boot:spring-boot-starter-webflux')
 	compile('org.springframework.boot:spring-boot-starter-jdbc')
+	compile("org.springframework.boot:spring-boot-starter-web")
+	// tag::security[]
+	compile("org.springframework.boot:spring-boot-starter-security")
+	// end::security[]
 	compile 'net.sourceforge.htmlunit:htmlunit'
 	compile 'dom4j:dom4j'
 	compile 'org.webjars:font-awesome:4.7.0'

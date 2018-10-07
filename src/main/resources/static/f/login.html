@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html data-ng-app="myApp" data-ng-controller="myCtrl" lang="uk-UA">
+<title>РІС-адмін</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta charset="utf-8" />
+<script src="/webjars/angularjs/1.7.4/angular.min.js"></script>
+<script src="/webjars/angularjs/1.7.4/angular-sanitize.min.js"></script>
+<script src="/webjars/angularjs/1.7.4/i18n/angular-locale_uk.js"></script>
+<script src="/f/js/am-ris001.js"></script>
+<script src="/f/patients-list.js"></script>
+<link rel="stylesheet" href="/f/css/w3.css">
+<link rel="stylesheet"
+	href="/webjars/font-awesome/4.7.0/css/font-awesome.min.css">
+<body>
+	<div class="w3-row w3-light-grey">
+		<div class="w3-col w3-container" style="width: 10%">
+			<a href="/" class=" w3-btn w3-hover-shadow"> <i
+				class="fa fa-home w3-large w3-border" aria-hidden="true"></i>
+			</a>
+		</div>
+		<div class="w3-col  w3-center" style="width: 80%">
+			<p>РІС-адмін</p>
+		</div>
+		<div class="w3-col w3-container w3-right-align" style="width: 10%">
+			<a href="/" class=" w3-btn w3-hover-shadow"> <i
+				class="fa fa-sign-out w3-large " aria-hidden="true"></i>
+			</a>
+		</div>
+	</div>
+
+
+	<div class="w3-container">
+		<form action="/login" method="post" class="ng-pristine ng-valid">
+			<!-- ngIf: page.request.parameters.pageKey -->
+			<input ng-if="page.request.parameters.pageKey" type="hidden"
+				name="pageKey" value="index" autocomplete="off" class="ng-scope">
+			<!-- end ngIf: page.request.parameters.pageKey -->
+			<div>
+				<div class="w3-row">
+					<div class="w3-col m3 l3 s3 w3-small">Ім’я користувача</div>
+					<div class="w3-col m9 l9 s9">
+					<!-- 
+						<input class="w3-border am-width-100pr" name="user"
+					 -->
+						<input class="w3-border am-width-100pr" name="username"
+							placeholder="Логін ім'я" type="text">
+					</div>
+				</div>
+				<div class="w3-row">
+					<div class="w3-col m3 l3 s3 ">Пароль:</div>
+					<div class="w3-col m9 l9 s9">
+						<input name="password" placeholder="Пароль"
+							class="w3-border am-width-100pr" type="password">
+					</div>
+				</div>
+			</div>
+			<!-- 
+	<div>
+		<label> Ім’я користувача : <input type="text" name="username" />
+		</label>
+	</div>
+	<div>
+		<label> Пароль: <input type="password" name="password" />
+		</label>
+	</div>
+ -->
+			<br>
+			<div>
+				<input class="w3-btn w3-border w3-round" value="Увійти"
+					type="submit">
+				<!-- ngIf: principal.user -->
+			</div>
+			<div class="w3-right w3-small">
+				<!-- ngIf: true || principal.principal -->
+				<span ng-if="true || principal.principal" class="ng-scope"> <a
+					href="/v/settings">налаштунки</a> |
+				</span>
+				<!-- end ngIf: true || principal.principal -->
+				<a href="/v/registry1">Реєстрація в системі якщо в вас немає
+					власного логін доступу</a>
+			</div>
+		</form>
+	</div>
+
+
+</body>
+</html>
