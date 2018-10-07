@@ -1,5 +1,7 @@
 package org.algoritmed.ammsg001;
 
+import java.security.Principal;
+import java.util.HashMap;
 import java.util.Map;
 
 import org.springframework.stereotype.Controller;
@@ -11,6 +13,13 @@ import reactor.core.publisher.Mono;
 
 @Controller
 public class AmMsg001Rest extends XCommon{
+	
+	@GetMapping("/r/principal")
+	public @ResponseBody Map<String, Object> principal(Principal principal) {
+		Map<String, Object> map = new HashMap<>();
+		map.put("m", principal);
+		return map;
+	}
 	
 	@GetMapping("/test1")
 	public @ResponseBody Map<String, Object> test1() {

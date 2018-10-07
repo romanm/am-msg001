@@ -22,9 +22,7 @@
 			<h1 class="w3-jumbo w3-padding-16 w3-center">РІС застосунок</h1>
 		</div>
 		<div class="w3-col w3-container w3-right-align" style="width: 10%">
-			<a href="/" class=" w3-btn w3-hover-shadow"> <i
-				class="fa fa-sign-out w3-large " aria-hidden="true"></i>
-			</a>
+			<span ng-include="'/f/login-link.html'"> </span>
 		</div>
 	</div>
 
@@ -50,6 +48,9 @@
 			<h2>Налаштунки</h2>
 			<p>
 				<a href="/f/admin.html" class="w3-btn">Адмін </a>
+			</p>
+			<p>
+				<a href="/f/login.html" class="w3-btn">Логін</a>
 			</p>
 			<div class="w3-right w3-tiny">
 				{{lastDbRead.lastCallTime | date : 'medium'}}

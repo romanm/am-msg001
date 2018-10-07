@@ -42,7 +42,7 @@ $scope.lastDbRead = {
 					rowObj.col_241 = rowObj.physician
 					rowObj.col_242 = rowObj.referral
 					rowObj.col_415 = rowObj.sales
-					build_sqlJ2c_row_insert(rowObj, col_data)
+					/build_sqlJ2c_row_insert(rowObj, col_data)
 					var data = {
 						sql:col_data.sql_row,
 						table_id:col_data.table_id,
@@ -60,6 +60,16 @@ $scope.lastDbRead = {
 	},
 }
 exe_fn.httpGet($scope.lastDbRead.requestToImport)
+
+var readPrincipal = {
+	url:'/r/principal',
+	then_fn:function(response){
+		$scope.principal = response.data.m
+		console.log($scope.principal)
+	},
+}
+exe_fn.httpGet(readPrincipal)
+
 $interval( function(){ exe_fn.httpGet($scope.lastDbRead.requestToImport) }, $scope.lastDbRead.timeout)
 $scope.callDbImport = function() {
 	if($scope.patientList){

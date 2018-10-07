@@ -1,7 +1,10 @@
 package org.algoritmed.ammsg001;
 
-import javax.sql.DataSource;
 
+import java.io.IOException;
+import java.sql.SQLException;
+
+import org.h2.tools.Server;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.PropertySource;
@@ -20,12 +23,26 @@ import org.springframework.security.config.annotation.web.configuration.WebSecur
 @Configuration
 @EnableWebSecurity
 @PropertySource("classpath:a2.properties")
-public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
+public class WebH2AndSecurityConfig extends WebSecurityConfigurerAdapter {
+	private void startH2Server() {
+		String startServerScript = env.getProperty("am.h2.startServerScript");
+		String[] cmd = new String[]{"/bin/bash"
+				, startServerScript};
+		try {
+			System.err.println("Attempting to start database service");
+			Process pr = Runtime.getRuntime().exec(cmd);
+			System.err.println("Database service started");
+		} catch (IOException e) {
+			System.err.println("Database service start problem");
+			e.printStackTrace();
+		}
+	}
 
 	@Override
 	protected void configure(HttpSecurity http) throws Exception {
+		startH2Server();
+
 //		CookieCsrfTokenRepository withHttpOnlyFalse = CookieCsrfTokenRepository.withHttpOnlyFalse();
-		System.err.println("------------25----------");
 		http
 		.csrf()
 			.disable() /* enable POST */
@@ -50,7 +67,6 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 		.permitAll();
 	}
 	@Autowired private SimpleAuthenticationSuccessHandler successHandler;
-	@Autowired DataSource dataSourceDb2;
 	@Autowired protected Environment env;
 	@Autowired
 	public void configureGlobal(AuthenticationManagerBuilder auth) throws Exception {
@@ -58,7 +74,6 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 		String userPassword = env.getProperty("am.user.password");
 		String adminName = env.getProperty("am.admin.username");
 		String adminPassword = env.getProperty("am.admin.password");
-		System.err.println("------------54----------"+userName+"/"+userPassword);
 		InMemoryUserDetailsManagerConfigurer<AuthenticationManagerBuilder> inMemoryAuthentication = auth
 				.inMemoryAuthentication();
 		inMemoryAuthentication.withUser(userName).password("{noop}"+userPassword).roles("USER");
