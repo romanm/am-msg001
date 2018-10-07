@@ -2,9 +2,7 @@ package org.algoritmed.ammsg001;
 
 
 import java.io.IOException;
-import java.sql.SQLException;
 
-import org.h2.tools.Server;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.PropertySource;
