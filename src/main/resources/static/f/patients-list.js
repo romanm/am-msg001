@@ -1,8 +1,34 @@
 app.controller('myCtrl', function($scope, $http, $interval, $filter) {
+	var pathNameValue = window.location.pathname.split('.html')[0].split('/').reverse()[0]
+	console.log(pathNameValue)
 	initApp($scope, $http)
 	$scope.firstName= "John";
 	$scope.lastName= "Doe";
 	$scope.random3=getRandomInt(3)
+
+	if('admin'==pathNameValue){
+		$scope.db_validation = {
+			removeDupletRows:function(){
+				console.log(123)
+				var data = {
+					sql : sql.duplet_rows_remove(),
+					dataAfterSave:function(response){
+						console.log(response)
+					}
+				}
+				writeSql(data)
+			},
+			duplet_rows_count:null,
+			sql:sql.duplet_rows_count(),
+			afterRead:function(response){
+				this.duplet_rows_count = 
+					response.data.list[0].cnt
+				console.log(response.data)
+				console.log(this)
+			}
+		}
+		readSql($scope.db_validation)
+	}
 
 $scope.date = {
 	today : new Date(),
@@ -13,7 +39,11 @@ $scope.date = {
 	addDay:function(addDay){
 		console.log(addDay)
 		this.seekDay.setDate(this.seekDay.getDate() + addDay);
-	}
+		$scope.patientList.pl_data.month=$scope.date.seekDay.getMonth()+1
+		$scope.patientList.pl_data.day=$scope.date.seekDay.getDate()
+		$scope.patientList.pl_data.year=$scope.date.seekDay.getFullYear()
+			readSql($scope.patientList.pl_data, $scope.patientList.pl)
+	},
 }
 
 $scope.lastDbRead = {
@@ -106,8 +136,7 @@ $scope.callDbImport = function() {
 		}
 	}})
 
-	$scope.patientList
-	= {
+	$scope.patientList = {
 		tableId:235,
 		sql:sql.read_table_config(),
 		config:{},
@@ -119,13 +148,17 @@ $scope.callDbImport = function() {
 					$scope.patientList.config.json_create_table = JSON.parse(v.docbody)
 			})
 			var sql_table_data =
-				sql.read_table_date_desc().replace(':read_table_sql',
+				sql.read_table_day_date_desc().replace(':read_table_sql',
 					$scope.patientList.config.sql_read_table_data
 				)
-			$scope.patientList.pl = {
+//			console.log(sql_table_data)
+			$scope.patientList.pl = {}
+			$scope.patientList.pl_data = {
+				month:$scope.date.seekDay.getMonth()+1,
+				day:$scope.date.seekDay.getDate(),
+				year:$scope.date.seekDay.getFullYear(),
 				sql:sql_table_data,
 				afterRead:function(){
-//					console.log($scope.patientList)
 					$scope.patientList.rowMap = {}
 					console.log($scope.patientList.pl.list.length)
 					angular.forEach($scope.patientList.pl.list, function(v){
@@ -133,7 +166,7 @@ $scope.callDbImport = function() {
 					})
 				}
 			}
-			readSql($scope.patientList.pl)
+			readSql($scope.patientList.pl_data, $scope.patientList.pl)
 		},
 		col_keys:{
 			col_236:'дата-час обстеженя',
@@ -181,6 +214,11 @@ var sql = {
 				" OR LOWER(col_242) LIKE LOWER(:seek) " +
 				""
 	},
+	read_table_day_date_desc:function(){
+		return "SELECT * FROM ( \n" +
+				":read_table_sql " +
+				") x WHERE MONTH(col_236)=:month AND YEAR(col_236)=:year AND DAY(col_236)=:day ORDER BY col_236 DESC"
+	},
 	read_table_date_desc:function(){
 		return "SELECT * FROM ( \n" +
 				":read_table_sql" +
@@ -194,6 +232,30 @@ var sql = {
 	read_table_config:function(){
 		return "SELECT * FROM doc d, docbody s \n" +
 				"WHERE parent = :tableId AND s.docbody_id=d.doc_id AND doctype!=4"
+	},
+	duplet_rows_count:function(){
+		return "SELECT count(*) cnt FROM (" +
+				this.duplet_rows() +
+				") x"
+	},
+	duplet_rows_remove:function(){
+		return "DELETE FROM doc WHERE parent IN (" + this.duplet_rows() +");\n" +
+		"DELETE FROM doc WHERE doc_id IN (" + this.duplet_rows() +")"
+	},
+	duplet_rows:function(){
+		return "SELECT max FROM ( " +
+		"SELECT * FROM ( " +
+		"SELECT MIN(doc_id) min, MAX(doc_id) max, COUNT(value) cnt, value  FROM ( " +
+		"SELECT d2.*, ts.* FROM timestamp ts, doc d1, doc d2 " +
+		"WHERE d2.parent=235 AND d2.doctype=4 AND d2.doc_id=d1.parent AND d1.doc_id=timestamp_id " +
+		") x GROUP BY value " +
+		") x WHERE min!=max " +
+		") x " +
+		"LEFT JOIN (SELECT d2.*, i.* FROM integer i, doc d1, doc d2 " +
+		"WHERE d1.reference=240 AND d2.parent=235 AND d2.doctype=4 AND d2.doc_id=d1.parent AND d1.doc_id=integer_id) y ON max=y.doc_id " +
+		"LEFT JOIN (SELECT d2.*, i.* FROM integer i, doc d1, doc d2 " +
+		"WHERE d1.reference=240 AND d2.parent=235 AND d2.doctype=4 AND d2.doc_id=d1.parent AND d1.doc_id=integer_id) z ON max=z.doc_id " +
+		"WHERE z.doc_id IS NULL AND y.doc_id IS NULL "
 	},
 }
 var sql_1c = sql

@@ -25,6 +25,12 @@
 			<span ng-include="'/f/login-link.html'"> </span>
 		</div>
 	</div>
+	<div class="w3-container">
+		<a href="#" ng-click="db_validation.removeDupletRows()" class="w3-btn" ng-if="db_validation.duplet_rows_count>0">
+			{{db_validation.duplet_rows_count}} - дуплет для видаленя</a>
+	</div>
+	<div class="w3-container">
 	Admin page on development
+	</div>
 </body>
 </html>
