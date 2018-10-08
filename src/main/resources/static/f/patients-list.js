@@ -35,14 +35,17 @@ $scope.date = {
 	seekDay : new Date(),
 	goToday:function(){
 		this.seekDay = new Date(this.today.getTime());
+		this.seekDayReadSql()
 	},
-	addDay:function(addDay){
-		console.log(addDay)
-		this.seekDay.setDate(this.seekDay.getDate() + addDay);
+	seekDayReadSql:function(){
 		$scope.patientList.pl_data.month=$scope.date.seekDay.getMonth()+1
 		$scope.patientList.pl_data.day=$scope.date.seekDay.getDate()
 		$scope.patientList.pl_data.year=$scope.date.seekDay.getFullYear()
-			readSql($scope.patientList.pl_data, $scope.patientList.pl)
+		readSql($scope.patientList.pl_data, $scope.patientList.pl)
+	},
+	addDay:function(addDay){
+		this.seekDay.setDate(this.seekDay.getDate() + addDay);
+		this.seekDayReadSql()
 	},
 }
 
