@@ -1,15 +1,12 @@
 app.controller('myCtrl', function($scope, $http, $interval, $filter) {
-	var pathNameValue = window.location.pathname.split('.html')[0].split('/').reverse()[0]
-	console.log(pathNameValue)
 	initApp($scope, $http)
 	$scope.firstName= "John";
 	$scope.lastName= "Doe";
 	$scope.random3=getRandomInt(3)
 
-	if('admin'==pathNameValue){
+	if(true || 'admin'==pathNameValue){
 		$scope.db_validation = {
 			removeDupletRows:function(){
-				console.log(123)
 				var data = {
 					sql : sql.duplet_rows_remove(),
 					dataAfterSave:function(response){
@@ -23,8 +20,6 @@ app.controller('myCtrl', function($scope, $http, $interval, $filter) {
 			afterRead:function(response){
 				this.duplet_rows_count = 
 					response.data.list[0].cnt
-				console.log(response.data)
-				console.log(this)
 			}
 		}
 		readSql($scope.db_validation)
@@ -33,19 +28,22 @@ app.controller('myCtrl', function($scope, $http, $interval, $filter) {
 $scope.date = {
 	today : new Date(),
 	seekDay : new Date(),
-	goToday:function(){
-		this.seekDay = new Date(this.today.getTime());
-		this.seekDayReadSql()
+	addDayUrl:function(addDay){
+		if($scope.request.parameters.addDay)
+			return addDay + $scope.request.parameters.addDay*1
+		return addDay
 	},
-	seekDayReadSql:function(){
+	setDay_pl_data:function(){
+		$scope.patientList.pl_data.year=$scope.date.seekDay.getFullYear()
 		$scope.patientList.pl_data.month=$scope.date.seekDay.getMonth()+1
 		$scope.patientList.pl_data.day=$scope.date.seekDay.getDate()
-		$scope.patientList.pl_data.year=$scope.date.seekDay.getFullYear()
+	},
+	seekDayReadSql:function(){
+		this.setDay_pl_data()
 		readSql($scope.patientList.pl_data, $scope.patientList.pl)
 	},
-	addDay:function(addDay){
-		this.seekDay.setDate(this.seekDay.getDate() + addDay);
-		this.seekDayReadSql()
+	addDayToseekDay:function(addDay){
+		this.seekDay.setDate(this.seekDay.getDate() + addDay)
 	},
 }
 
@@ -129,7 +127,7 @@ $scope.callDbImport = function() {
 		}
 	}
 }
-//    $interval( function(){ $scope.callDbImport(); }, $scope.lastDbRead.timeout)
+//	$interval( function(){ $scope.callDbImport(); }, $scope.lastDbRead.timeout)
 
 	$scope.$watch('patientList.seek',function(newValue){ if(true){
 		if($scope.patientList.pl){
@@ -159,9 +157,6 @@ $scope.callDbImport = function() {
 //			console.log(sql_table_data)
 			$scope.patientList.pl = {}
 			$scope.patientList.pl_data = {
-				month:$scope.date.seekDay.getMonth()+1,
-				day:$scope.date.seekDay.getDate(),
-				year:$scope.date.seekDay.getFullYear(),
 				sql:sql_table_data,
 				afterRead:function(){
 					$scope.patientList.rowMap = {}
@@ -171,6 +166,11 @@ $scope.callDbImport = function() {
 					})
 				}
 			}
+			if($scope.request.parameters.addDay)
+			{
+				$scope.date.addDayToseekDay($scope.request.parameters.addDay*1)
+			}
+			$scope.date.setDay_pl_data()
 			readSql($scope.patientList.pl_data, $scope.patientList.pl)
 		},
 		col_keys:{
@@ -188,6 +188,24 @@ $scope.callDbImport = function() {
 	$scope.pageVar = {
 		saveUpdate:function(){
 			this.o.col_240 = this.price
+			var col_data = {}
+			col_data.nextDbIdCounter = 3
+			col_data.sql_row = ''
+			col_data[240] = $scope.patientList.config.json_create_table[240]
+			var rowObj = this.o
+			angular.forEach(col_data, function(v_col_type,n){
+				var k = 'col_'+n
+				var v = rowObj[k]
+				console.log(n+'/'+k)
+				build_sqlJ2c_cell_write(v,k,n,col_data,rowObj)
+			})
+			console.log(col_data.sql_row)
+			var data = {
+				sql : col_data.sql_row,
+				row_id : rowObj.row_id,
+			}
+			console.log(data)
+			writeSql(data)
 		},
 		openEditRow:function(o){
 			this.ngStyleModal = {display:'block'}
@@ -217,7 +235,7 @@ var sql = {
 				" OR LOWER(col_240) LIKE LOWER(:seek) " +
 				" OR LOWER(col_241) LIKE LOWER(:seek) " +
 				" OR LOWER(col_242) LIKE LOWER(:seek) " +
-				""
+				" ORDER BY col_236 DESC"
 	},
 	read_table_day_date_desc:function(){
 		return "SELECT * FROM ( \n" +
@@ -245,7 +263,11 @@ var sql = {
 	},
 	duplet_rows_remove:function(){
 		return "DELETE FROM doc WHERE parent IN (" + this.duplet_rows() +");\n" +
-		"DELETE FROM doc WHERE doc_id IN (" + this.duplet_rows() +")"
+		"DELETE FROM doc WHERE doc_id IN (" + this.duplet_rows() +");\n" +
+		"DELETE FROM doc WHERE doc_id IN (" +
+		"SELECT d.doc_id FROM doc d LEFT JOIN doc d2 ON d2.parent=d.doc_id " +
+		"WHERE d.parent = 235 AND d.doctype=4 AND d2.doc_id IS NULL " +
+		");"
 	},
 	duplet_rows:function(){
 		return "SELECT max FROM ( " +
@@ -263,5 +285,6 @@ var sql = {
 		"WHERE z.doc_id IS NULL AND y.doc_id IS NULL "
 	},
 }
+
 var sql_1c = sql
 

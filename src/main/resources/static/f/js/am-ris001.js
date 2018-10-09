@@ -1,6 +1,7 @@
 var app = angular.module('myApp', ['ngSanitize']);
 var initApp = function($scope, $http){
 	console.log('initApp')
+	build_request($scope)
 	exe_fn = new Exe_fn($scope, $http);
 	exe_fn.httpGet_j2c_table_db1_params_then_fn = function(params, then_fn){
 		return {
@@ -51,6 +52,20 @@ function Exe_fn($scope, $http){
 
 function getRandomInt(max) {
 	return Math.floor(Math.random() * Math.floor(max));
+}
+
+function build_request($scope){
+	$scope.request={};
+	console.log($scope.request)
+	$scope.request.pathNameValue = window.location.pathname.split('.html')[0].split('/').reverse()[0]
+	console.log($scope.request.pathNameValue)
+	$scope.request.parameters={};
+	if(window.location.search.split('?')[1]){
+		angular.forEach(window.location.search.split('?')[1].split('&'), function(value, index){
+			var par = value.split("=");
+			$scope.request.parameters[par[0]] = par[1];
+		});
+	}
 }
 
 function build_sqlJ2c_row_insert(rowObj,col_data){
