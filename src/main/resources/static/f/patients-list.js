@@ -120,9 +120,11 @@ $scope.callDbImport = function() {
 	if($scope.patientList){
 		if($scope.patientList.pl){
 			$scope.lastDbRead.lastCallTime = new Date()
+			console.log($scope.patientList.pl)
+			console.log($scope.patientList.pl.sql)
 			$scope.lastDbRead.sql =
 				sql.read_table_max_min_date()
-				.replace(':read_table_sql',$scope.patientList.pl.sql)
+				.replace(':read_table_sql',$scope.patientList.config.sql_read_table_data)
 				readSql($scope.lastDbRead)
 		}
 	}
@@ -133,7 +135,7 @@ $scope.callDbImport = function() {
 		if($scope.patientList.pl){
 			var data = {
 				seek :'%'+newValue+'%',
-				sql : sql.read_table_seek().replace(':read_table_sql',$scope.patientList.pl.sql),
+				sql : sql.read_table_seek().replace(':read_table_sql',$scope.patientList.config.sql_read_table_data),
 			}
 			readSql(data, $scope.patientList.pl)
 		}
