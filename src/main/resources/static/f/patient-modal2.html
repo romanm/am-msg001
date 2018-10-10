@@ -1,5 +1,10 @@
 <div data-ng-click="pageVar.openEditRow(tr)"
 	data-ng-class="{'w3-green':tr.row_id==pageVar.o.row_id}">
-	<div data-ng-bind-html="highlight(tr.col_240, patientList.seek)"></div>
+	<div 
+	title="{{tr.col_240}}-{{tr.col_3311}}%"
+	data-ng-bind-html="highlight(
+	tr.col_240
+	-(tr.col_240*tr.col_3311/100)
+	, patientList.seek)"></div>
 	<div ng-if="!tr.col_240">_________</div>
 </div>

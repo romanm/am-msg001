@@ -101,29 +101,29 @@ public class Li159_10  extends XCommon{
 		return sheet;
 	}
 	private WebResponse getExcelResponse() throws FailingHttpStatusCodeException, MalformedURLException, IOException {
-		WebClient webClient = getWebClient(false, false); 
+		WebClient webClient = getWebClient(false, false);
 		String url = "http://159.224.141.10/auth/login";
 		System.err.println(url);
-		HtmlPage page1 = webClient.getPage(url);  
+		HtmlPage page1 = webClient.getPage(url);
 		// find the login form
-        HtmlForm form = page1.getForms().get(0);  
-        // find the inputs & button
-        HtmlTextInput textField = form.getInputByName("username");  
-        HtmlPasswordInput pass = form.getInputByName("password");  
-        HtmlButton htmlButton = form.getFirstByXPath("//button");
-        // fill in the input
-        textField.click();
-        String username = env.getProperty("li.username");
-        String password = env.getProperty("li.password");
-        textField.setValueAttribute(username);  
-        pass.click();
-        pass.setValueAttribute(password);  
-      
-        // push the button
-        HtmlPage page2 = htmlButton.click();  
-        URL url2 = page2.getUrl();
-        Page page = webClient.getPage(url2+"?download=on");
-        WebResponse webResponse = page.getWebResponse();
+		HtmlForm form = page1.getForms().get(0);
+		// find the inputs & button
+		HtmlTextInput textField = form.getInputByName("username");
+		HtmlPasswordInput pass = form.getInputByName("password");
+		HtmlButton htmlButton = form.getFirstByXPath("//button");
+		// fill in the input
+		textField.click();
+		String username = env.getProperty("li.username");
+		String password = env.getProperty("li.password");
+		textField.setValueAttribute(username);
+		pass.click();
+		pass.setValueAttribute(password);
+
+		// push the button
+		HtmlPage page2 = htmlButton.click();
+		URL url2 = page2.getUrl();
+		Page page = webClient.getPage(url2+"?download=on");
+		WebResponse webResponse = page.getWebResponse();
 		return webResponse;
 	}
 

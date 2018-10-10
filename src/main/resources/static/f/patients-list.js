@@ -188,10 +188,12 @@ $scope.callDbImport = function() {
 	$scope.pageVar = {
 		saveUpdate:function(){
 			this.o.col_240 = this.price
+			this.o.col_3311 = this.procent
 			var col_data = {}
 			col_data.nextDbIdCounter = 3
 			col_data.sql_row = ''
 			col_data[240] = $scope.patientList.config.json_create_table[240]
+			col_data[3311] = $scope.patientList.config.json_create_table[3311]
 			var rowObj = this.o
 			angular.forEach(col_data, function(v_col_type,n){
 				var k = 'col_'+n
@@ -209,11 +211,29 @@ $scope.callDbImport = function() {
 		},
 		openEditRow:function(o){
 			this.ngStyleModal = {display:'block'}
+			console.log(o)
+			console.log($scope.patientList.config.json_create_table)
 			if(this.row_id != o.row_id){
 				this.price = o.col_240
+				this.procent = o.col_3311
 				this.o = o
 				this.row_id = o.row_id
 			}
+			$scope.priceCalcHelpData = {}
+			console.log($scope.priceCalcHelpData)
+			console.log(o.col_239)
+			$scope.priceCalcHelpData.examination = {}
+			readSql({
+				examination:o.col_239,
+				sql:sql.read_examination_prices(),
+			}, $scope.priceCalcHelpData.examination)
+			$scope.priceCalcHelpData.destination = {}
+			console.log(sql.read_examination_prices())
+			console.log(o.col_242)
+			readSql({
+				destination:o.col_242,
+				sql:sql.read_destination_procents(),
+			}, $scope.priceCalcHelpData.destination)
 		}
 	}
 });
@@ -222,44 +242,66 @@ var sql = {
 	table_data_row_insert:function(){
 		return "INSERT INTO doc (doc_id, parent, doctype) VALUES (:nextDbId1 , :table_id , 4) ;"
 	},
+	table_data_cell_update:function(){
+		return "UPDATE :fieldtype SET value =:value WHERE :fieldtype_id=:cell_id ;"
+	},
 	table_data_cell_insert:function(){
 		return "INSERT INTO doc (doc_id, parent, reference, doctype) VALUES (:nextDbId2, :row_id , :column_id,  5) ;" +
-			"INSERT INTO :fieldtype (value,:fieldtype_id) VALUES (:value, :nextDbId2 ) ;"
+		"INSERT INTO :fieldtype (value,:fieldtype_id) VALUES (:value, :nextDbId2 ) ;"
+	},
+	read_destination_procents:function(){
+		return "SELECT * FROM ( SELECT COUNT(value) cnt, value FROM ( SELECT d.* FROM ( \n" +
+		"SELECT * FROM doc, integer WHERE reference =3311 AND doc_id=integer_id \n" +
+		") d, ( \n" +
+		"SELECT * FROM doc, string WHERE reference =242 AND doc_id=string_id AND value = :destination \n" +
+		") x WHERE x.parent=d.parent ) x GROUP BY value ) x ORDER BY cnt DESC"
+	},
+	read_examination_prices:function(){
+		return "SELECT * FROM ( " +
+		"SELECT COUNT(value) cnt, value FROM ( " +
+		"SELECT d.* FROM ( \n" +
+		"SELECT * FROM doc, integer WHERE reference =240 AND doc_id=integer_id \n" +
+		") d, (" +
+		"SELECT * FROM doc, string WHERE reference =239 AND doc_id=string_id AND value = :examination \n" +
+		") x " +
+		"WHERE x.parent=d.parent " +
+		") x GROUP BY value " +
+		") x ORDER BY cnt DESC"
 	},
 	read_table_seek:function(){
 		return "SELECT * FROM ( " +
-				":read_table_sql" +
-				" ) x WHERE LOWER(col_237) LIKE LOWER(:seek)" +
-				" OR LOWER(col_238) LIKE LOWER(:seek) " +
-				" OR LOWER(col_239) LIKE LOWER(:seek) " +
-				" OR LOWER(col_240) LIKE LOWER(:seek) " +
-				" OR LOWER(col_241) LIKE LOWER(:seek) " +
-				" OR LOWER(col_242) LIKE LOWER(:seek) " +
-				" ORDER BY col_236 DESC"
+		":read_table_sql" +
+		" ) x WHERE LOWER(col_237) LIKE LOWER(:seek)" +
+		" OR LOWER(col_238) LIKE LOWER(:seek) " +
+		" OR LOWER(col_239) LIKE LOWER(:seek) " +
+		" OR LOWER(col_240) LIKE LOWER(:seek) " +
+		" OR LOWER(col_241) LIKE LOWER(:seek) " +
+		" OR LOWER(col_242) LIKE LOWER(:seek) " +
+		" ORDER BY col_236 DESC"
 	},
 	read_table_day_date_desc:function(){
 		return "SELECT * FROM ( \n" +
-				":read_table_sql " +
-				") x WHERE MONTH(col_236)=:month AND YEAR(col_236)=:year AND DAY(col_236)=:day ORDER BY col_236 DESC"
+		":read_table_sql " +
+		") x WHERE MONTH(col_236)=:month AND YEAR(col_236)=:year AND DAY(col_236)=:day ORDER BY col_236 DESC"
 	},
 	read_table_date_desc:function(){
 		return "SELECT * FROM ( \n" +
-				":read_table_sql" +
-				") x ORDER BY col_236 DESC"
+		":read_table_sql" +
+		") x ORDER BY col_236 DESC"
 	},
 	read_table_max_min_date:function(){
 		return "SELECT min(col_236) min, max(col_236) max, count(*) FROM (" +
-				":read_table_sql" +
-				") x"
+		":read_table_sql" +
+		") x"
 	},
 	read_table_config:function(){
 		return "SELECT * FROM doc d, docbody s \n" +
-				"WHERE parent = :tableId AND s.docbody_id=d.doc_id AND doctype!=4"
+		"WHERE parent = :tableId AND s.docbody_id=d.doc_id AND doctype!=4"
 	},
 	duplet_rows_count:function(){
 		return "SELECT count(*) cnt FROM (" +
-				this.duplet_rows() +
-				") x"
+		this.duplet_rows() +
+		") x"
 	},
 	duplet_rows_remove:function(){
 		return "DELETE FROM doc WHERE parent IN (" + this.duplet_rows() +");\n" +

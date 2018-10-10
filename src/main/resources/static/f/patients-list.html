@@ -9,6 +9,7 @@
 <script src="/f/js/am-ris001.js"></script>
 <script src="/f/patients-list.js"></script>
 <link rel="stylesheet" href="/f/css/w3.css">
+<link rel="stylesheet" href="/f/css/am.css">
 <link rel="stylesheet"
 	href="/webjars/font-awesome/4.7.0/css/font-awesome.min.css">
 <body>
@@ -96,35 +97,79 @@
 				</td>
 			</tr>
 		</table>
-		<div data-ng-style="pageVar.ngStyleModal" class="w3-modal">
-			<div class="w3-modal-content">
+	</div>
 
-				<div class="w3-container">
-					<div class="w3-row-padding w3-border-bottom">
-						<div class="w3-col m4 l4 s4 ">
-							<button class="w3-border" data-ng-click="pageVar.saveUpdate()">OK
-								сплата друк</button>
-							<button class="w3-border"
-								ng-click="pageVar.ngStyleModal={display:'none'}">Cancel</button>
-						</div>
-						<div class="w3-col m8 l8 s8 ">
-							<div data-ng-include="pageVar.o.ngIncludes.modalBottonPanel"></div>
-						</div>
+	<div data-ng-style="pageVar.ngStyleModal" class="w3-modal">
+		<div class="w3-modal-content">
+
+			<div class="w3-container">
+				<div class="w3-row-padding w3-border-bottom">
+					<div class="w3-col m4 l4 s4 ">
+						<button class="w3-border" data-ng-click="pageVar.saveUpdate()">OK
+							сплата друк</button>
+						<button class="w3-border"
+							ng-click="pageVar.ngStyleModal={display:'none'}">Cancel</button>
 					</div>
-
-					<span data-ng-click="pageVar.ngStyleModal={display:'none'}"
-						class="w3-button w3-display-topright">&times;</span>
-					<p data-ng-if="!pageVar.o">Не вибрані дані для редагування.</p>
-					<p data-ng-if="pageVar.o">|{{pageVar.o.col_237}} |
-						{{pageVar.o.col_238}} | {{pageVar.o.col_239}} |
-						{{pageVar.o.col_240}} | {{pageVar.o.col_241}} |
-						{{pageVar.o.col_242}}</p>
-					<p>
-						Вартість: <input data-ng-model="pageVar.price" class="w3-border">
-					</p>
+					<div class="w3-col m8 l8 s8 ">
+						<div data-ng-include="pageVar.o.ngIncludes.modalBottonPanel"></div>
+					</div>
 				</div>
+
+				<span data-ng-click="pageVar.ngStyleModal={display:'none'}"
+					class="w3-button w3-display-topright">&times;</span>
+				<p data-ng-if="!pageVar.o">Не вибрані дані для редагування.</p>
+				<p data-ng-if="pageVar.o">|{{pageVar.o.col_237}} |
+					{{pageVar.o.col_238}} |
+					{{pageVar.o.col_240}} | {{pageVar.o.col_241}} |
+					</p>
+				<div class="w3-row">
+					<div class="w3-half w3-container "></div>
+					<div class="w3-half">
+						<span class="w3-tiny am-b">Обстеження:</span>
+						{{pageVar.o.col_239}}
+					</div>
+				</div>
+				<div class="w3-row">
+					<div class="w3-half w3-container ">
+						Вартість: <input data-ng-model="pageVar.price"
+							class="w3-border w3-right">
+					</div>
+					<div class="w3-half">
+						<span class="w3-tiny"
+							ng-repeat="o in priceCalcHelpData.examination.list">
+							<a ng-click="pageVar.price=o.value" class="w3-btn w3-hover-shadow w3-padding-small" href="#"
+							title="{{o.cnt}}"> {{o.value}} </a>
+						</span>
+					</div>
+				</div>
+				<div class="w3-row">
+					<div class="w3-half w3-container ">
+						Скидка (%): <input data-ng-model="pageVar.procent"
+							class="w3-border w3-right">
+					</div>
+					<div class="w3-half">
+						<span class="w3-tiny"
+							ng-repeat="o in priceCalcHelpData.destination.list"> <a
+							ng-click="pageVar.procent=o.value"
+							class="w3-btn w3-hover-shadow w3-padding-small" href="#"
+							title="{{o.cnt}}"> {{o.value}} </a>
+						</span>
+					</div>
+				</div>
+				<div class="w3-row">
+					<div class="w3-half w3-container ">
+						До сплати: <span class="am-b">
+							{{pageVar.price-(pageVar.price*pageVar.procent/100)}} </span>
+					</div>
+					<div class="w3-half">
+						<span class="w3-tiny am-b">Направлення:</span>
+						{{pageVar.o.col_242}}
+					</div>
+				</div>
+				<p>&nbsp;</p>
 			</div>
 		</div>
 	</div>
+
 </body>
 </html>
