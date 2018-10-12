@@ -185,6 +185,7 @@ $scope.callDbImport = function() {
 	}
 	readSql($scope.patientList)
 
+	
 	$scope.pageVar = {
 		saveUpdate:function(){
 			this.o.col_240 = this.price
