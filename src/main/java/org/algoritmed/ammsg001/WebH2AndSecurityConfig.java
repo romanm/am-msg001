@@ -1,14 +1,22 @@
 package org.algoritmed.ammsg001;
 
 
+import static org.hamcrest.CoreMatchers.instanceOf;
+
 import java.io.IOException;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.PropertySource;
+import org.springframework.core.env.AbstractEnvironment;
+import org.springframework.core.env.CompositePropertySource;
 import org.springframework.core.env.Environment;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.authentication.configurers.provisioning.InMemoryUserDetailsManagerConfigurer;
+import org.springframework.security.config.annotation.authentication.configurers.provisioning.UserDetailsManagerConfigurer;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
@@ -28,7 +36,7 @@ public class WebH2AndSecurityConfig extends WebSecurityConfigurerAdapter {
 				, startServerScript};
 		try {
 			System.err.println("Attempting to start database service");
-			Process pr = Runtime.getRuntime().exec(cmd);
+			Runtime.getRuntime().exec(cmd);
 			System.err.println("Database service started");
 		} catch (IOException e) {
 			System.err.println("Database service start problem");
@@ -68,16 +76,32 @@ public class WebH2AndSecurityConfig extends WebSecurityConfigurerAdapter {
 	@Autowired protected Environment env;
 	@Autowired
 	public void configureGlobal(AuthenticationManagerBuilder auth) throws Exception {
-		String userName = env.getProperty("am.user.username");
-		String userPassword = env.getProperty("am.user.password");
-		String adminName = env.getProperty("am.admin.username");
-		String adminPassword = env.getProperty("am.admin.password");
 		InMemoryUserDetailsManagerConfigurer<AuthenticationManagerBuilder> inMemoryAuthentication = auth
 				.inMemoryAuthentication();
-		inMemoryAuthentication.withUser(userName).password("{noop}"+userPassword).roles("USER");
-		inMemoryAuthentication.withUser(adminName).password("{noop}"+adminPassword).roles("ADMIN");
-		/*
 
+		for(Iterator it = ((AbstractEnvironment) env).getPropertySources().iterator(); it.hasNext(); ) {
+			Object next = it.next();
+			if(next instanceof CompositePropertySource) {
+				CompositePropertySource cps = (CompositePropertySource) next;
+				String[] propertyNames = cps.getPropertyNames();
+				for (String string : propertyNames) {
+					if(string.contains("am_login")) {
+						String userName = string.split("\\.")[1];
+						String userPassword = env.getProperty(string);
+						UserDetailsManagerConfigurer<AuthenticationManagerBuilder
+						, InMemoryUserDetailsManagerConfigurer<AuthenticationManagerBuilder>>.UserDetailsBuilder 
+						roles = inMemoryAuthentication.withUser(userName).password("{noop}"+userPassword).roles("USER");
+						if(env.containsProperty("am_add_role_login."+userName)) {
+							String add_roles = env.getProperty("am_add_role_login."+userName);
+							String[] split = add_roles.split(",");
+							roles.roles(split);
+						}
+					}
+				}
+			}
+			
+		}
+		/*
 		auth.jdbcAuthentication().dataSource(dataSourceDb2)
 		.usersByUsernameQuery(
 				"SELECT username,password, enabled FROM users WHERE username=?")
