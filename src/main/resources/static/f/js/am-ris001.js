@@ -70,7 +70,7 @@ function build_request($scope){
 
 function build_sqlJ2c_row_insert(rowObj,col_data){
 	col_data.sql_row = sql_1c.table_data_row_insert()
-	console.log(col_data)
+//	console.log(col_data)
 	build_sqlJ2c_row_write(rowObj, col_data,function(v,k,n){
 		build_sqlJ2c_cell_write(v,k,n,col_data,rowObj)
 	})
@@ -106,9 +106,9 @@ function build_sqlJ2c_cell_write_parameters(col_data, v, n){
 }
 
 function build_sqlJ2c_cell_write(v,k,n,col_data, rowObj){
-	console.log(col_data[n])
+//	console.log(col_data[n])
 	var cellId_v = rowObj[k+'_id']
-	console.log(k+'/'+v+'/'+cellId_v+'/'+n)
+//	console.log(k+'/'+v+'/'+cellId_v+'/'+n)
 	if(cellId_v){
 		col_data.sql = sql_1c.table_data_cell_update()
 		col_data.sql = col_data.sql.replace(':cell_id', cellId_v)

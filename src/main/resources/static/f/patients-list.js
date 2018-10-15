@@ -159,6 +159,7 @@ $scope.callDbImport = function() {
 			$scope.patientList.pl_data = {
 				sql:sql_table_data,
 				afterRead:function(){
+					console.log($scope.patientList.pl)
 					$scope.patientList.rowMap = {}
 					console.log($scope.patientList.pl.list.length)
 					angular.forEach($scope.patientList.pl.list, function(v){
@@ -190,11 +191,13 @@ $scope.callDbImport = function() {
 		saveUpdate:function(){
 			this.o.col_240 = this.price
 			this.o.col_3311 = this.procent
+			this.o.col_5218 = this.payment_privilege
 			var col_data = {}
 			col_data.nextDbIdCounter = 3
 			col_data.sql_row = ''
 			col_data[240] = $scope.patientList.config.json_create_table[240]
 			col_data[3311] = $scope.patientList.config.json_create_table[3311]
+			col_data[5218] = $scope.patientList.config.json_create_table[5218]
 			var rowObj = this.o
 			angular.forEach(col_data, function(v_col_type,n){
 				var k = 'col_'+n
@@ -213,7 +216,9 @@ $scope.callDbImport = function() {
 		openEditRow:function(o){
 			this.ngStyleModal = {display:'block'}
 			console.log(o)
-			console.log($scope.patientList.config.json_create_table)
+			this.payment_privilege = o.col_5218
+			console.log(this)
+//			console.log($scope.patientList.config.json_create_table)
 			if(this.row_id != o.row_id){
 				this.price = o.col_240
 				this.procent = o.col_3311
@@ -221,8 +226,8 @@ $scope.callDbImport = function() {
 				this.row_id = o.row_id
 			}
 			$scope.priceCalcHelpData = {}
-			console.log($scope.priceCalcHelpData)
-			console.log(o.col_239)
+//			console.log($scope.priceCalcHelpData)
+//			console.log(o.col_239)
 			$scope.priceCalcHelpData.examination = {}
 			readSql({
 				examination:o.col_239,
@@ -235,6 +240,16 @@ $scope.callDbImport = function() {
 				destination:o.col_242,
 				sql:sql.read_destination_procents(),
 			}, $scope.priceCalcHelpData.destination)
+
+			if(!$scope.pageVar.payment_privileges)
+				exe_fn.httpGet({url:'/f/config/payment_privilege.json',
+					then_fn:function(response){
+						$scope.pageVar.payment_privileges
+						= response.data
+						console.log(response.data)
+					}
+				})
+
 		}
 	}
 });

@@ -55,7 +55,6 @@
 		</div>
 	</div>
 	<div class="w3-container" ng-if="principal.name">
-
 		<table data-ng-repeat="o in [patientList]"
 			style="margin-left: auto; margin-right: auto;">
 			<caption>
@@ -167,6 +166,13 @@
 						<span class="w3-tiny am-b">Направлення:</span>
 						{{pageVar.o.col_242}}
 					</div>
+				</div>
+				{{pageVar.payment_privilege}}
+				<div>
+					Пільги: <select ng-model="pageVar.payment_privilege">
+						<option ng-repeat="x in pageVar.payment_privileges"
+							value="{{x.name}}">{{x.name}}</option>
+					</select>
 				</div>
 				<p>&nbsp;</p>
 			</div>
