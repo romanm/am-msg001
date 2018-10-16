@@ -252,9 +252,9 @@ $scope.callDbImport = function() {
 		}, $scope.priceCalcHelpData.destination)
 	
 		if(!$scope.pageVar.payment_privileges)
-			exe_fn.httpGet({url:'/f/config/payment_privilege.json',
+			exe_fn.httpGet({url:'/f/config/site_config.json',
 				then_fn:function(response){
-					$scope.pageVar.payment_privileges
+					$scope.pageVar.site_config
 					= response.data
 					console.log(response.data)
 				}

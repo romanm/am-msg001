@@ -2,6 +2,7 @@
 <html data-ng-app="myApp" data-ng-controller="myCtrl"  lang="uk-UA">
 <meta charset="utf-8" />
 <title>РІС застосунок</title>
+<link rel="shortcut icon" href="/f/img/algoritmed.ico" type="image/x-icon">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <link rel="stylesheet" href="/f/css/w3.css">
 <link rel="stylesheet"
@@ -11,17 +12,17 @@
 <script src="/webjars/angularjs/1.7.4/i18n/angular-locale_uk.js"></script>
 <script src="/f/js/am-ris001.js"></script>
 <script src="/f/patients-list.js"></script>
-<body>
+<body class="{{pageVar.colortheme.theme=='night'?'w3-dark-grey':''}}">
 	<div class="w3-row w3-light-grey">
 		<div class="w3-col  w3-container" style="width: 20%">
 			<a href="/" class=" w3-btn w3-hover-shadow"> <i
 				class="fa fa-home w3-large w3-border" aria-hidden="true"></i>
 			</a>
 		</div>
-		<div class="w3-col  w3-container w3-center" style="width: 60%">
+		<div class="w3-col  w3-container w3-center" style="width: 50%">
 			<h1 class="w3-jumbo w3-padding-16 w3-center">РІС застосунок</h1>
 		</div>
-		<div class="w3-col w3-container w3-right-align" style="width: 20%">
+		<div class="w3-col w3-container w3-right-align" style="width: 30%">
 			<span ng-include="'/f/login-link.html'"> </span>
 		</div>
 	</div>
