@@ -102,18 +102,8 @@ $scope.lastDbRead = {
 		exe_fn.httpGet($scope.lastDbRead.requestToImport)
 	},
 }
-exe_fn.httpGet($scope.lastDbRead.requestToImport)
 
-var readPrincipal = {
-	url:'/r/principal',
-	then_fn:function(response){
-		$scope.principal = response.data.m
-		console.log($scope.principal)
-	},
-}
-exe_fn.httpGet(readPrincipal)
 
-$interval( function(){ exe_fn.httpGet($scope.lastDbRead.requestToImport) }, $scope.lastDbRead.timeout)
 $scope.callDbImport = function() {
 	if($scope.patientList){
 		if($scope.patientList.pl){
@@ -187,14 +177,7 @@ $scope.callDbImport = function() {
 	readSql($scope.patientList)
 
 	$scope.pageVar = {}
-	$scope.pageVar.colortheme = {}
-	$scope.pageVar.colortheme.changeTheme = function(){
-		if(this.theme == 'night'){
-			this.theme = 'day'
-		}else{
-			this.theme = 'night'
-		}
-	}
+	
 	$scope.pageVar.saveUpdate = function(){
 		this.o.col_240 = this.price
 		this.o.col_3311 = this.procent
@@ -250,16 +233,45 @@ $scope.callDbImport = function() {
 			destination:o.col_242,
 			sql:sql.read_destination_procents(),
 		}, $scope.priceCalcHelpData.destination)
-	
-		if(!$scope.pageVar.payment_privileges)
-			exe_fn.httpGet({url:'/f/config/site_config.json',
-				then_fn:function(response){
-					$scope.pageVar.site_config
-					= response.data
-					console.log(response.data)
-				}
-			})
+
 	}
+
+	$scope.pageVar.colortheme = {}
+	$scope.pageVar.colortheme.changeTheme = function(){
+		if(this.theme == 'night'){
+			this.theme = 'day'
+		}else{
+			this.theme = 'night'
+		}
+		console.log($scope.pageVar.site_config)
+		var data = $scope.pageVar.site_config
+		data.colortheme
+			= $scope.pageVar.colortheme
+		console.log(data)
+		exe_fn.httpPost({ url:'/url_file_write',
+			then_fn:function(response) {
+				console.log(response.data)
+			},
+			data:data,
+		})
+	}
+
+	exe_fn.httpGet({
+		url:'/r/principal',
+		then_fn:function(response){
+			$scope.principal = response.data.m
+			console.log($scope.principal)
+			$scope.pageVar.site_config
+				= response.data.config
+			$scope.pageVar.colortheme.theme
+				= $scope.pageVar.site_config.colortheme.theme
+			console.log($scope.pageVar.site_config.colortheme)
+
+			exe_fn.httpGet($scope.lastDbRead.requestToImport)
+			$interval( function(){ exe_fn.httpGet($scope.lastDbRead.requestToImport) }, $scope.lastDbRead.timeout)
+
+		},
+	})
 
 });
 

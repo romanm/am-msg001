@@ -8,8 +8,10 @@ import java.util.Map;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import com.fasterxml.jackson.core.JsonParseException;
+import com.fasterxml.jackson.core.util.DefaultPrettyPrinter;
 import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.ObjectWriter;
 import com.gargoylesoftware.htmlunit.WebClient;
 
 public class XCommon {
@@ -17,6 +19,14 @@ public class XCommon {
 	public Map<String, Object> readJsonFromFullFileName(String fileName) {
 		File file = new File(fileName);
 		return readJsonFromFullFileName(file);
+	}
+	public void writeJsonToFile(String fileName, Object jsonDataObject) {
+		ObjectWriter writer = objectMapper.writer(new DefaultPrettyPrinter());
+		try {
+			writer.writeValue(new File(fileName), jsonDataObject);
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
 	}
 	public Map<String, Object> readJsonFromFullFileName(File file) {
 		Map<String, Object> readJsonFileToJavaObject = null;
