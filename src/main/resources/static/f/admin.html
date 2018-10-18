@@ -33,14 +33,33 @@
 	<div class="w3-container w3-orange w3-tiny">Admin page on
 		development</div>
 	<div class="w3-container">
-		виборка по платежу: <input class="w3-border" type="number"
-			data-ng-model="filter.minPayment" placeholder="min"> <input
-			class="w3-border" type="number" data-ng-model="filter.maxPayment"
-			placeholder="max">
-			<button class="w3-border" ng-click="filter.filterOnPayment()">OK</button>
-
-			<div ng-include="'/f/patient-list-table.html'"></div>
-			
+		<div>
+			<button class="w3-border" ng-click="filter.filterOnPaymentClean()">Скасувати</button>
+			виборка по платежу: <input class="w3-border" type="number"
+				data-ng-model="filter.minPayment" placeholder="min"> <input
+				class="w3-border" type="number" data-ng-model="filter.maxPayment"
+				placeholder="max">
+		</div>
+		<div>
+			<button class="w3-border" ng-click="filter.filterOnPrivilegeClean()">Скасувати</button>
+			виборка по пільгам: <select ng-model="filter.payment_privilege">
+				<option ng-repeat="x in pageVar.site_config.payment_privileges"
+					value="{{x.name}}">{{x.name}}</option>
+			</select>
+		</div>
+		<div>
+			<button class="w3-border" ng-click="filter.filterOnDateClean()">Скасувати</button>
+			виборка по даті: з<input class="w3-border" type="text"
+			data-ng-blur="filter.blurDate('fromDate')"
+			data-ng-change="filter.checkDate('fromDate')"
+				data-ng-model="filter.fromDate" placeholder="дд-мм-рр"> до<input
+			data-ng-blur="filter.blurDate('toDate')"
+			data-ng-change="filter.checkDate('toDate')"
+				class="w3-border" type="text" data-ng-model="filter.toDate"
+				placeholder="дд-мм-рр">
+		</div>
+		<button class="w3-border" ng-click="filter.filterOnPayment()">OK</button>
+		<div ng-include="'/f/patient-list-table.html'"></div>
 	</div>
 </body>
 </html>

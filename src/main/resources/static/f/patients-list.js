@@ -26,12 +26,55 @@ app.controller('myCtrl', function($scope, $http, $interval, $filter) {
 	}
 
 	$scope.filter = {
+		filterOnPrivilegeClean:function(){
+			this.payment_privilege = null
+		},
+		filterOnDateClean:function(){
+			
+		},
+		filterOnPaymentClean:function(){
+			this.maxPayment = null
+			this.minPayment = null
+		},
 		filterOnPayment:function(){
-			console.log(this)
-			this.sql = sql.read_table_payment().replace(':read_table_sql',$scope.patientList.config.sql_read_table_data),
+			this.sql = $scope.patientList.config.sql_read_table_data
+			console.log(this.payment_privilege)
+			if(this.minPayment && this.maxPayment){
+				this.sql = sql.read_table_payment().replace(':read_table_sql',this.sql)
+			}
+			if(this.payment_privilege){
+				this.sql = sql.read_table_privilege().replace(':read_table_sql',this.sql)
+			}
+//			console.log(this)
 			console.log(this.sql)
 			readSql(this, $scope.patientList.pl)
-		}
+		},
+		blurDate:function(dateName){
+			var date = this.checkDate(dateName)
+			console.log(date)
+			var s = date.getDate()+'-'+(date.getMonth()+1)+'-'+date.getFullYear()
+			console.log(s)
+			this[dateName+'_ts'] = date
+			this[dateName] = s
+		},
+		checkDate:function(dateName){
+			var date = new Date()
+			date.setHours(10)
+			var checkDate = this[dateName]
+			console.log(checkDate)
+			checkDate = checkDate.replace(/-/g,' ')
+			var checkDateSplit = checkDate.split(' ')
+			console.log(checkDateSplit)
+			date.setDate(checkDateSplit[0])
+			if(checkDateSplit[1]){
+				var m = checkDateSplit[1]*1-1
+				console.log(m)
+				date.setMonth(m)
+//			date.setDate(checkDateSplit[2])
+			}
+			console.log(date.toISOString())
+			return date
+ 		},
 	}
 
 	$scope.date = {
@@ -308,6 +351,11 @@ var sql = {
 		"WHERE x.parent=d.parent " +
 		") x GROUP BY value " +
 		") x ORDER BY cnt DESC"
+	},
+	read_table_privilege:function(){
+		return "SELECT * FROM ( " +
+		":read_table_sql " +
+		" ) x WHERE col_5218 = :payment_privilege"
 	},
 	read_table_payment:function(){
 		return "SELECT * FROM ( " +
