@@ -24,7 +24,16 @@ app.controller('myCtrl', function($scope, $http, $interval, $filter) {
 		}
 		readSql($scope.db_validation)
 	}
-	
+
+	$scope.filter = {
+		filterOnPayment:function(){
+			console.log(this)
+			this.sql = sql.read_table_payment().replace(':read_table_sql',$scope.patientList.config.sql_read_table_data),
+			console.log(this.sql)
+			readSql(this, $scope.patientList.pl)
+		}
+	}
+
 	$scope.date = {
 		today : new Date(),
 		seekDay : new Date(),
@@ -42,7 +51,7 @@ app.controller('myCtrl', function($scope, $http, $interval, $filter) {
 			this.setDay_pl_data()
 			readSql($scope.patientList.pl_data, $scope.patientList.pl)
 		},
-		addDayToseekDay:function(addDay){
+		addDayToSeekDay:function(addDay){
 			this.seekDay.setDate(this.seekDay.getDate() + addDay)
 		},
 	}
@@ -157,9 +166,8 @@ $scope.callDbImport = function() {
 					})
 				}
 			}
-			if($scope.request.parameters.addDay)
-			{
-				$scope.date.addDayToseekDay($scope.request.parameters.addDay*1)
+			if($scope.request.parameters.addDay) {
+				$scope.date.addDayToSeekDay($scope.request.parameters.addDay*1)
 			}
 			$scope.date.setDay_pl_data()
 			readSql($scope.patientList.pl_data, $scope.patientList.pl)
@@ -238,11 +246,7 @@ $scope.callDbImport = function() {
 
 	$scope.pageVar.colortheme = {}
 	$scope.pageVar.colortheme.changeTheme = function(){
-		if(this.theme == 'night'){
-			this.theme = 'day'
-		}else{
-			this.theme = 'night'
-		}
+		this.theme = (this.theme == 'night')?'day':'night'
 		console.log($scope.pageVar.site_config)
 		var data = $scope.pageVar.site_config
 		data.colortheme
@@ -304,6 +308,11 @@ var sql = {
 		"WHERE x.parent=d.parent " +
 		") x GROUP BY value " +
 		") x ORDER BY cnt DESC"
+	},
+	read_table_payment:function(){
+		return "SELECT * FROM ( " +
+		":read_table_sql " +
+		" ) x WHERE col_240 > :minPayment AND col_240 <= :maxPayment "
 	},
 	read_table_seek:function(){
 		return "SELECT * FROM ( " +

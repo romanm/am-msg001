@@ -21,18 +21,18 @@ public class AmFileRest extends XCommon{
 	protected static final Logger logger = LoggerFactory.getLogger(AmFileRest.class);
 	@Autowired protected Environment env;
 
-	
 	@PostMapping("/url_file_write")
 	public @ResponseBody Map<String, Object> url_file_write(
 			@RequestBody Map<String, Object> data
 			,HttpServletRequest request
 			,Principal principal
 		){
-		
+
 		logger.info("\n\n--27---- "
 				+ "/url_file_write"
 				+ "\n" + data
 				);
+
 		String amConfigFile = env.getProperty("am.configFile");
 		writeJsonToFile(amConfigFile, data);
 		return data;
