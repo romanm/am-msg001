@@ -30,35 +30,41 @@
 		<a href="#" ng-click="db_validation.removeDupletRows()" class="w3-btn" ng-if="db_validation.duplet_rows_count>0">
 			{{db_validation.duplet_rows_count}} - дуплет для видаленя</a>
 	</div>
-	<div class="w3-container w3-orange w3-tiny">Admin page on
+	<div class="w3-container w3-orange w3-tiny">Analytics page on
 		development</div>
 	<div class="w3-container">
-		<div>
-			<button class="w3-border" ng-click="filter.filterOnPaymentClean()">Скасувати</button>
-			виборка по платежу: <input class="w3-border" type="number"
-				data-ng-model="filter.minPayment" placeholder="min"> <input
-				class="w3-border" type="number" data-ng-model="filter.maxPayment"
-				placeholder="max">
-		</div>
-		<div>
-			<button class="w3-border" ng-click="filter.filterOnPrivilegeClean()">Скасувати</button>
-			виборка по пільгам: <select ng-model="filter.payment_privilege">
-				<option ng-repeat="x in pageVar.site_config.payment_privileges"
-					value="{{x.name}}">{{x.name}}</option>
-			</select>
-		</div>
-		<div>
-			<button class="w3-border" ng-click="filter.filterOnDateClean()">Скасувати</button>
-			виборка по даті: з<input class="w3-border" type="text"
-			data-ng-blur="filter.blurDate('fromDate')"
-			data-ng-change="filter.checkDate('fromDate')"
-				data-ng-model="filter.fromDate" placeholder="дд-мм-рр"> до<input
-			data-ng-blur="filter.blurDate('toDate')"
-			data-ng-change="filter.checkDate('toDate')"
-				class="w3-border" type="text" data-ng-model="filter.toDate"
-				placeholder="дд-мм-рр">
-		</div>
+		<div class="w3-row">
+			<div class="w3-col w3-container" style="width: 80%">
+				<div>
+					<button class="w3-border" ng-click="filter.filterOnPaymentClean()">Скасувати</button>
+					{{gui.filterOnPayment}} <input class="w3-border"
+						type="number" data-ng-model="filter.minPayment" placeholder="min">
+					<input class="w3-border" type="number"
+						data-ng-model="filter.maxPayment" placeholder="max">
+				</div>
+				<div>
+					<button class="w3-border"
+						ng-click="filter.filterOnPrivilegeClean()">Скасувати</button>
+					{{gui.filterOnPrivilege}} <select
+						ng-model="filter.payment_privilege">
+						<option ng-repeat="x in pageVar.site_config.payment_privileges"
+							value="{{x.name}}">{{x.name}}</option>
+					</select>
+				</div>
+				<div>
+					<button class="w3-border" ng-click="filter.filterOnDateClean()">Скасувати</button>
+					{{gui.filterOnDate}} з<input class="w3-border" type="text"
+						data-ng-blur="filter.blurDate('fromDate')"
+						data-ng-change="filter.checkDate('fromDate')"
+						data-ng-model="filter.fromDate" placeholder="дд-мм-рр"> до<input
+						data-ng-blur="filter.blurDate('toDate')"
+						data-ng-change="filter.checkDate('toDate')" class="w3-border"
+						type="text" data-ng-model="filter.toDate" placeholder="дд-мм-рр">
+				</div>
 		<button class="w3-border" ng-click="filter.filterOnPayment()">OK</button>
+			</div>
+			<div class="w3-col w3-container" style="width: 20%">excell</div>
+		</div>
 		<div ng-include="'/f/patient-list-table.html'"></div>
 	</div>
 </body>

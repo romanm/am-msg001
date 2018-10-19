@@ -4,7 +4,7 @@ app.controller('myCtrl', function($scope, $http, $interval, $filter) {
 	$scope.lastName= "Doe";
 	$scope.random3=getRandomInt(3)
 
-	if(true || 'admin'==pathNameValue){
+	if(true || 'analytics'==pathNameValue){
 		$scope.db_validation = {
 			removeDupletRows:function(){
 				var data = {
@@ -23,6 +23,12 @@ app.controller('myCtrl', function($scope, $http, $interval, $filter) {
 			}
 		}
 		readSql($scope.db_validation)
+	}
+
+	$scope.gui = {
+		filterOnDate:'виборка по даті:',
+		filterOnPrivilege:'виборка по пільгам:',
+		filterOnPayment:'виборка по платежу:',
 	}
 
 	$scope.filter = {
