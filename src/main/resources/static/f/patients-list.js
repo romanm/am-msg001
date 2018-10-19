@@ -234,7 +234,6 @@ $scope.callDbImport = function() {
 	readSql($scope.patientList)
 
 	$scope.pageVar = {}
-	
 	$scope.pageVar.saveUpdate = function(){
 		this.o.col_240 = this.price
 		this.o.col_3311 = this.procent
@@ -259,6 +258,16 @@ $scope.callDbImport = function() {
 		}
 		console.log(data)
 		writeSql(data)
+		var paymentData = {
+			payment:123,
+			name:'МРТ голови',
+		}
+		exe_fn.httpPost({ url:'/toPaymentApparatus',
+			then_fn:function(response) {
+				console.log(response.data)
+			},
+			data:paymentData,
+		})
 	}
 
 	$scope.pageVar.openEditRow = function(o){
