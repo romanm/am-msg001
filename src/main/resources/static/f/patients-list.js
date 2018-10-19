@@ -255,6 +255,9 @@ $scope.callDbImport = function() {
 		var data = {
 			sql : col_data.sql_row,
 			row_id : rowObj.row_id,
+			dataAfterSave: function(response){
+				console.log(response.data)
+			},
 		}
 		console.log(data)
 		writeSql(data)

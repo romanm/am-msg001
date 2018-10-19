@@ -56,10 +56,12 @@ public class PaymentRest {
 			System.err.println(e);
 			System.err.println("---57---------");
 		}
-//https://stackoverflow.com/questions/45986417/spring-webflux-how-can-i-debug-my-webclient-post-exchange
-		//https://www.baeldung.com/spring-5-webclient
+
 
 		return paymentData;
 	}
+//WebClient spring sent json to post
+//https://stackoverflow.com/questions/45986417/spring-webflux-how-can-i-debug-my-webclient-post-exchange
+//https://www.baeldung.com/spring-5-webclient
 
 }
