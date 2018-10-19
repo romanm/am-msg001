@@ -25,6 +25,16 @@ app.controller('myCtrl', function($scope, $http, $interval, $filter) {
 		readSql($scope.db_validation)
 	}
 
+	$scope.ekkr = {}
+	$scope.ekkr.xReport = function(){
+		exe_fn.httpGet({
+		url:'/getXReport',
+		then_fn:function(response){
+			console.log(response.data)
+		},
+	})
+	}
+
 	$scope.gui = {
 		filterOnDate:'виборка по даті:',
 		filterOnPrivilege:'виборка по пільгам:',

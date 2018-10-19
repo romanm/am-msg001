@@ -44,7 +44,7 @@
 				</div>
 				<div>
 					<button class="w3-border"
-						ng-click="filter.filterOnPrivilegeClean()">Скасувати</button>
+						data-ng-click="filter.filterOnPrivilegeClean()">Скасувати</button>
 					{{gui.filterOnPrivilege}} <select
 						ng-model="filter.payment_privilege">
 						<option ng-repeat="x in pageVar.site_config.payment_privileges"
