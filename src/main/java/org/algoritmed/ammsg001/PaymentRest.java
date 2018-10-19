@@ -48,7 +48,7 @@ public class PaymentRest {
 					.body( BodyInserters.fromObject( paymentData ) )
 					.exchange()
 					.flatMap( clientResponse -> clientResponse.bodyToMono( String.class ) );
-			
+
 			System.err.println("--52---------");
 			System.err.println(result);
 		}catch (Exception e) {
@@ -57,6 +57,7 @@ public class PaymentRest {
 			System.err.println("---57---------");
 		}
 //https://stackoverflow.com/questions/45986417/spring-webflux-how-can-i-debug-my-webclient-post-exchange
+		//https://www.baeldung.com/spring-5-webclient
 
 		return paymentData;
 	}
