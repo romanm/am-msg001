@@ -20,10 +20,10 @@ import org.springframework.web.reactive.function.client.WebClient;
 import reactor.core.publisher.Mono;
 
 @Controller
-public class PaymentRest extends DbCommon{
-	protected static final Logger logger = LoggerFactory.getLogger(PaymentRest.class);
+public class Payment2Rest  extends DbCommon{
+	protected static final Logger logger = LoggerFactory.getLogger(Payment2Rest.class);
 
-	@GetMapping("/getXReport")
+	@GetMapping("/getXReport2")
 	public @ResponseBody Map<String, Object> getXReport(
 			HttpServletRequest request
 		) {
@@ -59,8 +59,8 @@ public class PaymentRest extends DbCommon{
 		
 		return map;
 	}
-	
-	@PostMapping("/toPaymentApparatus")
+
+	@PostMapping("/toPaymentApparatus2")
 	public @ResponseBody Map<String, Object> toPaymentApparatus(
 			@RequestBody Map<String, Object> paymentData
 			,HttpServletRequest request
@@ -95,12 +95,7 @@ public class PaymentRest extends DbCommon{
 			System.err.println(e);
 			System.err.println("---57---------");
 		}
-
-
 		return paymentData;
 	}
-//WebClient spring sent json to post
-//https://stackoverflow.com/questions/45986417/spring-webflux-how-can-i-debug-my-webclient-post-exchange
-//https://www.baeldung.com/spring-5-webclient
 
 }
