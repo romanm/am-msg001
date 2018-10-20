@@ -41,10 +41,11 @@ public class PaymentRest extends DbCommon{
 				.build();
 		System.err.println("--41---------");
 		System.err.println(webClientPaymentApparat);
+		
 		try {
 			Mono<String> result = webClientPaymentApparat.post()
-					.uri( "https://192.168.1.11/cgi/proc/printreport" )
-//				.headers( headers )
+					.uri( "https://192.168.0.202/cgi/proc/printreport?10" ) // X отчёт
+//				.headers() 
 					.accept( MediaType.APPLICATION_JSON )
 //					.body( BodyInserters.fromObject( paymentData ) )
 					.exchange()
@@ -57,6 +58,7 @@ public class PaymentRest extends DbCommon{
 			System.err.println(e);
 			System.err.println("---57---------");
 		}
+		
 		
 		return map;
 	}
@@ -82,7 +84,7 @@ public class PaymentRest extends DbCommon{
 		System.err.println(webClientPaymentApparat);
 		try {
 			Mono<String> result = webClientPaymentApparat.post()
-					.uri( "https://192.168.1.11/url/to/send" )
+					.uri( "https://192.168.0.202/cgi/chk" )
 //				.headers( headers )
 					.accept( MediaType.APPLICATION_JSON )
 					.body( BodyInserters.fromObject( paymentData ) )

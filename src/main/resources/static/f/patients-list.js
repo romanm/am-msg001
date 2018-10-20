@@ -269,9 +269,17 @@ $scope.callDbImport = function() {
 		console.log(data)
 		writeSql(data)
 		var paymentData = {
-			payment:123,
-			name:'МРТ голови',
+			F:[
+				{C:{cm:'Кассир: Кассир 1'}},
+				{S:{code:723,price:800,name:'МРТ'}},
+				{P:{}},
+			],
+			IO:[
+				{C:{cm:'Кассир: Кассир 1'}},
+				{IO:{sum:800}},
+			],
 		}
+		console.log(paymentData)
 		exe_fn.httpPost({ url:'/toPaymentApparatus',
 			then_fn:function(response) {
 				console.log(response.data)
