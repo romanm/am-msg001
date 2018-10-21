@@ -57,35 +57,35 @@ public class Li159_10  extends XCommon{
 		cols_number.put("plan_ts", 23);
 		ArrayList<Map<String, Object>> rows = new ArrayList<>();
 		m.put("rows", rows);
-        Sheet sheet = getSheet();
-        Iterator<Row> rowIterator = sheet.rowIterator();
-        long	min = new Date().getTime(), max = 0, current = 0;
-        while (rowIterator.hasNext()) {
-        	Row row = rowIterator.next();
-        	if(row.getRowNum()>1) {
-        		Map<String, Object> rowMap = new HashMap<>();        
-        		for (String col_key : cols_number.keySet()) {
-        			String col_value = row.getCell(cols_number.get(col_key)).getStringCellValue();
-        			if("visit_ts".equals(col_key)
-        			){
-        				current = putTimestamp(rowMap, col_key, col_value).getTime();
-        				min = Math.min(min, current);
-        				max = Math.max(max, current);
-        			}else if("plan_ts".equals(col_key)){
-        				putTimestamp(rowMap, col_key, col_value);
-        			}else {
-        				rowMap.put(col_key, col_value);
-        			}
-        		}
-        		rows.add(rowMap);
-        	}
-        }
-        m.put("min", min);
-        m.put("max", max);
-        m.put("from_to", format.format(new Date(max)) 
-        		+ " - " + format.format(new Date(min))
-        		+ " - " + rows.size()
-        		);
+		Sheet sheet = getSheet();
+		Iterator<Row> rowIterator = sheet.rowIterator();
+		long	min = new Date().getTime(), max = 0, current = 0;
+		while (rowIterator.hasNext()) {
+			Row row = rowIterator.next();
+			if(row.getRowNum()>1) {
+				Map<String, Object> rowMap = new HashMap<>();        
+				for (String col_key : cols_number.keySet()) {
+					String col_value = row.getCell(cols_number.get(col_key)).getStringCellValue();
+					if("visit_ts".equals(col_key)
+							){
+						current = putTimestamp(rowMap, col_key, col_value).getTime();
+						min = Math.min(min, current);
+						max = Math.max(max, current);
+					}else if("plan_ts".equals(col_key)){
+						putTimestamp(rowMap, col_key, col_value);
+					}else {
+						rowMap.put(col_key, col_value);
+					}
+				}
+				rows.add(rowMap);
+			}
+		}
+		m.put("min", min);
+		m.put("max", max);
+		m.put("from_to", format.format(new Date(max)) 
+				+ " - " + format.format(new Date(min))
+				+ " - " + rows.size()
+				);
 		return m;
 	}
 	private Date putTimestamp(Map<String, Object> rowMap, String col_key, String col_value) throws ParseException {

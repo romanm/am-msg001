@@ -1,4 +1,4 @@
-package org.algoritmed.ammsg001;
+package org.algoritmed.ammsg001.eccr;
 
 import java.security.Principal;
 import java.util.Map;

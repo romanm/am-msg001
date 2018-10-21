@@ -349,7 +349,7 @@ $scope.callDbImport = function() {
 			if($scope.pageVar.site_config)
 				if($scope.pageVar.site_config.colortheme){
 					$scope.pageVar.colortheme.theme
-					= $scope.pageVar.site_config.colortheme.theme
+						= $scope.pageVar.site_config.colortheme.theme
 					console.log($scope.pageVar.site_config.colortheme)
 				}
 
