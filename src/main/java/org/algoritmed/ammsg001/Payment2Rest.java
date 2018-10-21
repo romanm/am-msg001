@@ -20,10 +20,10 @@ import org.springframework.web.reactive.function.client.WebClient;
 import reactor.core.publisher.Mono;
 
 @Controller
-public class PaymentRest extends DbCommon{
-	protected static final Logger logger = LoggerFactory.getLogger(PaymentRest.class);
+public class Payment2Rest  extends DbCommon{
+	protected static final Logger logger = LoggerFactory.getLogger(Payment2Rest.class);
 
-	@GetMapping("/getXReport")
+	@GetMapping("/getXReport2")
 	public @ResponseBody Map<String, Object> getXReport(
 			HttpServletRequest request
 		) {
@@ -40,11 +40,10 @@ public class PaymentRest extends DbCommon{
 				.build();
 		System.err.println("--41---------");
 		System.err.println(webClientPaymentApparat);
-		
 		try {
 			Mono<String> result = webClientPaymentApparat.post()
-					.uri( "https://192.168.0.202/cgi/proc/printreport?10" ) // X отчёт
-//				.headers() 
+					.uri( "https://192.168.1.11/cgi/proc/printreport" )
+//				.headers( headers )
 					.accept( MediaType.APPLICATION_JSON )
 //					.body( BodyInserters.fromObject( paymentData ) )
 					.exchange()
@@ -58,11 +57,10 @@ public class PaymentRest extends DbCommon{
 			System.err.println("---57---------");
 		}
 		
-		
 		return map;
 	}
-	
-	@PostMapping("/toPaymentApparatus")
+
+	@PostMapping("/toPaymentApparatus2")
 	public @ResponseBody Map<String, Object> toPaymentApparatus(
 			@RequestBody Map<String, Object> paymentData
 			,HttpServletRequest request
@@ -83,7 +81,7 @@ public class PaymentRest extends DbCommon{
 		System.err.println(webClientPaymentApparat);
 		try {
 			Mono<String> result = webClientPaymentApparat.post()
-					.uri( "https://192.168.0.202/cgi/chk" )
+					.uri( "https://192.168.1.11/url/to/send" )
 //				.headers( headers )
 					.accept( MediaType.APPLICATION_JSON )
 					.body( BodyInserters.fromObject( paymentData ) )
@@ -97,12 +95,7 @@ public class PaymentRest extends DbCommon{
 			System.err.println(e);
 			System.err.println("---57---------");
 		}
-
-
 		return paymentData;
 	}
-//WebClient spring sent json to post
-//https://stackoverflow.com/questions/45986417/spring-webflux-how-can-i-debug-my-webclient-post-exchange
-//https://www.baeldung.com/spring-5-webclient
 
 }
