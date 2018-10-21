@@ -2,12 +2,14 @@ package org.algoritmed.ammsg001;
 
 import java.security.Principal;
 import java.util.Map;
+import java.util.function.Consumer;
 
 import javax.servlet.http.HttpServletRequest;
 
 import org.algoritmed.ammsg001.amdb.DbCommon;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -41,6 +43,7 @@ public class Payment2Rest  extends DbCommon{
 		System.err.println("--41---------");
 		System.err.println(webClientPaymentApparat);
 		try {
+			Consumer<HttpHeaders> headers;
 			Mono<String> result = webClientPaymentApparat.post()
 					.uri( "https://192.168.1.11/cgi/proc/printreport" )
 //				.headers( headers )

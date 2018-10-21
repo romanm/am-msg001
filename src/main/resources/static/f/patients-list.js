@@ -346,8 +346,10 @@ $scope.callDbImport = function() {
 			console.log($scope.principal)
 			$scope.pageVar.site_config
 				= response.data.config
-			$scope.pageVar.colortheme.theme
-				= $scope.pageVar.site_config.colortheme.theme
+			if($scope.pageVar.site_config)
+				if($scope.pageVar.site_config.colortheme)
+					$scope.pageVar.colortheme.theme
+						= $scope.pageVar.site_config.colortheme.theme
 			console.log($scope.pageVar.site_config.colortheme)
 
 			exe_fn.httpGet($scope.lastDbRead.requestToImport)
