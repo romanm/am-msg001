@@ -347,10 +347,11 @@ $scope.callDbImport = function() {
 			$scope.pageVar.site_config
 				= response.data.config
 			if($scope.pageVar.site_config)
-				if($scope.pageVar.site_config.colortheme)
+				if($scope.pageVar.site_config.colortheme){
 					$scope.pageVar.colortheme.theme
-						= $scope.pageVar.site_config.colortheme.theme
-			console.log($scope.pageVar.site_config.colortheme)
+					= $scope.pageVar.site_config.colortheme.theme
+					console.log($scope.pageVar.site_config.colortheme)
+				}
 
 			exe_fn.httpGet($scope.lastDbRead.requestToImport)
 			$interval( function(){ exe_fn.httpGet($scope.lastDbRead.requestToImport) }, $scope.lastDbRead.timeout)
