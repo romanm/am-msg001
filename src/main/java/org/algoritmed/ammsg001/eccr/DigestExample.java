@@ -27,7 +27,8 @@ import org.apache.http.util.EntityUtils;
 
 public class DigestExample {
 
-	private final static String uri = "http://my.digest.based.auth.url.com";
+//	private final static String uri = "http://my.digest.based.auth.url.com";
+	private final static String uri = "http://192.168.1.5";
 	private static HttpHost target;
 
 	public static void main(String[] args) throws IOException {
@@ -42,9 +43,11 @@ public class DigestExample {
 			System.out.println("Setup was unsuccesfull");
 			return;
 		}
+		System.err.println(challengeHaeder);
 
 		// NOTE: challenge is reused for subsequent HTTP GET calls
-		getWithDigestAuth(challengeHaeder, "/", "/schema");
+//		getWithDigestAuth(challengeHaeder, "/", "/schema");
+		getWithDigestAuth(challengeHaeder, "/cgi/state");
 
 	}
 
@@ -69,7 +72,8 @@ public class DigestExample {
 		CredentialsProvider credsProvider = new BasicCredentialsProvider();
 		credsProvider.setCredentials(
 				new AuthScope(target.getHostName(), target.getPort()),
-				new UsernamePasswordCredentials("user", "pass"));
+				new UsernamePasswordCredentials("1", "0"));
+//		new UsernamePasswordCredentials("user", "pass"));
 
 		try (CloseableHttpClient httpclient = HttpClients.custom()
 				.setDefaultCredentialsProvider(credsProvider)

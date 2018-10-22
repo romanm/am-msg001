@@ -85,13 +85,13 @@
 
 			<div class="w3-container">
 				<div class="w3-row-padding w3-border-bottom">
-					<div class="w3-col m4 l4 s4 ">
-						<button class="w3-border" data-ng-click="pageVar.saveUpdate()">OK
-							сплата друк</button>
+					<div class="w3-col m10 l10 s10 ">
+						<button class="w3-border" data-ng-click="pageVar.saveUpdate()">OK,
+							сплачено - друк фіскальний чек</button>
 						<button class="w3-border"
 							ng-click="pageVar.ngStyleModal={display:'none'}">Cancel</button>
 					</div>
-					<div class="w3-col m8 l8 s8 ">
+					<div class="w3-col m2 l2 s2 ">
 						<div data-ng-include="pageVar.o.ngIncludes.modalBottonPanel"></div>
 					</div>
 				</div>
@@ -155,6 +155,15 @@
 					</select>
 				</div>
 				<p>&nbsp;</p>
+				<div class="w3-tiny">
+					альтернатива:
+					<div>
+						<button class="w3-border" data-ng-click="pageVar.saveCheckFile()">Друк:
+							check file</button>
+						<i class="fa fa-long-arrow-right" aria-hidden="true"></i>
+						{{pageVar.getCheckFile()}}
+					</div>
+				</div>
 			</div>
 		</div>
 	</div>

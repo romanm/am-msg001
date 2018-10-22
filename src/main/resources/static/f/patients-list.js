@@ -116,7 +116,7 @@ app.controller('myCtrl', function($scope, $http, $interval, $filter) {
 	}
 
 $scope.lastDbRead = {
-	timeout : 5*60*1000,
+	timeout : 15*60*1000,
 	lastCallTime : new Date(),
 	importCnt:0,
 	requestToImport:{
@@ -244,6 +244,49 @@ $scope.callDbImport = function() {
 	readSql($scope.patientList)
 
 	$scope.pageVar = {}
+	$scope.pageVar.getCheckFile = function(){
+		if(!this.o)
+			return ''
+		return this.o.row_id 
+		+'|' + this.o.col_239 
+		+'|' + (this.price-(this.price*this.procent/100))
+	}
+	
+	$scope.pageVar.saveCheckFile = function(){
+		
+		console.log(this.o)
+		this.o.saveCheckFile = this.getCheckFile()
+
+//		filename = '/home/roman/algoritmed/git-1/am-msg001-config/check',
+		var blob = new Blob([this.o.saveCheckFile], {type: 'text/plain'}),
+//		var blob = new Blob([this.o.saveCheckFile], {type: "text/plain;charset=utf-8"});
+		filename = 'check',
+		e = document.createEvent('MouseEvents'),
+		a = document.createElement('a')
+
+		if (window.navigator && window.navigator.msSaveOrOpenBlob) {
+			window.navigator.msSaveOrOpenBlob(blob, filename);
+		}
+		else{
+			var e = document.createEvent('MouseEvents'),
+			a = document.createElement('a');
+
+			a.download = filename;
+			a.href = window.URL.createObjectURL(blob);
+			a.dataset.downloadurl = ['text/plain', a.download, a.href].join(':');
+			e.initEvent('click', true, false, window,
+					0, 0, 0, 0, 0, false, false, false, false, 0, null);
+			a.dispatchEvent(e);
+		}
+
+		exe_fn.httpPost({ url:'/saveCheckFile',
+			then_fn:function(response) {
+				console.log(response.data)
+			},
+			data:this.o,
+		})
+	}
+
 	$scope.pageVar.saveUpdate = function(){
 		this.o.col_240 = this.price
 		this.o.col_3311 = this.procent
