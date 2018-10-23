@@ -22,7 +22,7 @@ import reactor.core.publisher.Mono;
 @Controller
 public class PaymentRest extends DbCommon{
 	protected static final Logger logger = LoggerFactory.getLogger(PaymentRest.class);
-
+	
 	@GetMapping("/getXReport")
 	public @ResponseBody Map<String, Object> getXReport(
 			HttpServletRequest request

@@ -28,7 +28,7 @@ app.controller('myCtrl', function($scope, $http, $interval, $filter) {
 	$scope.ekkr = {}
 	$scope.ekkr.xReport = function(){
 		exe_fn.httpGet({
-		url:'/getXReport',
+		url:'/getXReport2',
 		then_fn:function(response){
 			console.log(response.data)
 		},

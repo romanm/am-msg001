@@ -1,14 +1,19 @@
 package org.algoritmed.ammsg001.eccr;
 
+import java.io.IOException;
 import java.security.Principal;
 import java.util.Map;
 import java.util.function.Consumer;
 
 import javax.servlet.http.HttpServletRequest;
 
+import org.algoritmed.ammsg001.Digest2Example;
 import org.algoritmed.ammsg001.amdb.DbCommon;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.PropertySource;
+import org.springframework.core.env.Environment;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Controller;
@@ -24,9 +29,29 @@ import reactor.core.publisher.Mono;
 @Controller
 public class Payment2Rest  extends DbCommon{
 	protected static final Logger logger = LoggerFactory.getLogger(Payment2Rest.class);
+	@Autowired protected Digest2Example digest2Example;
 
 	@GetMapping("/getXReport2")
-	public @ResponseBody Map<String, Object> getXReport(
+	public @ResponseBody Map<String, Object> getXReport2(
+			HttpServletRequest request
+			) {
+		Map<String, Object> map = sqlParamToMap(request);
+		logger.info("\n\n--39--- "
+				+ "/getXReport2"
+				+ "\n" + map
+				);
+		try {
+			digest2Example.printXReport();
+		} catch (IOException e) {
+			e.printStackTrace();
+			String message = e.getMessage();
+			map.put("error", message);
+		}
+		map.put("x", "y");
+		return map;
+	}
+
+	public @ResponseBody Map<String, Object> getXReport2_1(
 			HttpServletRequest request
 		) {
 		Map<String, Object> map = sqlParamToMap(request);

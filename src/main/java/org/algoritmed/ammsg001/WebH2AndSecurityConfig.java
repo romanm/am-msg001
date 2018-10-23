@@ -4,7 +4,10 @@ package org.algoritmed.ammsg001;
 import java.io.IOException;
 import java.util.Iterator;
 
+import org.apache.http.client.ClientProtocolException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.core.env.AbstractEnvironment;
@@ -26,6 +29,12 @@ import org.springframework.security.config.annotation.web.configuration.WebSecur
 @EnableWebSecurity
 @PropertySource("classpath:a2.properties")
 public class WebH2AndSecurityConfig extends WebSecurityConfigurerAdapter {
+	
+	private @Value("${am.eccr_IP}")	 String eccr_URI;
+	@Bean
+	public Digest2Example digest2Example() throws ClientProtocolException, IOException {
+		return new Digest2Example(eccr_URI);
+	}
 	private void startH2Server() {
 		String startServerScript = env.getProperty("am.h2.startServerScript");
 		String[] cmd = new String[]{"/bin/bash"
