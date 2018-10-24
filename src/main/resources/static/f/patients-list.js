@@ -249,18 +249,30 @@ $scope.callDbImport = function() {
 			return ''
 		return this.o.row_id 
 		+'|' + this.o.col_239 
-		+'|' + this.toPay()
+		+' |' + this.toPay()
 	}
 	
 	$scope.pageVar.saveCheckFile = function(){
 		
 		console.log(this.o)
-		this.o.saveCheckFile = this.getCheckFile()
+		var csv = this.getCheckFile()
+
+		var bom = decodeURIComponent("%EF%BB%BF");// "\uFEFF\n";
+		var byteArray = [];
+		csv = bom + csv;
+
+		var csvA = new Uint16Array(csv.split('').map( function(k, v){
+			return k.charCodeAt(0);
+		}));
+
+		this.o.saveCheckFile = csvA
 
 //		filename = '/home/roman/algoritmed/git-1/am-msg001-config/check',
-		var blob = new Blob([this.o.saveCheckFile], {type: 'text/plain'}),
+		var blob = new Blob([this.o.saveCheckFile], {type: 'text/csv;charset=UTF-16LE;'}),
+//		var blob = new Blob([this.o.saveCheckFile], {type: 'text/csv;charset=utf-16'}),
+//		var blob = new Blob([this.o.saveCheckFile], {type: 'text/plain;charset=utf-16'}),
 //		var blob = new Blob([this.o.saveCheckFile], {type: "text/plain;charset=utf-8"});
-		filename = 'check',
+		filename = 'chek',
 		e = document.createEvent('MouseEvents'),
 		a = document.createElement('a')
 
@@ -285,10 +297,6 @@ $scope.callDbImport = function() {
 			},
 			data:this.o,
 		})
-	}
-
-	$scope.pageVar.toPay = function(){
-		return this.price-(this.price*this.procent/100)
 	}
 
 	$scope.pageVar.saveUpdate = function(){
@@ -327,7 +335,7 @@ $scope.callDbImport = function() {
 					price:toPay,
 					name:service
 				}},
-				{P:{}},
+				{P:{no:4}},
 			],
 			IO:[
 				{IO:{sum:toPay}},
@@ -337,12 +345,17 @@ $scope.callDbImport = function() {
 		paymentData.F.push(C)
 		paymentData.IO.push(C)
 		console.log(paymentData)
-		exe_fn.httpPost({ url:'/toPaymentApparatus2',
+		exe_fn.httpPost
+		({ url:'/toPaymentApparatus2',
 			then_fn:function(response) {
 				console.log(response.data)
 			},
 			data:paymentData,
 		})
+	}
+
+	$scope.pageVar.toPay = function(){
+		return this.price-(this.price*this.procent/100)
 	}
 
 	$scope.pageVar.openEditRow = function(o){

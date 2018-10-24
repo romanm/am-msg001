@@ -2,6 +2,7 @@ package org.algoritmed.ammsg001.eccr;
 
 import java.io.IOException;
 import java.security.Principal;
+import java.util.HashMap;
 import java.util.Map;
 import java.util.function.Consumer;
 
@@ -95,17 +96,17 @@ public class Payment2Rest  extends DbCommon{
 				+ "/toPaymentApparatus2"
 				+ "\n" + paymentData
 				);
+		Map<String, Object> cgiChr;
 		try {
 			System.out.println("-------101---------");
-			digest2Example.cgiChr(paymentData);
+			cgiChr = digest2Example.cgiChr(paymentData);
 			System.out.println("-------102---------");
 		} catch (IOException e1) {
 			e1.printStackTrace();
+			cgiChr = new HashMap<>();
+			cgiChr.put("error", e1.getMessage());
 		}
-		
-		paymentData.put("message", "записано - може бути");
-
-		return paymentData;
+		return cgiChr;
 	}
 
 }
