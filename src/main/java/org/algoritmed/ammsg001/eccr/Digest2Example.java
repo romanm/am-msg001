@@ -5,7 +5,6 @@ import java.io.InputStream;
 import java.net.URL;
 import java.nio.charset.StandardCharsets;
 import java.util.Map;
-import static net.gcardone.junidecode.Junidecode.*;
 
 import org.apache.commons.io.IOUtils;
 import org.apache.http.Header;
@@ -36,15 +35,15 @@ public class Digest2Example {
 	HttpClientContext localContextWithDigestAuth
 		= HttpClientContext.create();
 	CloseableHttpClient httpclient;
+	Header challengeHeader ;
 	public Digest2Example(String uri) throws ClientProtocolException, IOException {
 		System.out.println("------------34-----------------" + uri);
 //		uri = env.getProperty("am.eccr_IP");
 		URL url = new URL(uri);
 		target = new HttpHost(url.getHost(), url.getPort(), url.getProtocol());
-		Header challengeHeader = getAuthChallengeHeader(uri);
+		challengeHeader = getAuthChallengeHeader(uri);
 		System.err.println(challengeHeader);
 		System.out.println("------------40-----------------");
-		initLocalContextWithDigestAuth(challengeHeader);
 	}
 	@Autowired	ObjectMapper objectMapper;
 	public void cgiChr(Map<String, Object> paymentData) throws ClientProtocolException, IOException {
@@ -79,6 +78,7 @@ public class Digest2Example {
 		httpPost(requestXReport);
 	}
 	private void cgiState() throws ClientProtocolException, IOException {
+		initLocalContextWithDigestAuth(challengeHeader);
 		String requestState = "/cgi/state";
 		CloseableHttpResponse httpGet = httpGet(requestState);
 	}

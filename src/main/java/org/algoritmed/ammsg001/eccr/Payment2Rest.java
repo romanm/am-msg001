@@ -105,28 +105,6 @@ public class Payment2Rest  extends DbCommon{
 		
 		paymentData.put("message", "записано - може бути");
 
-//		WebClient webClientPaymentApparat = WebClient
-//				.builder()
-////				.baseUrl("https://192.168.1.11")
-//				.build();
-//		System.err.println("--41---------");
-//		System.err.println(webClientPaymentApparat);
-//		try {
-//			Mono<String> result = webClientPaymentApparat.post()
-//					.uri( "https://192.168.1.11/url/to/send" )
-////				.headers( headers )
-//					.accept( MediaType.APPLICATION_JSON )
-//					.body( BodyInserters.fromObject( paymentData ) )
-//					.exchange()
-//					.flatMap( clientResponse -> clientResponse.bodyToMono( String.class ) );
-//
-//			System.err.println("--52---------");
-//			System.err.println(result);
-//		}catch (Exception e) {
-//			System.err.println("---55---------");
-//			System.err.println(e);
-//			System.err.println("---57---------");
-//		}
 		return paymentData;
 	}
 

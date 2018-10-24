@@ -249,7 +249,7 @@ $scope.callDbImport = function() {
 			return ''
 		return this.o.row_id 
 		+'|' + this.o.col_239 
-		+'|' + (this.price-(this.price*this.procent/100))
+		+'|' + this.toPay()
 	}
 	
 	$scope.pageVar.saveCheckFile = function(){
@@ -287,6 +287,10 @@ $scope.callDbImport = function() {
 		})
 	}
 
+	$scope.pageVar.toPay = function(){
+		return this.price-(this.price*this.procent/100)
+	}
+
 	$scope.pageVar.saveUpdate = function(){
 		this.o.col_240 = this.price
 		this.o.col_3311 = this.procent
@@ -314,17 +318,24 @@ $scope.callDbImport = function() {
 		}
 		console.log(data)
 		writeSql(data)
+		var toPay = this.toPay()
+		var service = this.o.col_239
 		var paymentData = {
 			F:[
-				{C:{cm:'Кассир: Поліна'}},
-				{S:{code:726,price:800,name:'МРТ шиї'}},
+				{S:{
+					code:rowObj.row_id,
+					price:toPay,
+					name:service
+				}},
 				{P:{}},
 			],
 			IO:[
-				{C:{cm:'Кассир: Поліна'}},
-				{IO:{sum:800}},
+				{IO:{sum:toPay}},
 			],
 		}
+		var C = {C:{cm:'КАСИР: Касир 1'}}
+		paymentData.F.push(C)
+		paymentData.IO.push(C)
 		console.log(paymentData)
 		exe_fn.httpPost({ url:'/toPaymentApparatus2',
 			then_fn:function(response) {
