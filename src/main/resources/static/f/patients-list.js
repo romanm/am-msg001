@@ -257,9 +257,9 @@ $scope.callDbImport = function() {
 		console.log(this.o)
 		var csv = this.getCheckFile()
 
-		var bom = decodeURIComponent("%EF%BB%BF");// "\uFEFF\n";
-		var byteArray = [];
-		csv = bom + csv;
+//		var bom = decodeURIComponent("%EF%BB%BF");// "\uFEFF\n";
+//		var byteArray = [];
+//		csv = bom + csv;
 
 		var csvA = new Uint16Array(csv.split('').map( function(k, v){
 			return k.charCodeAt(0);
