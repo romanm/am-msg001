@@ -316,17 +316,17 @@ $scope.callDbImport = function() {
 		writeSql(data)
 		var paymentData = {
 			F:[
-				{C:{cm:'Кассир: Кассир 1'}},
-				{S:{code:723,price:800,name:'МРТ'}},
+				{C:{cm:'Кассир: Поліна'}},
+				{S:{code:726,price:800,name:'МРТ шиї'}},
 				{P:{}},
 			],
 			IO:[
-				{C:{cm:'Кассир: Кассир 1'}},
+				{C:{cm:'Кассир: Поліна'}},
 				{IO:{sum:800}},
 			],
 		}
 		console.log(paymentData)
-		exe_fn.httpPost({ url:'/toPaymentApparatus',
+		exe_fn.httpPost({ url:'/toPaymentApparatus2',
 			then_fn:function(response) {
 				console.log(response.data)
 			},
