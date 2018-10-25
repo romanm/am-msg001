@@ -299,7 +299,6 @@ $scope.callDbImport = function() {
 	}
 	
 	$scope.pageVar.makeCheckFile = function(){
-		console.log($scope.ekkr.config)
 		$scope.ekkr.config.ask_paymentId("SELECT NEXTVAL('paymentId')", "nextPaymentId")
 	}
 	$scope.pageVar.saveCheckFile = function(){
@@ -415,6 +414,7 @@ $scope.callDbImport = function() {
 	}
 
 	$scope.pageVar.openEditRow = function(o){
+		$scope.ekkr.config.ask_paymentId("SELECT NEXTVAL('paymentId')", "nextPaymentId")
 		this.ngStyleModal = {display:'block'}
 		console.log(o)
 		this.payment_privilege = o.col_5218
