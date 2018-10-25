@@ -30,8 +30,7 @@
 	</div>
 	<div class="w3-container">
 		<div class="w3-row w3-tiny">
-			<div class="w3-half w3-container ">list: {{firstName}}
-				{{lastName}} | {{lastDbRead.lastCallTime | date : 'medium'}}</div>
+			<div class="w3-half w3-container ">{{lastDbRead.lastCallTime | date : 'medium'}}</div>
 			<div class="w3-half w3-container">
 				<a ng-if="!principal.name" href="/f/login.html"> логін </a> <a
 					ng-if="'admin'==principal.name" href="/f/admin.html">адніністратор</a>
@@ -149,17 +148,26 @@
 				</div>
 				{{pageVar.payment_privilege}}
 				<div>
-					Пільги: <select ng-model="pageVar.payment_privilege" class="w3-border">
+					Пільги: <select ng-model="pageVar.payment_privilege"
+						class="w3-border">
 						<option ng-repeat="x in pageVar.site_config.payment_privileges"
 							value="{{x.name}}">{{x.name}}</option>
-					</select>
+					</select> Форма оплати: <a href="#"
+						data-ng-class="{'w3-green':pageVar.paymentData_F_P.no==1}"
+						data-ng-click="pageVar.paymentData_F_P.no=1"> ГОТІВКА </a> | <a
+						data-ng-class="{'w3-green':pageVar.paymentData_F_P.no==4}"
+						href="#" data-ng-click="pageVar.paymentData_F_P.no=4"> КАРТКА
+					</a>
 				</div>
 				<p>&nbsp;</p>
 				<div class="w3-tiny">
 					<span class="am-b" style="text-decoration: underline;">
-						альтернатива: </span> можливість використання Сервисну консоль MG-T808TL
+						альтернатива: </span> підготувати
+					<button class="w3-border" data-ng-click="pageVar.makeCheckFile()">
+						check file</button>
+					для Сервисної консолі MG-T808TL
 					<div>
-						<button class="w3-border" data-ng-click="pageVar.saveCheckFile()">Друк:
+						<button class="w3-border" data-ng-click="pageVar.saveCheckFile()">Запис:
 							check file</button>
 						<i class="fa fa-long-arrow-right" aria-hidden="true"></i>
 						{{pageVar.getCheckFile()}}

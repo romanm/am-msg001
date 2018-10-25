@@ -40,13 +40,22 @@ function readSql(params, obj){
 
 function Exe_fn($scope, $http){
 	this.httpGet=function(progr_am){
-		$http
-		.get(progr_am.url, {params:progr_am.params})
-		.then(progr_am.then_fn)
+		if(progr_am.error_fn)
+			$http
+			.get(progr_am.url, {params:progr_am.params})
+			.then(progr_am.then_fn, progr_am.error_fn)
+		else
+			$http
+			.get(progr_am.url, {params:progr_am.params})
+			.then(progr_am.then_fn)
 	}
 	this.httpPost=function(progr_am){
-		$http.post(progr_am.url, progr_am.data)
-		.then(progr_am.then_fn)
+		if(progr_am.error_fn)
+			$http.post(progr_am.url, progr_am.data)
+			.then(progr_am.then_fn, progr_am.error_fn)
+		else
+			$http.post(progr_am.url, progr_am.data)
+			.then(progr_am.then_fn)
 	}
 }
 

@@ -32,9 +32,28 @@
 	</div>
 	<div class="w3-row w3-container">
 		<div class="w3-container w3-half">
-			<h4>Різні звітти з і в ЕККР</h4>
-			<div>
-				<button class="w3-border" data-ng-click="ekkr.xReport()">Х-Звіт</button>
+			<h4>Звіти ЕККР</h4>
+			<div class="w3-row w3-container">
+				<div class="w3-container w3-half">
+					<div>
+						<button class="w3-border" data-ng-click="ekkr.xReport()">Х-Звіт</button>
+					</div>
+				</div>
+				<div class="w3-container w3-half">
+					<div>
+						<button class="w3-border" data-ng-click="ekkr.zReport()">Z-Звіт</button>
+					</div>
+				</div>
+			</div>
+			<div data-ng-if="ekkr.error"
+				class="w3-panel w3-leftbar w3-red w3-card-4 w3-display-container"
+				title="{{ekkr.error}}">
+				<span onclick="this.parentElement.style.display='none'"
+					class="w3-button w3-display-topright">x</span>
+				<h3>
+					Помилка! <span class="w3-small"> {{ekkr.error.error}} </span>
+				</h3>
+				Код стану HTTP: {{ekkr.error.status}}
 			</div>
 		</div>
 		<div class="w3-container w3-half w3-border">

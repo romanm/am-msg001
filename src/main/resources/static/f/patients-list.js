@@ -1,8 +1,5 @@
 app.controller('myCtrl', function($scope, $http, $interval, $filter) {
 	initApp($scope, $http)
-	$scope.firstName= "John";
-	$scope.lastName= "Doe";
-	$scope.random3=getRandomInt(3)
 
 	if(true || 'analytics'==pathNameValue){
 		$scope.db_validation = {
@@ -36,8 +33,7 @@ app.controller('myCtrl', function($scope, $http, $interval, $filter) {
 		delete $scope.ekkr.config.addPaymentId
 		if($scope.ekkr.config.newPaymentId
 		> $scope.ekkr.config.currentPaymentId
-		)
-			writeSql({
+		) writeSql({
 				sql : 'ALTER SEQUENCE paymentid RESTART WITH '
 					+ $scope.ekkr.config.newPaymentId,
 					dataAfterSave:function(response){
@@ -46,13 +42,16 @@ app.controller('myCtrl', function($scope, $http, $interval, $filter) {
 			})
 	}
 	$scope.ekkr.config.read_paymentId = function(){
+		$scope.ekkr.config.ask_paymentId("SELECT CURRVAL('paymentId')", "currentPaymentId")
+	}
+	$scope.ekkr.config.ask_paymentId = function(sql, sql_var){
 		readSql({
-			sql:"SELECT CURRVAL('paymentId') currentPaymentId",
+			sql:sql+" "+sql_var,
 			afterRead:function(response){
-				$scope.ekkr.config.currentPaymentId 
-				= response.data.list[0].currentPaymentId
+				$scope.ekkr.config[sql_var] 
+				= response.data.list[0][sql_var]
 				$scope.ekkr.config.newPaymentId
-				= $scope.ekkr.config.currentPaymentId
+				= $scope.ekkr.config[sql_var]
 			},
 		})
 	}
@@ -69,11 +68,16 @@ app.controller('myCtrl', function($scope, $http, $interval, $filter) {
 	}
 	$scope.ekkr.xReport = function(){
 		exe_fn.httpGet({
-		url:'/getXReport2',
-		then_fn:function(response){
-			console.log(response.data)
-		},
-	})
+			url:'/getXReport2',
+			then_fn:function(response){
+				console.log(response.data)
+			},
+			error_fn:function(response){
+				console.error('-----error-----------')
+				$scope.ekkr.error = response.data
+				console.error(response.data)
+			},
+		})
 	}
 
 	$scope.gui = {
@@ -288,11 +292,16 @@ $scope.callDbImport = function() {
 	$scope.pageVar.getCheckFile = function(){
 		if(!this.o)
 			return ''
-		return this.o.row_id 
+		//return this.o.row_id 
+		return $scope.ekkr.config.nextPaymentId
 		+'|' + this.o.col_239 
 		+' |' + this.toPay() + '|'
 	}
 	
+	$scope.pageVar.makeCheckFile = function(){
+		console.log($scope.ekkr.config)
+		$scope.ekkr.config.ask_paymentId("SELECT NEXTVAL('paymentId')", "nextPaymentId")
+	}
 	$scope.pageVar.saveCheckFile = function(){
 		
 		console.log(this.o)
@@ -340,6 +349,7 @@ $scope.callDbImport = function() {
 		})
 	}
 
+	$scope.pageVar.paymentData_F_P = {no:1}
 	$scope.pageVar.saveUpdate = function(){
 		this.o.col_240 = this.price
 		this.o.col_3311 = this.procent
@@ -369,14 +379,15 @@ $scope.callDbImport = function() {
 		writeSql(data)
 		var toPay = this.toPay()
 		var service = this.o.col_239
+		var code = $scope.ekkr.config.nextPaymentId
 		var paymentData = {
 			F:[
 				{S:{
-					code:rowObj.row_id,
+					code:code,
 					price:toPay,
 					name:service
 				}},
-				{P:{no:4}},
+				{P:{no:$scope.pageVar.paymentData_F_P.no}},
 			],
 			IO:[
 				{IO:{sum:toPay}},
@@ -390,6 +401,10 @@ $scope.callDbImport = function() {
 		({ url:'/toPaymentApparatus2',
 			then_fn:function(response) {
 				console.log(response.data)
+			},
+			error_fn:function(response) {
+				console.error('---error----помилка-------')
+				console.error(response.data)
 			},
 			data:paymentData,
 		})
@@ -467,6 +482,7 @@ $scope.callDbImport = function() {
 		},
 	})
 
+	$scope.random3=getRandomInt(3)
 });
 
 var sql = {
