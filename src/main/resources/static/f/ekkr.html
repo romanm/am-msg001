@@ -46,12 +46,16 @@
 					data-ng-if="ekkr.config.config_tab=='sequence_paymentId'">
 					Поточне значення лічільника чеків: {{ekkr.config.currentPaymentId}}
 					<div>
-						<input class="w3-border" type="number"
+						<i class="fa fa-plus" aria-hidden="true"></i> <input
+							class="w3-border" type="number"
 							data-ng-change="ekkr.config.change_addPaymentId()"
 							data-ng-model="ekkr.config.addPaymentId" max="100" min="1">
 					</div>
-					<div>Нове значення лічільника чеків стартувати з:
-						{{ekkr.config.newPaymentId}}</div>
+					<div>
+						Нове значення лічільника чеків стартувати з: <span
+							data-ng-if="ekkr.config.addPaymentId">
+							{{ekkr.config.newPaymentId}}</span>
+					</div>
 					<button class="w3-border"
 						data-ng-click="ekkr.config.set_newPaymentId()">Встновити</button>
 				</div>
