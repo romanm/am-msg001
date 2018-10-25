@@ -26,6 +26,47 @@ app.controller('myCtrl', function($scope, $http, $interval, $filter) {
 	}
 
 	$scope.ekkr = {}
+	$scope.ekkr.config = {}
+	$scope.ekkr.config.change_addPaymentId = function(){
+		$scope.ekkr.config.newPaymentId
+			= $scope.ekkr.config.currentPaymentId
+			+ $scope.ekkr.config.addPaymentId
+	}
+	$scope.ekkr.config.set_newPaymentId = function(){
+		delete $scope.ekkr.config.addPaymentId
+		if($scope.ekkr.config.newPaymentId
+		> $scope.ekkr.config.currentPaymentId
+		)
+			writeSql({
+				sql : 'ALTER SEQUENCE paymentid RESTART WITH '
+					+ $scope.ekkr.config.newPaymentId,
+					dataAfterSave:function(response){
+						$scope.ekkr.config.read_paymentId()
+					}
+			})
+	}
+	$scope.ekkr.config.read_paymentId = function(){
+		readSql({
+			sql:"SELECT CURRVAL('paymentId') currentPaymentId",
+			afterRead:function(response){
+				$scope.ekkr.config.currentPaymentId 
+				= response.data.list[0].currentPaymentId
+				$scope.ekkr.config.newPaymentId
+				= $scope.ekkr.config.currentPaymentId
+			},
+		})
+	}
+	$scope.ekkr.config.change_paymentId = function(){
+		this.config_tab_click('sequence_paymentId')
+		if(this.config_tab == 'sequence_paymentId')
+			$scope.ekkr.config.read_paymentId()
+	}
+	$scope.ekkr.config.config_tab_click = function(tab){
+		if(this.config_tab == tab)
+			this.config_tab = null
+		else
+			this.config_tab = tab
+	}
 	$scope.ekkr.xReport = function(){
 		exe_fn.httpGet({
 		url:'/getXReport2',
@@ -249,7 +290,7 @@ $scope.callDbImport = function() {
 			return ''
 		return this.o.row_id 
 		+'|' + this.o.col_239 
-		+' |' + this.toPay()
+		+' |' + this.toPay() + '|'
 	}
 	
 	$scope.pageVar.saveCheckFile = function(){

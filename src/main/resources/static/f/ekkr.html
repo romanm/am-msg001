@@ -30,12 +30,32 @@
 			<span ng-include="'/f/login-link.html'"> </span>
 		</div>
 	</div>
-	<div class="w3-container">
-		<h2>Різні звітти з і в ЕККР</h2>
-		<div>
-			<button class="w3-border"
-			data-ng-click="ekkr.xReport()"
-			>Х-Звіт</button>
+	<div class="w3-row w3-container">
+		<div class="w3-container w3-half">
+			<h4>Різні звітти з і в ЕККР</h4>
+			<div>
+				<button class="w3-border" data-ng-click="ekkr.xReport()">Х-Звіт</button>
+			</div>
+		</div>
+		<div class="w3-container w3-half w3-border">
+			<h4>Config</h4>
+			<div>
+				<a href="#" data-ng-click="ekkr.config.change_paymentId()"
+					class="w3-btn w3-small"> рахівник чеків </a>
+				<div class="w3-border"
+					data-ng-if="ekkr.config.config_tab=='sequence_paymentId'">
+					Поточне значення лічільника чеків: {{ekkr.config.currentPaymentId}}
+					<div>
+						<input class="w3-border" type="number"
+							data-ng-change="ekkr.config.change_addPaymentId()"
+							data-ng-model="ekkr.config.addPaymentId" max="100" min="1">
+					</div>
+					<div>Нове значення лічільника чеків стартувати з:
+						{{ekkr.config.newPaymentId}}</div>
+					<button class="w3-border"
+						data-ng-click="ekkr.config.set_newPaymentId()">Встновити</button>
+				</div>
+			</div>
 		</div>
 
 	</div>

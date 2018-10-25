@@ -149,14 +149,15 @@
 				</div>
 				{{pageVar.payment_privilege}}
 				<div>
-					Пільги: <select ng-model="pageVar.payment_privilege">
+					Пільги: <select ng-model="pageVar.payment_privilege" class="w3-border">
 						<option ng-repeat="x in pageVar.site_config.payment_privileges"
 							value="{{x.name}}">{{x.name}}</option>
 					</select>
 				</div>
 				<p>&nbsp;</p>
 				<div class="w3-tiny">
-					альтернатива:
+					<span class="am-b" style="text-decoration: underline;">
+						альтернатива: </span> можливість використання Сервисну консоль MG-T808TL
 					<div>
 						<button class="w3-border" data-ng-click="pageVar.saveCheckFile()">Друк:
 							check file</button>
