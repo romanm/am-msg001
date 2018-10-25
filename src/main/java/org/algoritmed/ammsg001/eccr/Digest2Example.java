@@ -76,9 +76,9 @@ public class Digest2Example {
 	private CloseableHttpResponse httpPost(String request) throws ClientProtocolException, IOException {
 		return httpclient.execute(target, new HttpPost(request), localContextWithDigestAuth);
 	}
-	public void printXReport() throws ClientProtocolException, IOException {
+	public void printXZReport(int reportId) throws ClientProtocolException, IOException {
 		cgiState();
-		String requestXReport = "/cgi/proc/printreport?10";
+		String requestXReport = "/cgi/proc/printreport?"+reportId;
 		httpPost(requestXReport);
 	}
 	private void cgiState() throws ClientProtocolException, IOException {
@@ -88,7 +88,7 @@ public class Digest2Example {
 	}
 	public static void main(String[] args) throws IOException {
 		Digest2Example digest2Example = new Digest2Example("http://192.168.1.5");
-		digest2Example.printXReport();
+		digest2Example.printXZReport(10);
 	}
 	private CloseableHttpResponse httpGet(String request) throws ClientProtocolException, IOException {
 		return httpclient.execute(target, new HttpGet(request), localContextWithDigestAuth);

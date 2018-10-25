@@ -28,6 +28,24 @@ public class Payment2Rest  extends DbCommon{
 	protected static final Logger logger = LoggerFactory.getLogger(Payment2Rest.class);
 	@Autowired protected Digest2Example digest2Example;
 
+	@GetMapping("/getZReport2")
+	public @ResponseBody Map<String, Object> getZReport2(
+			HttpServletRequest request
+			) {
+		Map<String, Object> map = sqlParamToMap(request);
+		logger.info("\n\n--36--- "
+				+ "/getZReport2"
+				+ "\n" + map
+				);
+		try {
+			digest2Example.printXZReport(0);
+		} catch (IOException e) {
+			e.printStackTrace();
+			String message = e.getMessage();
+			map.put("error", message);
+		}
+		return map;
+	}
 	@GetMapping("/getXReport2")
 	public @ResponseBody Map<String, Object> getXReport2(
 			HttpServletRequest request
@@ -38,13 +56,12 @@ public class Payment2Rest  extends DbCommon{
 				+ "\n" + map
 				);
 		try {
-			digest2Example.printXReport();
+			digest2Example.printXZReport(10);
 		} catch (IOException e) {
 			e.printStackTrace();
 			String message = e.getMessage();
 			map.put("error", message);
 		}
-		map.put("x", "y");
 		return map;
 	}
 

@@ -66,9 +66,12 @@ app.controller('myCtrl', function($scope, $http, $interval, $filter) {
 		else
 			this.config_tab = tab
 	}
-	$scope.ekkr.xReport = function(){
+	$scope.ekkr.zReport = function(){ $scope.ekkr.xzReport('/getZReport2') }
+	$scope.ekkr.xReport = function(){ $scope.ekkr.xzReport('/getXReport2') }
+	$scope.ekkr.xzReport = function(url){
+		console.log('--xzReport------------'+url)
 		exe_fn.httpGet({
-			url:'/getXReport2',
+			url:url,
 			then_fn:function(response){
 				console.log(response.data)
 			},
@@ -384,7 +387,8 @@ $scope.callDbImport = function() {
 				{S:{
 					code:code,
 					price:toPay,
-					name:service
+					name:service,
+					tax:5,
 				}},
 				{P:{no:$scope.pageVar.paymentData_F_P.no}},
 			],
