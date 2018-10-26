@@ -89,56 +89,82 @@ app.controller('myCtrl', function($scope, $http, $interval, $filter) {
 		filterOnPayment:'виборка по платежу:',
 	}
 
-	$scope.filter = {
-		filterOnPrivilegeClean:function(){
-			this.payment_privilege = null
-		},
-		filterOnDateClean:function(){
-			
-		},
-		filterOnPaymentClean:function(){
-			this.maxPayment = null
-			this.minPayment = null
-		},
-		filterOnPayment:function(){
-			this.sql = $scope.patientList.config.sql_read_table_data
-			console.log(this.payment_privilege)
-			if(this.minPayment && this.maxPayment){
-				this.sql = sql.read_table_payment().replace(':read_table_sql',this.sql)
-			}
-			if(this.payment_privilege){
-				this.sql = sql.read_table_privilege().replace(':read_table_sql',this.sql)
-			}
-//			console.log(this)
-			console.log(this.sql)
-			readSql(this, $scope.patientList.pl)
-		},
-		blurDate:function(dateName){
-			var date = this.checkDate(dateName)
-			console.log(date)
-			var s = date.getDate()+'-'+(date.getMonth()+1)+'-'+date.getFullYear()
-			console.log(s)
-			this[dateName+'_ts'] = date
-			this[dateName] = s
-		},
-		checkDate:function(dateName){
-			var date = new Date()
-			date.setHours(10)
-			var checkDate = this[dateName]
-			console.log(checkDate)
-			checkDate = checkDate.replace(/-/g,' ')
-			var checkDateSplit = checkDate.split(' ')
-			console.log(checkDateSplit)
-			date.setDate(checkDateSplit[0])
-			if(checkDateSplit[1]){
-				var m = checkDateSplit[1]*1-1
-				console.log(m)
-				date.setMonth(m)
-//			date.setDate(checkDateSplit[2])
-			}
-			console.log(date.toISOString())
-			return date
- 		},
+	$scope.filter = {}
+	
+	$scope.filter.filterOnPrivilegeClean = function(){
+		this.payment_privilege = null
+	}
+	$scope.filter.filterOnDateClean = function(){ }
+	$scope.filter.filterOnPaymentClean = function(){
+		this.maxPayment = null
+		this.minPayment = null
+	}
+	$scope.filter.filterToExcellCsv = function(){
+		var csvFile = ''
+		angular.forEach($scope.patientList.col_keys, function(v,k){
+			csvFile += v.trim()+','
+		})
+		csvFile += '\r\n'
+		angular.forEach($scope.patientList.pl.list, function(v){
+			angular.forEach($scope.patientList.col_keys, function(vCol,k){
+				var vC
+				if(typeof(v[k])=='string')
+					if(v[k].indexOf(',')>0)
+						vC = '"'+v[k].trim()+'"'
+					else
+						vC = v[k].trim()
+				else if(k=='col_236')
+					vC = $filter('date')(new Date(v[k]), 'yyyy-MM-dd HH:mm')
+				else if(v[k])
+					vC = v[k]
+				else
+					vC = ''
+				csvFile += vC+','
+			})
+			csvFile += '\r\n'
+		})
+//		console.log(csvFile)
+		
+		loadVarAsFile(csvFile, 'exportCsv', 'text/csv;charset=utf-8')
+	}
+	$scope.filter.filterOnPayment = function(){
+		this.sql = $scope.patientList.config.sql_read_table_data
+		console.log(this.payment_privilege)
+		if(this.minPayment && this.maxPayment){
+			this.sql = sql.read_table_payment().replace(':read_table_sql',this.sql)
+		}
+		if(this.payment_privilege){
+			this.sql = sql.read_table_privilege().replace(':read_table_sql',this.sql)
+		}
+	//		console.log(this)
+		console.log(this.sql)
+		readSql(this, $scope.patientList.pl)
+	}
+	$scope.filter.blurDate = function(dateName){
+		var date = this.checkDate(dateName)
+		console.log(date)
+		var s = date.getDate()+'-'+(date.getMonth()+1)+'-'+date.getFullYear()
+		console.log(s)
+		this[dateName+'_ts'] = date
+		this[dateName] = s
+	}
+	$scope.filter.checkDate = function(dateName){
+		var date = new Date()
+		date.setHours(10)
+		var checkDate = this[dateName]
+		console.log(checkDate)
+		checkDate = checkDate.replace(/-/g,' ')
+		var checkDateSplit = checkDate.split(' ')
+		console.log(checkDateSplit)
+		date.setDate(checkDateSplit[0])
+		if(checkDateSplit[1]){
+			var m = checkDateSplit[1]*1-1
+			console.log(m)
+			date.setMonth(m)
+	//			date.setDate(checkDateSplit[2])
+		}
+		console.log(date.toISOString())
+		return date
 	}
 
 	$scope.date = {

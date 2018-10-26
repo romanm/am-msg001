@@ -132,3 +132,24 @@ function build_sqlJ2c_cell_write(v,k,n,col_data, rowObj){
 		build_sqlJ2c_cell_write_parameters(col_data, v, n)
 	}
 }
+
+function loadVarAsFile(data, fileName, file_MIME_type){
+	var blob = new Blob([data], {type: file_MIME_type}),
+	e = document.createEvent('MouseEvents'),
+	a = document.createElement('a')
+
+	if (window.navigator && window.navigator.msSaveOrOpenBlob) {
+		window.navigator.msSaveOrOpenBlob(blob, fileName);
+	}
+	else{
+		var e = document.createEvent('MouseEvents'),
+		a = document.createElement('a');
+
+		a.download = fileName;
+		a.href = window.URL.createObjectURL(blob);
+		a.dataset.downloadurl = ['text/plain', a.download, a.href].join(':');
+		e.initEvent('click', true, false, window,
+				0, 0, 0, 0, 0, false, false, false, false, 0, null);
+		a.dispatchEvent(e);
+	}
+}
