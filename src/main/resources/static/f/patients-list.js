@@ -324,7 +324,7 @@ $scope.callDbImport = function() {
 //		var blob = new Blob([this.o.saveCheckFile], {type: 'text/csv;charset=utf-16'}),
 //		var blob = new Blob([this.o.saveCheckFile], {type: 'text/plain;charset=utf-16'}),
 //		var blob = new Blob([this.o.saveCheckFile], {type: "text/plain;charset=utf-8"});
-		filename = 'chek',
+		filename = 'chek.txt',
 		e = document.createEvent('MouseEvents'),
 		a = document.createElement('a')
 
