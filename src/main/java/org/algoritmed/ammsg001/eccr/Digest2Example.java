@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
 import java.nio.charset.StandardCharsets;
+import java.util.List;
 import java.util.Map;
 
 import org.apache.commons.io.IOUtils;
@@ -28,6 +29,7 @@ import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClients;
 import org.springframework.beans.factory.annotation.Autowired;
 
+import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 public class Digest2Example {
@@ -75,6 +77,18 @@ public class Digest2Example {
 	
 	private CloseableHttpResponse httpPost(String request) throws ClientProtocolException, IOException {
 		return httpclient.execute(target, new HttpPost(request), localContextWithDigestAuth);
+	}
+	public List<Map<String, Object>> cgi_chk(int id) throws ClientProtocolException, IOException {
+		cgiState();
+		String requestState = "/cgi/chk";
+		if(id>0) {
+			requestState += "?id="+id;
+		}
+		CloseableHttpResponse httpGet = httpGet(requestState);
+		HttpEntity entity = httpGet.getEntity();
+		InputStream content = entity.getContent();
+		List<Map<String, Object>> readValue = objectMapper.readValue(content, List.class);
+		return readValue;
 	}
 	public void printXZReport(int reportId) throws ClientProtocolException, IOException {
 		cgiState();

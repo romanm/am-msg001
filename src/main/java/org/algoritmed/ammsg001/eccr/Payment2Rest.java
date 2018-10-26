@@ -2,7 +2,9 @@ package org.algoritmed.ammsg001.eccr;
 
 import java.io.IOException;
 import java.security.Principal;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.function.Consumer;
 
@@ -46,6 +48,7 @@ public class Payment2Rest  extends DbCommon{
 		}
 		return map;
 	}
+
 	@GetMapping("/getXReport2")
 	public @ResponseBody Map<String, Object> getXReport2(
 			HttpServletRequest request
@@ -102,6 +105,23 @@ public class Payment2Rest  extends DbCommon{
 		return map;
 	}
 
+	@GetMapping("/cgi_chk")
+	public @ResponseBody List<Map<String, Object>> cgi_chk(
+			HttpServletRequest request
+			) {
+		List<Map<String, Object>> cgi_chk;
+		try {
+			cgi_chk = digest2Example.cgi_chk(0);
+		} catch (IOException e) {
+			e.printStackTrace();
+			cgi_chk = new ArrayList<>();
+			Map<String, Object> m = new HashMap<>();
+			m.put("error", e.getMessage());
+			cgi_chk.add(m);
+		}
+		return cgi_chk;
+	}
+
 	@PostMapping("/toPaymentApparatus2")
 	public @ResponseBody Map<String, Object> toPaymentApparatus(
 			@RequestBody Map<String, Object> paymentData
@@ -118,10 +138,10 @@ public class Payment2Rest  extends DbCommon{
 			System.out.println("-------101---------");
 			cgiChr = digest2Example.cgiChr(paymentData);
 			System.out.println("-------102---------");
-		} catch (IOException e1) {
-			e1.printStackTrace();
+		} catch (IOException e) {
+			e.printStackTrace();
 			cgiChr = new HashMap<>();
-			cgiChr.put("error", e1.getMessage());
+			cgiChr.put("error", e.getMessage());
 		}
 		return cgiChr;
 	}
