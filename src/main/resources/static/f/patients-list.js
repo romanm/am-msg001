@@ -378,6 +378,9 @@ $scope.callDbImport = function() {
 	}
 
 	$scope.pageVar.paymentData_F_P = {no:1}
+	$scope.pageVar.saveEKKR = function(){
+		console.log(345)
+	}
 	$scope.pageVar.saveUpdate = function(){
 		this.o.col_240 = this.price
 		this.o.col_3311 = this.procent
@@ -395,16 +398,24 @@ $scope.callDbImport = function() {
 			console.log(n+'/'+k)
 			build_sqlJ2c_cell_write(v,k,n,col_data,rowObj)
 		})
-		console.log(col_data.sql_row)
+		col_data.sql_row += sql.read_table_one_row()
+			.replace(':read_table_sql',$scope.patientList.config.sql_read_table_data)
 		var data = {
 			sql : col_data.sql_row,
 			row_id : rowObj.row_id,
 			dataAfterSave: function(response){
-				console.log(response.data)
+				var list = response.data.list1
+				|| response.data.list2
+				|| response.data.list3
+				|| response.data.list4
+				|| response.data.list5
+				|| response.data.list6
+				$scope.pageVar.o = list[0]
 			},
 		}
-		console.log(data)
 		writeSql(data)
+	}
+	$scope.pageVar.saveUpdate2 = function(){
 		var toPay = this.toPay()
 		var service = this.o.col_239
 		var code = $scope.ekkr.config.nextPaymentId
@@ -544,6 +555,11 @@ var sql = {
 		"WHERE x.parent=d.parent " +
 		") x GROUP BY value " +
 		") x ORDER BY cnt DESC"
+	},
+	read_table_one_row:function(){
+		return "SELECT * FROM ( \n" +
+		":read_table_sql " +
+		" ) x WHERE row_id = :row_id"
 	},
 	read_table_privilege:function(){
 		return "SELECT * FROM ( " +

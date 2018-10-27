@@ -85,8 +85,10 @@
 			<div class="w3-container">
 				<div class="w3-row-padding w3-border-bottom">
 					<div class="w3-col m10 l10 s10 ">
-						<button class="w3-border" data-ng-click="pageVar.saveUpdate()">OK,
-							сплачено - друк фіскальний чек</button>
+						<button class="w3-border" data-ng-click="pageVar.saveUpdate()">Запис
+							ціни</button>
+						<button class="w3-border" data-ng-click="pageVar.saveEKKR()"
+							data-ng-disabled="!pageVar.o.col_240">Друк фіскальний чек</button>
 						<button class="w3-border"
 							ng-click="pageVar.ngStyleModal={display:'none'}">Cancel</button>
 					</div>
