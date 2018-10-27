@@ -110,7 +110,8 @@ app.controller('myCtrl', function($scope, $http, $interval, $filter) {
 		console.log(321)
 		var csvFile = ''
 		angular.forEach($scope.patientList.col_keys, function(v,k){
-			csvFile += v.trim()+','
+			csvFile += v.trim()+';'
+//			csvFile += v.trim()+','
 		})
 		csvFile += '\r\n'
 		angular.forEach($scope.patientList.pl.list, function(v){
@@ -127,7 +128,8 @@ app.controller('myCtrl', function($scope, $http, $interval, $filter) {
 					vC = v[k]
 				else
 					vC = ''
-				csvFile += vC+','
+				csvFile += vC+';'
+//				csvFile += vC+','
 			})
 			csvFile += '\r\n'
 		})
