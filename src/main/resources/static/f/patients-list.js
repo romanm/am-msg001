@@ -128,8 +128,11 @@ app.controller('myCtrl', function($scope, $http, $interval, $filter) {
 		})
 //		console.log(csvFile)
 		var ts = new Date().toISOString().split('\.')[0]
-		console.log(ts)
-		loadVarAsFile(csvFile, 'export-'+ts+'.csv', 'text/csv;charset=utf-8')
+		var csvFileUTF16  = new Uint16Array(csvFile.split('').map( function(k, v){
+			return k.charCodeAt(0);
+		}));
+		loadVarAsFile(csvFileUTF16, 'export-'+ts+'.csv', 'text/csv;charset=UTF-16LE;')
+		//loadVarAsFile(csvFile, 'export-'+ts+'.csv', 'text/csv;charset=utf-8')
 	}
 	$scope.filter.filterOnPayment = function(){
 		this.sql = $scope.patientList.config.sql_read_table_data
