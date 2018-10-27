@@ -103,6 +103,11 @@ app.controller('myCtrl', function($scope, $http, $interval, $filter) {
 		this.minPayment = null
 	}
 	$scope.filter.filterToExcellCsv = function(){
+		console.log(123)
+		$scope.filter.filterToWinExcellCsv()
+	}
+	$scope.filter.filterToWinExcellCsv = function(){
+		console.log(321)
 		var csvFile = ''
 		angular.forEach($scope.patientList.col_keys, function(v,k){
 			csvFile += v.trim()+','
@@ -128,11 +133,14 @@ app.controller('myCtrl', function($scope, $http, $interval, $filter) {
 		})
 //		console.log(csvFile)
 		var ts = new Date().toISOString().split('\.')[0]
-		var csvFileUTF16  = new Uint16Array(csvFile.split('').map( function(k, v){
-			return k.charCodeAt(0);
-		}));
-		loadVarAsFile(csvFileUTF16, 'export-'+ts+'.csv', 'text/csv;charset=UTF-16LE;')
-		//loadVarAsFile(csvFile, 'export-'+ts+'.csv', 'text/csv;charset=utf-8')
+//		var csvFileUTF16  = new Uint16Array(csvFile.split('').map( function(k, v){
+//			return k.charCodeAt(0);
+//		}));
+//		loadVarAsFile(csvFileUTF16, 'export-'+ts+'.csv', 'text/csv;charset=UTF-16LE;')
+		console.log(ts)
+		console.log('\uFEFF'+csvFile)
+		console.log(ts)
+		loadVarAsFile('\uFEFF'+csvFile, 'export-'+ts+'.csv', 'text/csv;charset=utf-8')
 	}
 	$scope.filter.filterOnPayment = function(){
 		this.sql = $scope.patientList.config.sql_read_table_data
@@ -157,8 +165,7 @@ app.controller('myCtrl', function($scope, $http, $interval, $filter) {
 			this.toDate_sql = this.toDate_ts.toISOString().split('T')[0]
 			this.sql = sql.read_table_betweenDates().replace(':read_table_sql',this.sql)
 		}
-		console.log(this)
-		console.log(this.sql)
+		//console.log(this.sql)
 		readSql(this, $scope.patientList.pl)
 	}
 	$scope.filter.blurDate = function(dateName){
