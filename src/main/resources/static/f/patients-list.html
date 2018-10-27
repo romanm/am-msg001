@@ -88,7 +88,7 @@
 						<button class="w3-border" data-ng-click="pageVar.saveUpdate()">Запис
 							ціни</button>
 						<button class="w3-border" data-ng-click="pageVar.saveEKKR()"
-							data-ng-disabled="!pageVar.o.col_240">Друк фіскальний чек</button>
+							data-ng-disabled="!pageVar.o.col_240 || pageVar.o.col_14207">Друк фіскальний чек</button>
 						<button class="w3-border"
 							ng-click="pageVar.ngStyleModal={display:'none'}">Cancel</button>
 					</div>
@@ -98,7 +98,6 @@
 				</div>
 				<span data-ng-click="pageVar.ngStyleModal={display:'none'}"
 					class="w3-button w3-display-topright">&times;</span>
-					
 					a1
 					{{pageVar.o.row_id}}
 					a1
@@ -117,12 +116,15 @@
 				<div class="w3-row">
 					<div class="w3-half w3-container ">
 						Вартість: <input data-ng-model="pageVar.price"
+						data-ng-disabled="pageVar.o.col_14207"
 							class="w3-border w3-right">
 					</div>
 					<div class="w3-half">
 						<span class="w3-tiny"
-							ng-repeat="o in priceCalcHelpData.examination.list">
-							<a ng-click="pageVar.price=o.value" class="w3-btn w3-hover-shadow w3-padding-small" href="#"
+							ng-repeat="o in priceCalcHelpData.examination.list"> <a
+							data-ng-disabled="pageVar.o.col_14207"
+							ng-click="pageVar.price=o.value"
+							class="w3-btn w3-hover-shadow w3-padding-small" href="#"
 							title="{{o.cnt}}"> {{o.value}} </a>
 						</span>
 					</div>
@@ -130,12 +132,13 @@
 				<div class="w3-row">
 					<div class="w3-half w3-container ">
 						Скидка (%): <input data-ng-model="pageVar.procent"
-							class="w3-border w3-right">
+							data-ng-disabled="pageVar.o.col_14207" class="w3-border w3-right">
 					</div>
 					<div class="w3-half">
 						<span class="w3-tiny"
 							ng-repeat="o in priceCalcHelpData.destination.list"> <a
-							ng-click="pageVar.procent=o.value"
+							data-ng-disabled="pageVar.o.col_14207"
+							data-ng-click="pageVar.procent=o.value"
 							class="w3-btn w3-hover-shadow w3-padding-small" href="#"
 							title="{{o.cnt}}"> {{o.value}} </a>
 						</span>

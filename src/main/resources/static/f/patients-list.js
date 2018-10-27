@@ -377,21 +377,19 @@ $scope.callDbImport = function() {
 		})
 	}
 
-	$scope.pageVar.paymentData_F_P = {no:1}
-	$scope.pageVar.saveEKKR = function(){
-		console.log(345)
-	}
 	$scope.pageVar.saveUpdate = function(){
 		this.o.col_240 = this.price
 		this.o.col_3311 = this.procent
 		this.o.col_5218 = this.payment_privilege
 		var col_data = {}
-		col_data.nextDbIdCounter = 3
-		col_data.sql_row = ''
 		col_data[240] = $scope.patientList.config.json_create_table[240]
 		col_data[3311] = $scope.patientList.config.json_create_table[3311]
 		col_data[5218] = $scope.patientList.config.json_create_table[5218]
-		var rowObj = this.o
+		$scope.pageVar.writeUpdate(col_data, this.o)
+	}
+	$scope.pageVar.writeUpdate = function(col_data, rowObj){
+		col_data.nextDbIdCounter = 3
+		col_data.sql_row = ''
 		angular.forEach(col_data, function(v_col_type,n){
 			var k = 'col_'+n
 			var v = rowObj[k]
@@ -415,39 +413,48 @@ $scope.callDbImport = function() {
 		}
 		writeSql(data)
 	}
-	$scope.pageVar.saveUpdate2 = function(){
-		var toPay = this.toPay()
-		var service = this.o.col_239
-		var code = $scope.ekkr.config.nextPaymentId
-		var paymentData = {
-			F:[
-				{S:{
-					code:code,
-					price:toPay,
-					name:service,
-					tax:5,
-				}},
-				{P:{no:$scope.pageVar.paymentData_F_P.no}},
-			],
-			IO:[
-				{IO:{sum:toPay}},
-			],
+	$scope.pageVar.paymentData_F_P = {no:1}
+	$scope.pageVar.saveEKKR = function(){
+		if(this.o.col_14207){
+			console.error('--фіскальна реєстрація вже виконана---- checkId = '+this.o.col_14207)
+		}else{
+			var toPay = this.toPay()
+			var service = this.o.col_239
+			var code = $scope.ekkr.config.nextPaymentId
+			var paymentData = {
+				F:[
+					{S:{
+						code:code,
+						price:toPay,
+						name:service,
+						tax:5,
+					}},
+					{P:{no:$scope.pageVar.paymentData_F_P.no}},
+				],
+				IO:[
+					{IO:{sum:toPay}},
+				],
+			}
+			var C = {C:{cm:'КАСИР: Касир 1'}}
+			paymentData.F.push(C)
+			paymentData.IO.push(C)
+			console.log(paymentData)
+			exe_fn.httpPost
+			({ url:'/toPaymentApparatus2',
+				then_fn:function(response) {
+					console.log(response.data)
+					$scope.pageVar.o.col_14207 = $scope.ekkr.config.nextPaymentId
+					var col_data = {}
+					col_data[14207] = $scope.patientList.config.json_create_table[14207]
+					$scope.pageVar.writeUpdate(col_data, $scope.pageVar.o)
+				},
+				error_fn:function(response) {
+					console.error('---error----помилка-------')
+					console.error(response.data)
+				},
+				data:paymentData,
+			})
 		}
-		var C = {C:{cm:'КАСИР: Касир 1'}}
-		paymentData.F.push(C)
-		paymentData.IO.push(C)
-		console.log(paymentData)
-		exe_fn.httpPost
-		({ url:'/toPaymentApparatus2',
-			then_fn:function(response) {
-				console.log(response.data)
-			},
-			error_fn:function(response) {
-				console.error('---error----помилка-------')
-				console.error(response.data)
-			},
-			data:paymentData,
-		})
 	}
 
 	$scope.pageVar.toPay = function(){
