@@ -20,7 +20,7 @@
 			</a>
 		</div>
 		<div class="w3-col  w3-center" style="width: 50%">
-			<p>РІС-адмін</p>
+			<p>РІС-фільтри виборки</p>
 		</div>
 		<div class="w3-col w3-container w3-right-align" style="width: 30%">
 			<span ng-include="'/f/login-link.html'"> </span>
@@ -30,10 +30,10 @@
 		<a href="#" ng-click="db_validation.removeDupletRows()" class="w3-btn" ng-if="db_validation.duplet_rows_count>0">
 			{{db_validation.duplet_rows_count}} - дуплет для видаленя</a>
 	</div>
-	<div class="w3-container w3-orange w3-tiny">сьогодні:
-		{{date.today | date : 'shortDate'}} 
-		---
-		Analytics page on development</div>
+	<div class="w3-container w3-tiny">
+		сьогодні: {{date.today | date : 'shortDate'}} <span class=" w3-orange">
+			--- Analytics page on development</span>
+	</div>
 	<div class="w3-container">
 		<div class="w3-row">
 			<div class="w3-col w3-container" style="width: 80%">
@@ -47,10 +47,19 @@
 				<div>
 					<button class="w3-border"
 						data-ng-click="filter.filterOnPrivilegeClean()">Скасувати</button>
-					{{gui.filterOnPrivilege}} <select
+					{{gui.filterOnPrivilege}} <select class="w3-border"
 						ng-model="filter.payment_privilege">
 						<option
 							data-ng-repeat="x in pageVar.site_config.payment_privileges"
+							value="{{x.name}}">{{x.name}}</option>
+					</select>
+				</div>
+				<div>
+					<button class="w3-border"
+						data-ng-click="filter.filterOnPayTypeClean()">Скасувати</button>
+					{{gui.filterOnPayType}} <select class="w3-border"
+						ng-model="filter.payment_type">
+						<option data-ng-repeat="x in pageVar.site_config.payment_type"
 							value="{{x.name}}">{{x.name}}</option>
 					</select>
 				</div>
@@ -68,7 +77,7 @@
 			</div>
 			<div class="w3-col w3-container" style="width: 20%">
 				<button class="w3-border" data-ng-click="filter.filterToExcellCsv()">
-					<i class="fa fa-file-excel-o" aria-hidden="true"></i> excell
+					<i class="fa fa-file-excel-o" aria-hidden="true"></i> excell CSV
 				</button>
 			</div>
 		</div>

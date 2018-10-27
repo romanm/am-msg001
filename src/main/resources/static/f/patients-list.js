@@ -84,13 +84,16 @@ app.controller('myCtrl', function($scope, $http, $interval, $filter) {
 	}
 
 	$scope.gui = {
-		filterOnDate:'виборка по даті:',
-		filterOnPrivilege:'виборка по пільгам:',
-		filterOnPayment:'виборка по платежу:',
+		filterOnDate:'по даті:',
+		filterOnPrivilege:'по пільгам:',
+		filterOnPayType:'по типу оплати:',
+		filterOnPayment:'по платежу:',
 	}
 
 	$scope.filter = {}
-	
+	$scope.filter.filterOnPayTypeClean = function(){
+		this.payment_type = null
+	}
 	$scope.filter.filterOnPrivilegeClean = function(){
 		this.payment_privilege = null
 	}
@@ -135,6 +138,9 @@ app.controller('myCtrl', function($scope, $http, $interval, $filter) {
 		}
 		if(this.payment_privilege){
 			this.sql = sql.read_table_privilege().replace(':read_table_sql',this.sql)
+		}
+		if(this.payment_type){
+			this.sql = sql.read_table_payment_type().replace(':read_table_sql',this.sql)
 		}
 		if(this.fromDate_ts){
 			this.fromDate_sql = this.fromDate_ts.toISOString().split('T')[0]
@@ -392,10 +398,12 @@ $scope.callDbImport = function() {
 		this.o.col_240 = this.price
 		this.o.col_3311 = this.procent
 		this.o.col_5218 = this.payment_privilege
+		this.o.col_18972 = this.paymentData_F_P.name
 		var col_data = {}
 		col_data[240] = $scope.patientList.config.json_create_table[240]
 		col_data[3311] = $scope.patientList.config.json_create_table[3311]
 		col_data[5218] = $scope.patientList.config.json_create_table[5218]
+		col_data[18972] = $scope.patientList.config.json_create_table[18972]
 		$scope.pageVar.writeUpdate(col_data, this.o)
 	}
 	$scope.pageVar.writeUpdate = function(col_data, rowObj){
@@ -408,7 +416,9 @@ $scope.callDbImport = function() {
 			build_sqlJ2c_cell_write(v,k,n,col_data,rowObj)
 		})
 		col_data.sql_row += sql.read_table_one_row()
-			.replace(':read_table_sql',$scope.patientList.config.sql_read_table_data)
+			.replace(':read_table_sql', $scope.patientList.config.sql_read_table_data)
+		console.log(sql.read_table_one_row()
+				.replace(':read_table_sql', $scope.patientList.config.sql_read_table_data))
 		var data = {
 			sql : col_data.sql_row,
 			row_id : rowObj.row_id,
@@ -424,11 +434,15 @@ $scope.callDbImport = function() {
 		}
 		writeSql(data)
 	}
-	$scope.pageVar.paymentData_F_P = {no:1}
+	$scope.pageVar.paymentData_F_P = {no:0}
+	$scope.pageVar.setPaymentData_F_P = function(v){
+		if(!$scope.pageVar.o.col_14207)
+			$scope.pageVar.paymentData_F_P = v
+	}
 	$scope.pageVar.saveEKKR = function(){
 		if(this.o.col_14207){
 			console.error('--фіскальна реєстрація вже виконана---- checkId = '+this.o.col_14207)
-		}else{
+		}else if($scope.pageVar.paymentData_F_P.no>0){
 			var toPay = this.toPay()
 			var service = this.o.col_239
 			var code = $scope.ekkr.config.nextPaymentId
@@ -480,10 +494,14 @@ $scope.callDbImport = function() {
 		console.log(this)
 		//console.log($scope.patientList.config.json_create_table)
 		if(this.row_id != o.row_id){
+			this.o = o
 			this.price = o.col_240
 			this.procent = o.col_3311
-			this.o = o
 			this.row_id = o.row_id
+			angular.forEach($scope.pageVar.site_config.payment_type, function(v,k){
+				if(v.name==o.col_18972)
+					$scope.pageVar.paymentData_F_P = v
+			})
 		}
 		$scope.priceCalcHelpData = {}
 	//			console.log($scope.priceCalcHelpData)
@@ -578,6 +596,11 @@ var sql = {
 		return "SELECT * FROM ( \n" +
 		":read_table_sql " +
 		" ) x WHERE row_id = :row_id"
+	},
+	read_table_payment_type:function(){
+		return "SELECT * FROM ( " +
+		":read_table_sql " +
+		" ) x WHERE col_18972 = :payment_type"
 	},
 	read_table_privilege:function(){
 		return "SELECT * FROM ( " +

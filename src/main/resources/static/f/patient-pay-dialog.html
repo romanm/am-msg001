@@ -1,0 +1,107 @@
+<div data-ng-style="pageVar.ngStyleModal" class="w3-modal ">
+	<div
+		class="w3-modal-content {{pageVar.colortheme.theme=='night'?'w3-dark-grey':''}}">
+
+		<div class="w3-container">
+			<div class="w3-row-padding w3-border-bottom">
+				<div class="w3-col m10 l10 s10 ">
+					<button class="w3-border" data-ng-click="pageVar.saveUpdate()">Запис
+						ціни</button>
+					<button class="w3-border" data-ng-click="pageVar.saveEKKR()"
+						data-ng-disabled="!pageVar.o.col_240 || pageVar.o.col_14207 || pageVar.o.col_18972=='ІНШЕ'">Друк
+						фіскальний чек</button>
+					<button class="w3-border"
+						ng-click="pageVar.ngStyleModal={display:'none'}">Cancel</button>
+				</div>
+				<div class="w3-col m2 l2 s2 ">
+					<div data-ng-include="pageVar.o.ngIncludes.modalBottonPanel"></div>
+				</div>
+			</div>
+			<span data-ng-click="pageVar.ngStyleModal={display:'none'}"
+				class="w3-button w3-display-topright">&times;</span> a1
+			{{pageVar.o.row_id}} a1
+			<p data-ng-if="!pageVar.o">Не вибрані дані для редагування.</p>
+			<p data-ng-if="pageVar.o">|{{pageVar.o.col_237}} |
+				{{pageVar.o.col_238}} | {{pageVar.o.col_240}} |
+				{{pageVar.o.col_241}} |</p>
+			<div class="w3-row">
+				<div class="w3-half w3-container "></div>
+				<div class="w3-half">
+					<span class="w3-tiny am-b">Обстеження:</span> {{pageVar.o.col_239}}
+				</div>
+			</div>
+			<div class="w3-row">
+				<div class="w3-half w3-container ">
+					Вартість: <input data-ng-model="pageVar.price"
+						data-ng-disabled="pageVar.o.col_14207" class="w3-border w3-right">
+				</div>
+				<div class="w3-half">
+					<span class="w3-tiny"
+						ng-repeat="o in priceCalcHelpData.examination.list"> <a
+						data-ng-disabled="pageVar.o.col_14207"
+						ng-click="pageVar.price=o.value"
+						class="w3-btn w3-hover-shadow w3-padding-small" href="#"
+						title="{{o.cnt}}"> {{o.value}} </a>
+					</span>
+				</div>
+			</div>
+			<div class="w3-row">
+				<div class="w3-half w3-container ">
+					Скидка (%): <input data-ng-model="pageVar.procent"
+						data-ng-disabled="pageVar.o.col_14207" class="w3-border w3-right">
+				</div>
+				<div class="w3-half">
+					<span class="w3-tiny"
+						ng-repeat="o in priceCalcHelpData.destination.list"> <a
+						data-ng-disabled="pageVar.o.col_14207"
+						data-ng-click="pageVar.procent=o.value"
+						class="w3-btn w3-hover-shadow w3-padding-small" href="#"
+						title="{{o.cnt}}"> {{o.value}} </a>
+					</span>
+				</div>
+			</div>
+			<div class="w3-row">
+				<div class="w3-half w3-container ">
+					До сплати: <span class="am-b">
+						{{pageVar.price-(pageVar.price*pageVar.procent/100)}} </span>
+				</div>
+				<div class="w3-half">
+					<span class="w3-tiny am-b">Направлення:</span>
+					{{pageVar.o.col_242}}
+				</div>
+			</div>
+			{{pageVar.payment_privilege}}
+			<div>
+				Пільги: <select ng-model="pageVar.payment_privilege"
+					class="w3-border">
+					<option ng-repeat="x in pageVar.site_config.payment_privileges"
+						value="{{x.name}}">{{x.name}}</option>
+				</select> <span data-ng-disabled="pageVar.o.col_14207"> Форма оплати:
+					<a href="#" data-ng-disabled="pageVar.o.col_14207>0"
+					data-ng-class="{'w3-green':pageVar.paymentData_F_P.no==1}"
+					data-ng-click="pageVar.setPaymentData_F_P(pageVar.site_config.payment_type[0])">{{pageVar.site_config.payment_type[0].name}}</a>
+					| <a data-ng-class="{'w3-green':pageVar.paymentData_F_P.no==4}"
+					data-ng-disabled="pageVar.o.col_14207>0" href="#"
+					data-ng-click="pageVar.setPaymentData_F_P(pageVar.site_config.payment_type[1])">{{pageVar.site_config.payment_type[1].name}}</a>
+					| <a data-ng-class="{'w3-green':pageVar.paymentData_F_P.no==0}"
+					data-ng-disabled="pageVar.o.col_14207" href="#"
+					data-ng-click="pageVar.setPaymentData_F_P(pageVar.site_config.payment_type[2])">{{pageVar.site_config.payment_type[2].name}}</a>
+				</span>
+			</div>
+			<p>&nbsp;</p>
+			<div class="w3-tiny">
+				<span class="am-b" style="text-decoration: underline;">
+					альтернатива: </span> підготувати
+				<button class="w3-border" data-ng-click="pageVar.makeCheckFile()">
+					check file</button>
+				для Сервисної консолі MG-T808TL
+				<div>
+					<button class="w3-border" data-ng-click="pageVar.saveCheckFile()">Запис:
+						check file</button>
+					<i class="fa fa-long-arrow-right" aria-hidden="true"></i>
+					{{pageVar.getCheckFile()}}
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
