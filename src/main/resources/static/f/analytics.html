@@ -30,8 +30,10 @@
 		<a href="#" ng-click="db_validation.removeDupletRows()" class="w3-btn" ng-if="db_validation.duplet_rows_count>0">
 			{{db_validation.duplet_rows_count}} - дуплет для видаленя</a>
 	</div>
-	<div class="w3-container w3-orange w3-tiny">Analytics page on
-		development</div>
+	<div class="w3-container w3-orange w3-tiny">сьогодні:
+		{{date.today | date : 'shortDate'}} 
+		---
+		Analytics page on development</div>
 	<div class="w3-container">
 		<div class="w3-row">
 			<div class="w3-col w3-container" style="width: 80%">

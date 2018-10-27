@@ -136,7 +136,18 @@ app.controller('myCtrl', function($scope, $http, $interval, $filter) {
 		if(this.payment_privilege){
 			this.sql = sql.read_table_privilege().replace(':read_table_sql',this.sql)
 		}
-	//		console.log(this)
+		if(this.fromDate_ts){
+			this.fromDate_sql = this.fromDate_ts.toISOString().split('T')[0]
+			console.log(this.fromDate_sql)
+			if(!this.toDate_ts){
+				this.toDate_ts = new Date(this.fromDate_ts)
+			}
+			console.log(this.toDate_ts)
+			this.toDate_ts.setDate(this.toDate_ts.getDate()+1)
+			this.toDate_sql = this.toDate_ts.toISOString().split('T')[0]
+			this.sql = sql.read_table_betweenDates().replace(':read_table_sql',this.sql)
+		}
+		console.log(this)
 		console.log(this.sql)
 		readSql(this, $scope.patientList.pl)
 	}
@@ -572,6 +583,11 @@ var sql = {
 		return "SELECT * FROM ( " +
 		":read_table_sql " +
 		" ) x WHERE col_5218 = :payment_privilege"
+	},
+	read_table_betweenDates:function(){
+		return "SELECT * FROM ( " +
+		":read_table_sql " +
+		" ) x WHERE col_236 between :fromDate_sql AND :toDate_sql "
 	},
 	read_table_payment:function(){
 		return "SELECT * FROM ( " +
