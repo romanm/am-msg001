@@ -139,9 +139,9 @@ app.controller('myCtrl', function($scope, $http, $interval, $filter) {
 //			return k.charCodeAt(0);
 //		}));
 //		loadVarAsFile(csvFileUTF16, 'export-'+ts+'.csv', 'text/csv;charset=UTF-16LE;')
-		console.log(ts)
-		console.log('\uFEFF'+csvFile)
-		console.log(ts)
+//		console.log(ts)
+//		console.log('\uFEFF'+csvFile)
+//		console.log(ts)
 		loadVarAsFile('\uFEFF'+csvFile, 'export-'+ts+'.csv', 'text/csv;charset=utf-8')
 	}
 	$scope.filter.filterOnPayment = function(){
@@ -275,7 +275,6 @@ $scope.lastDbRead = {
 	},
 }
 
-
 $scope.callDbImport = function() {
 	if($scope.patientList){
 		if($scope.patientList.pl){
@@ -293,11 +292,19 @@ $scope.callDbImport = function() {
 
 	$scope.$watch('patientList.seek',function(newValue){ if(true){
 		if($scope.patientList.pl){
-			var data = {
-				seek :'%'+newValue+'%',
-				sql : sql.read_table_seek().replace(':read_table_sql',$scope.patientList.config.sql_read_table_data),
-			}
+			var sqlSeek = sql.read_table_seek().replace(':read_table_sql',$scope.patientList.config.sql_read_table_data)
+			var seek = '%'+newValue+'%'
+//			console.log(sqlSeek.replace(/:seek/g,"'"+seek+"'"))
+			var data = { seek : seek, sql : sqlSeek + ' LIMIT 50', }
 			readSql(data, $scope.patientList.pl)
+			
+			var sqlSeekCnt = "SELECT count(*) cnt FROM ( \n" +sqlSeek +" ) x"
+			var dataCnt = { seek : seek, sql : sqlSeekCnt, 
+				afterRead:function(response){
+					$scope.patientList.pl.cnt = response.data.list[0].cnt
+				}
+			}
+			readSql(dataCnt)
 		}
 	}})
 

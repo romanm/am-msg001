@@ -18,8 +18,7 @@
 				</div>
 			</div>
 			<span data-ng-click="pageVar.ngStyleModal={display:'none'}"
-				class="w3-button w3-display-topright">&times;</span> a1
-			{{pageVar.o.row_id}} a1
+				class="w3-button w3-display-topright">&times;</span> 
 			<p data-ng-if="!pageVar.o">Не вибрані дані для редагування.</p>
 			<p data-ng-if="pageVar.o">|{{pageVar.o.col_237}} |
 				{{pageVar.o.col_238}} | {{pageVar.o.col_240}} |
@@ -94,7 +93,8 @@
 					альтернатива: </span> підготувати
 				<button class="w3-border" data-ng-click="pageVar.makeCheckFile()">
 					check file</button>
-				для Сервисної консолі MG-T808TL
+				для Сервисної консолі MG-T808TL <span class="w3-right">
+					{{pageVar.o.row_id}} </span>
 				<div>
 					<button class="w3-border" data-ng-click="pageVar.saveCheckFile()">Запис:
 						check file</button>

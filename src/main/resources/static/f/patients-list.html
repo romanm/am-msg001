@@ -59,8 +59,11 @@
 	</div>
 	<div class="w3-container" ng-if="principal.name">
 		<div class="w3-row w3-section">
-			<div class="w3-col w3-text-gray" style="width: 20px">
-				<sub> {{patientList.pl.list.length}} </sub>
+			<div class="w3-col w3-text-gray" style="width: 80px">
+				<sup> {{patientList.pl.list.length}} </sup> <span
+					data-ng-if="patientList.pl.cnt > patientList.pl.list.length"> / <sub>
+						{{patientList.pl.cnt}} </sub>
+				</span>
 			</div>
 			<div class="w3-col" style="width: 50px">
 				<span data-ng-repeat="random3 in [random3]" data-ng-switch="random3">
