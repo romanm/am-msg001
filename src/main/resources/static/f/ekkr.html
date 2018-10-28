@@ -88,7 +88,22 @@
 				</div>
 			</div>
 		</div>
-
 	</div>
+	<table>
+		<tr> <td>СУМА ПРОДАЖ</td> <td>{{cgi_chk_X_report.sum}}</td> </tr>
+		<tr> <td>КАРТКОЮ</td> <td>{{cgi_chk_X_report.carte}}</td> </tr>
+		<tr> <td>ГОТІВКОЮ</td> <td>{{cgi_chk_X_report.cash}}</td> </tr>
+		<tr>
+			<td class="w3-border-bottom">В СЕЙФІ</td>
+			<td class="w3-border-bottom">{{cgi_chk_X_report.safe}}</td>
+		</tr>
+		<tr data-ng-repeat="chk in cgi_chk">
+			<td>{{chk.F[1].P.name}}</td>
+			<td>{{chk.F[1].P.sum}}</td>
+			<td>{{chk.F[0].S.name}}</td>
+			<td>{{chk.F[0].S.code}}</td>
+			<!-- <td>{{chk.F[0].S}}</td> -->
+		</tr>
+	</table>
 </body>
 </html>

@@ -23,6 +23,42 @@ app.controller('myCtrl', function($scope, $http, $interval, $filter) {
 	}
 
 	$scope.ekkr = {}
+	if('ekkr'==$scope.request.pathNameValue){
+		console.log($scope.request.pathNameValue)
+		exe_fn.httpGet({
+			url:'/cgi_chk',
+			then_fn:function(response){
+				$scope.cgi_chk = response.data
+				$scope.cgi_chk_X_report = {sum:0,carte:0,cash:0,safe:0}
+				console.log($scope.cgi_chk_X_report)
+				angular.forEach($scope.cgi_chk, function(chk){
+					console.log(chk)
+					if(chk.F){
+						if(1==chk.F[1].P.no){
+							$scope.cgi_chk_X_report.cash
+							+= chk.F[1].P.sum
+						}else
+						if(4==chk.F[1].P.no){
+							$scope.cgi_chk_X_report.carte
+							+= chk.F[1].P.sum
+						}
+						$scope.cgi_chk_X_report.sum
+							+= chk.F[1].P.sum
+						console.log(chk.F[1].P.sum)
+					}
+				})
+				$scope.cgi_chk_X_report.safe
+				= $scope.cgi_chk_X_report.sum
+				- $scope.cgi_chk_X_report.carte
+
+			},
+			error_fn:function(response){
+				console.error('-----error-----------')
+				$scope.ekkr.error = response.data
+				console.error(response.data)
+			},
+		})
+	}
 	$scope.ekkr.config = {}
 	$scope.ekkr.config.change_addPaymentId = function(){
 		$scope.ekkr.config.newPaymentId
@@ -118,7 +154,7 @@ app.controller('myCtrl', function($scope, $http, $interval, $filter) {
 			angular.forEach($scope.patientList.col_keys, function(vCol,k){
 				var vC
 				if(typeof(v[k])=='string')
-					if(v[k].indexOf(',')>0)
+					if(v[k].indexOf(';')>=0)
 						vC = '"'+v[k].trim()+'"'
 					else
 						vC = v[k].trim()
