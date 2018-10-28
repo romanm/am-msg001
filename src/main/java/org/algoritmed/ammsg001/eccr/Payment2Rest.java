@@ -128,8 +128,7 @@ public class Payment2Rest  extends DbCommon{
 			,HttpServletRequest request
 			,Principal principal
 		){
-		
-		logger.info("\n\n--26---- "
+		logger.info("\n\n--131---- "
 				+ "/toPaymentApparatus2"
 				+ "\n" + paymentData
 				);

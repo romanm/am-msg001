@@ -24,15 +24,24 @@ app.controller('myCtrl', function($scope, $http, $interval, $filter) {
 
 	$scope.ekkr = {}
 	if('ekkr'==$scope.request.pathNameValue){
-		console.log($scope.request.pathNameValue)
+		$scope.cgi_chk_X_report = {
+			sum:0,carte:0,cash:0
+			,safe:0
+			,safe_minus:0
+			,safe_minus_sum:0
+		}
+		console.log($scope.cgi_chk_X_report)
 		exe_fn.httpGet({
 			url:'/cgi_chk',
 			then_fn:function(response){
 				$scope.cgi_chk = response.data
-				$scope.cgi_chk_X_report = {sum:0,carte:0,cash:0,safe:0}
 				console.log($scope.cgi_chk_X_report)
 				angular.forEach($scope.cgi_chk, function(chk){
 					console.log(chk)
+					if(chk.IO){
+						$scope.cgi_chk_X_report.safe_minus_sum
+						+= chk.IO[1].IO.sum
+					}else
 					if(chk.F){
 						if(1==chk.F[1].P.no){
 							$scope.cgi_chk_X_report.cash
@@ -44,13 +53,13 @@ app.controller('myCtrl', function($scope, $http, $interval, $filter) {
 						}
 						$scope.cgi_chk_X_report.sum
 							+= chk.F[1].P.sum
-						console.log(chk.F[1].P.sum)
 					}
 				})
 				$scope.cgi_chk_X_report.safe
 				= $scope.cgi_chk_X_report.sum
 				- $scope.cgi_chk_X_report.carte
-
+				+ $scope.cgi_chk_X_report.safe_minus_sum
+				console.log($scope.cgi_chk_X_report)
 			},
 			error_fn:function(response){
 				console.error('-----error-----------')
@@ -60,6 +69,32 @@ app.controller('myCtrl', function($scope, $http, $interval, $filter) {
 		})
 	}
 	$scope.ekkr.config = {}
+	$scope.ekkr.config.safeMinusSumSave = function(){
+		if($scope.cgi_chk_X_report.safe_minus <= $scope.cgi_chk_X_report.safe){
+			console.log($scope.cgi_chk_X_report.safe_minus)
+			var paymentData = {
+				IO:[
+					{C:{cm:'КАСИР: Касир 1'}},
+					{IO:{
+						sum:0-$scope.cgi_chk_X_report.safe_minus,
+						no:1,
+					}},
+				],
+			}
+			console.log(paymentData)
+			exe_fn.httpPost
+			({ url:'/toPaymentApparatus2',
+				then_fn:function(response) {
+					console.log(response.data)
+				},
+				error_fn:function(response) {
+					console.error('---error----помилка-------')
+					console.error(response.data)
+				},
+				data:paymentData,
+			})
+		}
+	}
 	$scope.ekkr.config.change_addPaymentId = function(){
 		$scope.ekkr.config.newPaymentId
 			= $scope.ekkr.config.currentPaymentId

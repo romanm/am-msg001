@@ -24,7 +24,10 @@
 			</a>
 		</div>
 		<div class="w3-col  w3-center" style="width: 50%">
-			<p>РІС список пацієнтів</p>
+			<p>
+				РІС <span class="w3-tiny">ЕЛЕКТРОННИЙ КОНТРОЛЬНО-КАСОВИЙ
+					РЕЄСТРАТОР </span>
+			</p>
 		</div>
 		<div class="w3-col w3-container w3-right-align" style="width: 30%">
 			<span ng-include="'/f/login-link.html'"> </span>
@@ -46,8 +49,9 @@
 						<div class="w3-border"
 							data-ng-if="ekkr.config.config_tab=='zReport'">
 							<p
-								class="w3-panel  w3-leftbar w3-green w3-card-4 w3-display-container">Підтвердіть
+								class="w3-panel w3-leftbar w3-green w3-card-4 w3-display-container">Підтвердіть
 								виконання Z-Звіту:</p>
+							<div class="w3-tiny w3-right">Якщо ви впевнені &nbsp;</div>
 							<button class="w3-border" data-ng-click="ekkr.zReport()">Z-Звіт</button>
 						</div>
 					</div>
@@ -90,20 +94,58 @@
 		</div>
 	</div>
 	<table>
-		<tr> <td>СУМА ПРОДАЖ</td> <td>{{cgi_chk_X_report.sum}}</td> </tr>
-		<tr> <td>КАРТКОЮ</td> <td>{{cgi_chk_X_report.carte}}</td> </tr>
-		<tr> <td>ГОТІВКОЮ</td> <td>{{cgi_chk_X_report.cash}}</td> </tr>
+		<tr>
+			<td>СУМА ПРОДАЖ</td>
+			<td>{{cgi_chk_X_report.sum}}</td>
+		</tr>
+		<tr>
+			<td>КАРТКОЮ</td>
+			<td>{{cgi_chk_X_report.carte}}</td>
+		</tr>
+		<tr>
+			<td>ГОТІВКОЮ</td>
+			<td>{{cgi_chk_X_report.cash}}</td>
+		</tr>
+		<tr data-ng-if="cgi_chk_X_report.safe_minus_sum<0">
+			<td>СЛУЖБОВА ВИДАЧА</td>
+			<td>{{cgi_chk_X_report.safe_minus_sum}}</td>
+		</tr>
 		<tr>
 			<td class="w3-border-bottom">В СЕЙФІ</td>
-			<td class="w3-border-bottom">{{cgi_chk_X_report.safe}}</td>
+			<td class="w3-border-bottom"><a class=""
+				data-ng-click="ekkr.config.config_tab_click('minusSafe')" href="#">
+					{{cgi_chk_X_report.safe}}</a></td>
+			<td colspan="2" data-ng-if="cgi_chk_X_report.safe>0"><a
+				class="w3-btn"
+				data-ng-click="ekkr.config.config_tab_click('minusSafe')" href="#">Службове
+					винесення </a>
+				<div class="w3-border"
+					data-ng-if="ekkr.config.config_tab=='minusSafe'">
+					<p
+						class="w3-panel w3-leftbar w3-green w3-card-4 w3-display-container">
+						Виконати службове винесення</p>
+					<i class="fa fa-minus" aria-hidden="true"></i> <input
+						class="w3-border" type="number"
+						data-ng-model="cgi_chk_X_report.safe_minus"
+						max="{{cgi_chk_X_report.safe}}" min="1">
+					<button class="w3-border"
+						data-ng-click="ekkr.config.safeMinusSumSave()">Запис</button>
+				</div></td>
 		</tr>
-		<tr data-ng-repeat="chk in cgi_chk">
-			<td>{{chk.F[1].P.name}}</td>
-			<td>{{chk.F[1].P.sum}}</td>
-			<td>{{chk.F[0].S.name}}</td>
-			<td>{{chk.F[0].S.code}}</td>
-			<!-- <td>{{chk.F[0].S}}</td> -->
-		</tr>
+		<tbody data-ng-repeat="chk in cgi_chk">
+			<tr data-ng-if="chk.IO">
+				<td>{{chk.IO[1].IO.name}}</td>
+				<td>{{chk.IO[1].IO.sum}}</td>
+				<td>СЛУЖБОВА ВИДАЧА</td>
+			</tr>
+			<tr data-ng-if="chk.F">
+				<td>{{chk.F[1].P.name}}</td>
+				<td>{{chk.F[1].P.sum}}</td>
+				<td>{{chk.F[0].S.name}}</td>
+				<td>{{chk.F[0].S.code}}</td>
+				<!-- <td>{{chk.F[0].S}}</td> -->
+			</tr>
+		</tbody>
 	</table>
 </body>
 </html>
