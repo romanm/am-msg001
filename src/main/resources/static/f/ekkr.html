@@ -41,7 +41,15 @@
 				</div>
 				<div class="w3-container w3-half">
 					<div>
-						<button class="w3-border" data-ng-click="ekkr.zReport()">Z-Звіт</button>
+						<a class="w3-btn"
+							data-ng-click="ekkr.config.config_tab_click('zReport')" href="#">Z-Звіт</a>
+						<div class="w3-border"
+							data-ng-if="ekkr.config.config_tab=='zReport'">
+							<p
+								class="w3-panel  w3-leftbar w3-green w3-card-4 w3-display-container">Підтвердіть
+								виконання Z-Звіту:</p>
+							<button class="w3-border" data-ng-click="ekkr.zReport()">Z-Звіт</button>
+						</div>
 					</div>
 				</div>
 			</div>
