@@ -94,18 +94,9 @@
 		</div>
 	</div>
 	<table>
-		<tr>
-			<td>СУМА ПРОДАЖ</td>
-			<td>{{cgi_chk_X_report.sum}}</td>
-		</tr>
-		<tr>
-			<td>КАРТКОЮ</td>
-			<td>{{cgi_chk_X_report.carte}}</td>
-		</tr>
-		<tr>
-			<td>ГОТІВКОЮ</td>
-			<td>{{cgi_chk_X_report.cash}}</td>
-		</tr>
+		<tr> <td>СУМА ПРОДАЖ</td> <td>{{cgi_chk_X_report.sum}}</td> </tr>
+		<tr> <td>КАРТКОЮ</td> <td>{{cgi_chk_X_report.carte}}</td> </tr>
+		<tr> <td>ГОТІВКОЮ</td> <td>{{cgi_chk_X_report.cash}}</td> </tr>
 		<tr data-ng-if="cgi_chk_X_report.safe_minus_sum<0">
 			<td>СЛУЖБОВА ВИДАЧА</td>
 			<td>{{cgi_chk_X_report.safe_minus_sum}}</td>
