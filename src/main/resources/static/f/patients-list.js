@@ -220,6 +220,12 @@ app.controller('myCtrl', function($scope, $http, $interval, $filter) {
 	$scope.filter.filterOnPayment = function(){
 		this.sql = $scope.patientList.config.sql_read_table_data
 		console.log(this.payment_privilege)
+		if(this.minPayment && !this.maxPayment){
+			this.maxPayment = 99999
+		}else
+		if(!this.minPayment && this.maxPayment){
+			this.minPayment = 1
+		}
 		if(this.minPayment && this.maxPayment){
 			this.sql = sql.read_table_payment().replace(':read_table_sql',this.sql)
 		}
