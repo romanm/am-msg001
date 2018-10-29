@@ -178,15 +178,20 @@ app.controller('myCtrl', function($scope, $http, $interval, $filter) {
 		$scope.filter.filterToWinExcellCsv()
 	}
 	$scope.filter.filterToWinExcellCsv = function(){
-		console.log(321)
 		var csvFile = ''
-		angular.forEach($scope.patientList.col_keys, function(v,k){
-			csvFile += v.trim()+';'
-//			csvFile += v.trim()+','
+//		angular.forEach($scope.patientList.col_keys, function(v,k){
+//			csvFile += v.trim()+';'
+////			csvFile += v.trim()+','
+//		})
+		angular.forEach($scope.patientList.config.json_create_table, function(vCol,kn){
+			csvFile += vCol.fieldname.trim()+';'
 		})
 		csvFile += '\r\n'
+		console.log($scope.patientList.config.json_create_table)
 		angular.forEach($scope.patientList.pl.list, function(v){
-			angular.forEach($scope.patientList.col_keys, function(vCol,k){
+			angular.forEach($scope.patientList.config.json_create_table, function(vCol,kn){
+				var k = 'col_'+kn
+			//angular.forEach($scope.patientList.col_keys, function(vCol,k){
 				var vC
 				if(typeof(v[k])=='string')
 					if(v[k].indexOf(';')>=0)
@@ -206,9 +211,6 @@ app.controller('myCtrl', function($scope, $http, $interval, $filter) {
 		})
 //		console.log(csvFile)
 		var ts = new Date().toISOString().split('\.')[0]
-//		var csvFileUTF16  = new Uint16Array(csvFile.split('').map( function(k, v){
-//			return k.charCodeAt(0);
-//		}));
 //		loadVarAsFile(csvFileUTF16, 'export-'+ts+'.csv', 'text/csv;charset=UTF-16LE;')
 //		console.log(ts)
 //		console.log('\uFEFF'+csvFile)
@@ -244,6 +246,8 @@ app.controller('myCtrl', function($scope, $http, $interval, $filter) {
 	$scope.filter.blurDate = function(dateName){
 		var date = this.checkDate(dateName)
 		console.log(date)
+		if(!date)
+			return
 		var s = date.getDate()+'-'+(date.getMonth()+1)+'-'+date.getFullYear()
 		console.log(s)
 		this[dateName+'_ts'] = date
@@ -252,8 +256,11 @@ app.controller('myCtrl', function($scope, $http, $interval, $filter) {
 	$scope.filter.checkDate = function(dateName){
 		var date = new Date()
 		date.setHours(10)
+		console.log(dateName)
 		var checkDate = this[dateName]
 		console.log(checkDate)
+		if(!checkDate)
+			return
 		checkDate = checkDate.replace(/-/g,' ')
 		var checkDateSplit = checkDate.split(' ')
 		console.log(checkDateSplit)
