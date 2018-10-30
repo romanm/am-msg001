@@ -430,7 +430,7 @@ $scope.callDbImport = function() {
 				sql.read_table_day_date_desc().replace(':read_table_sql',
 					$scope.patientList.config.sql_read_table_data
 				)
-			console.log(sql_table_data)
+			//console.log(sql_table_data)
 			$scope.patientList.pl = {}
 			$scope.patientList.pl_data = {
 				sql:sql_table_data,
@@ -464,13 +464,29 @@ $scope.callDbImport = function() {
 	$scope.pageVar = {}
 	$scope.pageVar.payCount = {}
 	$scope.pageVar.payCount.open = function(){
+		if(this.isOpened){
+			this.isOpened = false
+			return
+		}
 		this.isOpened = true
 		console.log( $scope.patientList.pl.list)
-		$scope.pageVar.payCount.calc = {cntPays:0,sumPays:0}
+		$scope.pageVar.payCount.calc = {
+			cntPays:0,sumPays:0,
+			cntCarte:0,sumCarte:0,
+			cntCash:0,sumCash:0,
+		}
 		angular.forEach($scope.patientList.pl.list,function(v,k){
 			if(v.col_240){
 				$scope.pageVar.payCount.calc.cntPays++
 				$scope.pageVar.payCount.calc.sumPays +=v.col_240
+				if('ГОТІВКА'==v.col_18972){
+					$scope.pageVar.payCount.calc.cntCash++
+					$scope.pageVar.payCount.calc.sumCash +=v.col_240
+				}else
+				if('КАРТКА'==v.col_18972){
+					$scope.pageVar.payCount.calc.cntCarte++
+					$scope.pageVar.payCount.calc.sumCarte +=v.col_240
+				}
 			}
 		})
 		console.log($scope.pageVar.payCount.calc)

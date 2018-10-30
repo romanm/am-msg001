@@ -68,9 +68,17 @@
 					</span>
 					<div class="w3-dropdown-content w3-border" style="width: 322px;"
 						data-ng-class="{'w3-show':pageVar.payCount.isOpened}">
-						<div>Кількість здійснених оплат: {{pageVar.payCount.calc.cntPays}}</div>
-						<div>Загальна ∑ оплат: {{pageVar.payCount.calc.sumPays}}</div>
-						a2 a1 <span data-ng-click="pageVar.payCount.close()"
+						<div>Оплачено: {{pageVar.payCount.calc.cntPays}}, ∑ оплат:
+							{{pageVar.payCount.calc.sumPays}}</div>
+						<div>Карткою: {{pageVar.payCount.calc.cntCarte}}, ∑ оплат:
+							{{pageVar.payCount.calc.sumCarte}}</div>
+						<div>Готівкою: {{pageVar.payCount.calc.cntCash}}, ∑ оплат:
+							{{pageVar.payCount.calc.sumCash}}</div>
+						<div>Решта: {{pageVar.payCount.calc.cntPays -
+							pageVar.payCount.calc.cntCash - pageVar.payCount.calc.cntCarte}},
+							∑ оплат: {{pageVar.payCount.calc.sumPays -
+							pageVar.payCount.calc.sumCash - pageVar.payCount.calc.sumCarte}}</div>
+						<span data-ng-click="pageVar.payCount.close()"
 							class="w3-button w3-display-topright w3-tiny">×</span>
 					</div>
 				</div>
