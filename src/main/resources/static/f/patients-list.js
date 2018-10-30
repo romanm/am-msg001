@@ -159,18 +159,20 @@ app.controller('myCtrl', function($scope, $http, $interval, $filter) {
 		filterOnPrivilege:'по пільгам:',
 		filterOnPayType:'по типу оплати:',
 		filterOnPayment:'по платежу:',
+		filterOnApparat:'по аппаратам:',
 	}
 
 	$scope.filter = {}
 	$scope.filter.payment_type_sum = function(){
-		if(true||this.payment_type){
-			console.log( $scope.patientList.pl.list)
-			var sum = 0
-			angular.forEach($scope.patientList.pl.list,function(v,k){
-				sum +=v.col_240
-			})
-		}
+		console.log( $scope.patientList.pl.list)
+		var sum = 0
+		angular.forEach($scope.patientList.pl.list,function(v,k){
+			sum +=v.col_240
+		})
 		return sum
+	}
+	$scope.filter.filterOnApparatClean = function(){
+		this.apparat_type = null
 	}
 	$scope.filter.filterOnPayTypeClean = function(){
 		this.payment_type = null
@@ -241,6 +243,9 @@ app.controller('myCtrl', function($scope, $http, $interval, $filter) {
 		}
 		if(this.payment_privilege){
 			this.sql = sql.read_table_privilege().replace(':read_table_sql',this.sql)
+		}
+		if(this.apparat_type){
+			this.sql = sql.read_table_apparat_type().replace(':read_table_sql',this.sql)
 		}
 		if(this.payment_type){
 			console.log(this.payment_type)
@@ -761,7 +766,12 @@ var sql = {
 	read_table_payment_type2:function(){
 		return "SELECT * FROM ( " +
 		":read_table_sql " +
-		" ) x WHERE col_18972 = 'ІНШЕ' OR col_18972 is null"
+		" ) x WHERE col_18972 = 'ІНШЕ' OR col_18972 IS NULL"
+	},
+	read_table_apparat_type:function(){
+		return "SELECT * FROM ( " +
+		":read_table_sql " +
+		" ) x WHERE col_238 = :apparat_type"
 	},
 	read_table_payment_type:function(){
 		return "SELECT * FROM ( " +
