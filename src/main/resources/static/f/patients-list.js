@@ -162,6 +162,16 @@ app.controller('myCtrl', function($scope, $http, $interval, $filter) {
 	}
 
 	$scope.filter = {}
+	$scope.filter.payment_type_sum = function(){
+		if(this.payment_type){
+			console.log( $scope.patientList.pl.list)
+			var sum = 0
+			angular.forEach($scope.patientList.pl.list,function(v,k){
+				sum +=v.col_240
+			})
+		}
+		return sum
+	}
 	$scope.filter.filterOnPayTypeClean = function(){
 		this.payment_type = null
 	}
@@ -307,18 +317,6 @@ $scope.lastDbRead = {
 	timeout : 15*60*1000,
 	lastCallTime : new Date(),
 	importCnt:0,
-	requestToImport:{
-//		url:'/f/js/li159-10-test1.json',
-		url:'/li159-10',
-		then_fn:function(response){
-			$scope.lastDbRead.importCnt++
-			if(!$scope.dataToImport || response.data.max>$scope.dataToImport.max){
-				$scope.dataToImport = response.data
-				console.log($scope.dataToImport)
-				$scope.callDbImport()
-			}
-		},
-	},
 	afterRead : function(){
 //		this.importCnt++
 		this.maxInDB = this.list[0].max
@@ -353,11 +351,24 @@ $scope.lastDbRead = {
 		}
 //		exe_fn.httpGet($scope.lastDbRead.requestToImport)
 	},
-	reread:function(){
+}
+	$scope.lastDbRead.reread = function(){
 		console.log($filter('date')(new Date(this.maxInDB), 'medium'))
 		exe_fn.httpGet($scope.lastDbRead.requestToImport)
-	},
-}
+	}
+
+	$scope.lastDbRead.requestToImport = {
+//		url:'/f/js/li159-10-test1.json',
+		url:'/li159-10',
+		then_fn:function(response){
+			$scope.lastDbRead.importCnt++
+			if(!$scope.dataToImport || response.data.max>$scope.dataToImport.max){
+				$scope.dataToImport = response.data
+				console.log($scope.dataToImport)
+				$scope.callDbImport()
+			}
+		},
+	}
 
 $scope.callDbImport = function() {
 	if($scope.patientList){
@@ -590,10 +601,33 @@ $scope.callDbImport = function() {
 		return this.price-(this.price*this.procent/100)
 	}
 
+	$scope.pageVar.updateFromImportRow = function(o,v){
+		console.log(v)
+		var isToUpdate = false
+		var col_data = {}
+		angular.forEach([{examination:239}, {physician:241}], function(col){
+			angular.forEach(col, function(colV,colK){
+				if(o['col_'+colV]!=v[colK]){
+					isToUpdate = true
+					o['col_'+colV]=v[colK]
+					col_data[colV] = $scope.patientList.config.json_create_table[colV]
+				}
+			})
+		})
+		if(isToUpdate){
+			console.log(col_data)
+		}
+	}
 	$scope.pageVar.openEditRow = function(o){
 		$scope.ekkr.config.ask_paymentId("SELECT NEXTVAL('paymentId')", "nextPaymentId")
 		this.ngStyleModal = {display:'block'}
 		console.log(o)
+		console.log(o.col_236)
+		angular.forEach($scope.dataToImport.rows, function(v,k){
+			if(v.visit_ts==o.col_236){
+				//$scope.pageVar.updateFromImportRow(o,v)
+			}
+		})
 		this.payment_privilege = o.col_5218
 		console.log(this)
 		//console.log($scope.patientList.config.json_create_table)

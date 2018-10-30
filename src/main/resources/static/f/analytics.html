@@ -61,7 +61,9 @@
 						ng-model="filter.payment_type">
 						<option data-ng-repeat="x in pageVar.site_config.payment_type"
 							value="{{x.name}}">{{x.name}}</option>
-					</select>
+					</select> <span data-ng-if="filter.payment_type"> <span class="am-b">∑</span>
+						{{filter.payment_type_sum()}}
+					</span>
 				</div>
 				<div>
 					<button class="w3-border" ng-click="filter.filterOnDateClean()">Скасувати</button>

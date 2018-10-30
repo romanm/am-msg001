@@ -39,8 +39,7 @@ public class AmMsg001ConfigAndSecurity extends WebSecurityConfigurerAdapter {
 
 	private void startH2Server() {
 		String startServerScript = env.getProperty("am.h2.startServerScript");
-		String[] cmd = new String[]{"/bin/bash"
-				, startServerScript};
+		String[] cmd = new String[]{"/bin/bash", startServerScript};
 		try {
 			System.err.println("Attempting to start database service");
 			Runtime.getRuntime().exec(cmd);
