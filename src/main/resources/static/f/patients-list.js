@@ -163,7 +163,7 @@ app.controller('myCtrl', function($scope, $http, $interval, $filter) {
 
 	$scope.filter = {}
 	$scope.filter.payment_type_sum = function(){
-		if(this.payment_type){
+		if(true||this.payment_type){
 			console.log( $scope.patientList.pl.list)
 			var sum = 0
 			angular.forEach($scope.patientList.pl.list,function(v,k){
@@ -243,7 +243,14 @@ app.controller('myCtrl', function($scope, $http, $interval, $filter) {
 			this.sql = sql.read_table_privilege().replace(':read_table_sql',this.sql)
 		}
 		if(this.payment_type){
-			this.sql = sql.read_table_payment_type().replace(':read_table_sql',this.sql)
+			console.log(this.payment_type)
+			if('ІНШЕ'==this.payment_type){
+				console.log(sql.read_table_payment_type2())
+				this.sql = sql.read_table_payment_type2().replace(':read_table_sql',this.sql)
+			}else{
+				this.sql = sql.read_table_payment_type().replace(':read_table_sql',this.sql)
+			}
+//			this.sql = sql.read_table_payment_type().replace(':read_table_sql',this.sql)
 		}
 		if(this.fromDate_ts){
 			this.fromDate_sql = this.fromDate_ts.toISOString().split('T')[0]
@@ -256,7 +263,7 @@ app.controller('myCtrl', function($scope, $http, $interval, $filter) {
 			this.toDate_sql = this.toDate_ts.toISOString().split('T')[0]
 			this.sql = sql.read_table_betweenDates().replace(':read_table_sql',this.sql)
 		}
-		//console.log(this.sql)
+		console.log(this.sql)
 		readSql(this, $scope.patientList.pl)
 	}
 	$scope.filter.blurDate = function(dateName){
@@ -418,7 +425,7 @@ $scope.callDbImport = function() {
 				sql.read_table_day_date_desc().replace(':read_table_sql',
 					$scope.patientList.config.sql_read_table_data
 				)
-//			console.log(sql_table_data)
+			console.log(sql_table_data)
 			$scope.patientList.pl = {}
 			$scope.patientList.pl_data = {
 				sql:sql_table_data,
@@ -450,6 +457,22 @@ $scope.callDbImport = function() {
 	readSql($scope.patientList)
 
 	$scope.pageVar = {}
+	$scope.pageVar.payCount = {}
+	$scope.pageVar.payCount.open = function(){
+		this.isOpened = true
+		console.log( $scope.patientList.pl.list)
+		$scope.pageVar.payCount.calc = {cntPays:0,sumPays:0}
+		angular.forEach($scope.patientList.pl.list,function(v,k){
+			if(v.col_240){
+				$scope.pageVar.payCount.calc.cntPays++
+				$scope.pageVar.payCount.calc.sumPays +=v.col_240
+			}
+		})
+		console.log($scope.pageVar.payCount.calc)
+	}
+	$scope.pageVar.payCount.close = function(){
+		this.isOpened = false
+	}
 	$scope.pageVar.getCheckFile = function(){
 		if(!this.o)
 			return ''
@@ -734,6 +757,11 @@ var sql = {
 		return "SELECT * FROM ( \n" +
 		":read_table_sql " +
 		" ) x WHERE row_id = :row_id"
+	},
+	read_table_payment_type2:function(){
+		return "SELECT * FROM ( " +
+		":read_table_sql " +
+		" ) x WHERE col_18972 = 'ІНШЕ' OR col_18972 is null"
 	},
 	read_table_payment_type:function(){
 		return "SELECT * FROM ( " +

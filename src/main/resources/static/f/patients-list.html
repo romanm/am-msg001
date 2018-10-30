@@ -60,10 +60,20 @@
 	<div class="w3-container" ng-if="principal.name">
 		<div class="w3-row w3-section">
 			<div class="w3-col w3-text-gray" style="width: 80px">
-				<sup> {{patientList.pl.list.length}} </sup> <span
-					data-ng-if="patientList.pl.cnt > patientList.pl.list.length"> / <sub>
-						{{patientList.pl.cnt}} </sub>
-				</span>
+				<div class="w3-dropdown-click">
+					<sup data-ng-click="pageVar.payCount.open()">
+						{{patientList.pl.list.length}} </sup> <span
+						data-ng-if="patientList.pl.cnt > patientList.pl.list.length">
+						/ <sub> {{patientList.pl.cnt}} </sub>
+					</span>
+					<div class="w3-dropdown-content w3-border" style="width: 322px;"
+						data-ng-class="{'w3-show':pageVar.payCount.isOpened}">
+						<div>Кількість здійснених оплат: {{pageVar.payCount.calc.cntPays}}</div>
+						<div>Загальна ∑ оплат: {{pageVar.payCount.calc.sumPays}}</div>
+						a2 a1 <span data-ng-click="pageVar.payCount.close()"
+							class="w3-button w3-display-topright w3-tiny">×</span>
+					</div>
+				</div>
 			</div>
 			<div class="w3-col" style="width: 50px">
 				<span data-ng-repeat="random3 in [random3]" data-ng-switch="random3">
