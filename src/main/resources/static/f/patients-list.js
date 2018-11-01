@@ -164,11 +164,14 @@ app.controller('myCtrl', function($scope, $http, $interval, $filter) {
 
 	$scope.filter = {}
 	$scope.filter.payment_type_sum = function(){
-		console.log( $scope.patientList.pl.list)
 		var sum = 0
+		console.log( $scope.patientList.pl)
+		/*
+		console.log( $scope.patientList.pl.list)
 		angular.forEach($scope.patientList.pl.list,function(v,k){
 			sum +=v.col_240
 		})
+		 */
 		return sum
 	}
 	$scope.filter.filterOnApparatClean = function(){
@@ -268,7 +271,7 @@ app.controller('myCtrl', function($scope, $http, $interval, $filter) {
 			this.toDate_sql = this.toDate_ts.toISOString().split('T')[0]
 			this.sql = sql.read_table_betweenDates().replace(':read_table_sql',this.sql)
 		}
-		console.log(this.sql)
+		//console.log(this.sql)
 		readSql(this, $scope.patientList.pl)
 	}
 	$scope.filter.blurDate = function(dateName){
@@ -292,13 +295,13 @@ app.controller('myCtrl', function($scope, $http, $interval, $filter) {
 		checkDate = checkDate.replace(/-/g,' ')
 		var checkDateSplit = checkDate.split(' ')
 		console.log(checkDateSplit)
-		date.setDate(checkDateSplit[0])
 		if(checkDateSplit[1]){
 			var m = checkDateSplit[1]*1-1
 			console.log(m)
 			date.setMonth(m)
 	//			date.setDate(checkDateSplit[2])
 		}
+		date.setDate(checkDateSplit[0])
 		console.log(date.toISOString())
 		return date
 	}
