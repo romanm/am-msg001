@@ -1,6 +1,6 @@
 app.controller('myCtrl', function($scope, $http, $interval, $filter) {
 	initApp($scope, $http)
-
+		
 	if(true || 'analytics'==pathNameValue){
 		$scope.db_validation = {
 			removeDupletRows:function(){
@@ -171,9 +171,9 @@ app.controller('myCtrl', function($scope, $http, $interval, $filter) {
 		})
 		return sum
 	}
-	$scope.filter.filterGroup = function(group_type){
-		if(this.group != group_type)
-			this.group = group_type
+	$scope.filter.filterGroup = function(col_nnn){
+		if(this.group != col_nnn)
+			this.group = col_nnn
 		else
 			this.group = null
 	}
@@ -189,6 +189,8 @@ app.controller('myCtrl', function($scope, $http, $interval, $filter) {
 	$scope.filter.filterOnDateClean = function(){ 
 		delete this.fromDate
 		delete this.toDate
+		delete this.fromDate_ts
+		delete this.toDate_ts
 	}
 	$scope.filter.filterOnPaymentClean = function(){
 		this.maxPayment = null
@@ -269,7 +271,7 @@ app.controller('myCtrl', function($scope, $http, $interval, $filter) {
 		if(this.fromDate_ts){
 			this.fromDate_sql = this.fromDate_ts.toISOString().split('T')[0]
 			console.log(this.fromDate_sql)
-			if(!this.toDate_ts){
+			if(!this.toDate){
 				this.toDate_ts = new Date(this.fromDate_ts)
 			}
 			console.log(this.toDate_ts)
@@ -277,8 +279,8 @@ app.controller('myCtrl', function($scope, $http, $interval, $filter) {
 			this.toDate_sql = this.toDate_ts.toISOString().split('T')[0]
 			this.sql = sql.read_table_betweenDates().replace(':read_table_sql',this.sql)
 		}
-		if('apparat'==this.group){
-			this.sql = sql.read_table_group_apparat().replace(':read_table_sql',this.sql)
+		if(this.group){
+			this.sql = sql.read_table_group_col(this.group).replace(':read_table_sql',this.sql)
 		}
 //		console.log(this)
 //		console.log(this.sql)
@@ -362,6 +364,8 @@ $scope.lastDbRead = {
 					rowObj.col_241 = rowObj.physician
 					rowObj.col_242 = rowObj.referral
 					rowObj.col_415 = rowObj.sales
+					rowObj.col_33504 = rowObj.patient_birthdate
+					rowObj.col_33505 = rowObj.patient_phone
 					/build_sqlJ2c_row_insert(rowObj, col_data)
 					var data = {
 						sql:col_data.sql_row,
@@ -818,10 +822,12 @@ var sql = {
 		":read_table_sql " +
 		" ) x WHERE col_236 BETWEEN :fromDate_sql AND :toDate_sql "
 	},
-	read_table_group_apparat:function(){
-		return "SELECT col_238 groupName, COUNT(col_238) cnt, SUM(col_240) sum FROM (" +
+	read_table_group_col:function(col_nnn){
+		return ("SELECT * FROM ( " +
+				"SELECT :col_nnn groupName, COUNT(:col_nnn) cnt, SUM(col_240) sum FROM (" +
 				":read_table_sql " +
-				" ) GROUP BY col_238"
+				" ) GROUP BY :col_nnn " +
+				" ) x ORDER BY CNT DESC").replace(/:col_nnn/g,col_nnn)
 	},
 	read_table_seek:function(){
 		return "SELECT * FROM ( " +

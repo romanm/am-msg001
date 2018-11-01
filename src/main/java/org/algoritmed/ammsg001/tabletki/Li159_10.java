@@ -55,6 +55,8 @@ public class Li159_10  extends XCommon{
 		cols_number.put("referral", 20);
 		cols_number.put("contrast", 21);
 		cols_number.put("plan_ts", 23);
+		cols_number.put("patient_phone", 43);
+		cols_number.put("patient_birthdate", 5);
 		ArrayList<Map<String, Object>> rows = new ArrayList<>();
 		m.put("rows", rows);
 		Sheet sheet = getSheet();
@@ -63,7 +65,7 @@ public class Li159_10  extends XCommon{
 		while (rowIterator.hasNext()) {
 			Row row = rowIterator.next();
 			if(row.getRowNum()>1) {
-				Map<String, Object> rowMap = new HashMap<>();        
+				Map<String, Object> rowMap = new HashMap<>();
 				for (String col_key : cols_number.keySet()) {
 					String col_value = row.getCell(cols_number.get(col_key)).getStringCellValue();
 					if("visit_ts".equals(col_key)

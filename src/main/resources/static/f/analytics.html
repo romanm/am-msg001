@@ -85,12 +85,24 @@
 							value="{{x.name}}">{{x.name}}</option>
 					</select>
 				</div>
-				Групіровка по: <a href="#"
-					data-ng-click="filter.filterGroup('apparat')"
-					data-ng-class="{'w3-green':filter.group=='apparat'}">
-					аппарату </a>
+				<div>
+					Групіровка по: <a href="#"
+						data-ng-click="filter.filterGroup('col_237')"
+						data-ng-class="{'w3-green':filter.group=='col_237'}"> П.І.Б. </a>
+					| <a href="#" data-ng-click="filter.filterGroup('col_238')"
+						data-ng-class="{'w3-green':filter.group=='col_238'}"> аппарату
+					</a> | <a href="#" data-ng-click="filter.filterGroup('col_239')"
+						data-ng-class="{'w3-green':filter.group=='col_239'}">
+						дослідження </a> | <a href="#"
+						data-ng-click="filter.filterGroup('col_241')"
+						data-ng-class="{'w3-green':filter.group=='col_241'}"> лікарям
+					</a> | <a href="#" data-ng-click="filter.filterGroup('col_242')"
+						data-ng-class="{'w3-green':filter.group=='col_242'}"> ЗОЗ
+						направленя </a>
+				</div>
 				<div>
 					<button class="w3-border" ng-click="filter.filterOnPayment()">OK</button>
+					Всього: {{patientList.pl.list.length}}
 				</div>
 			</div>
 			<div class="w3-col w3-container" style="width: 20%">
