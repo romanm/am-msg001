@@ -165,13 +165,10 @@ app.controller('myCtrl', function($scope, $http, $interval, $filter) {
 	$scope.filter = {}
 	$scope.filter.payment_type_sum = function(){
 		var sum = 0
-		console.log( $scope.patientList.pl)
-		/*
-		console.log( $scope.patientList.pl.list)
+		if($scope.patientList.pl)
 		angular.forEach($scope.patientList.pl.list,function(v,k){
 			sum +=v.col_240
 		})
-		 */
 		return sum
 	}
 	$scope.filter.filterOnApparatClean = function(){
