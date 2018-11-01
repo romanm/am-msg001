@@ -171,6 +171,12 @@ app.controller('myCtrl', function($scope, $http, $interval, $filter) {
 		})
 		return sum
 	}
+	$scope.filter.filterGroup = function(group_type){
+		if(this.group != group_type)
+			this.group = group_type
+		else
+			this.group = null
+	}
 	$scope.filter.filterOnApparatClean = function(){
 		this.apparat_type = null
 	}
@@ -180,7 +186,10 @@ app.controller('myCtrl', function($scope, $http, $interval, $filter) {
 	$scope.filter.filterOnPrivilegeClean = function(){
 		this.payment_privilege = null
 	}
-	$scope.filter.filterOnDateClean = function(){ }
+	$scope.filter.filterOnDateClean = function(){ 
+		delete this.fromDate
+		delete this.toDate
+	}
 	$scope.filter.filterOnPaymentClean = function(){
 		this.maxPayment = null
 		this.minPayment = null
@@ -268,33 +277,35 @@ app.controller('myCtrl', function($scope, $http, $interval, $filter) {
 			this.toDate_sql = this.toDate_ts.toISOString().split('T')[0]
 			this.sql = sql.read_table_betweenDates().replace(':read_table_sql',this.sql)
 		}
-		//console.log(this.sql)
+		if('apparat'==this.group){
+			this.sql = sql.read_table_group_apparat().replace(':read_table_sql',this.sql)
+		}
+//		console.log(this)
+//		console.log(this.sql)
+		$scope.patientList.pl.afterRead = function(response){
+//			console.log(response.data)
+			console.log($scope.patientList.pl)
+		}
 		readSql(this, $scope.patientList.pl)
 	}
 	$scope.filter.blurDate = function(dateName){
 		var date = this.checkDate(dateName)
-		console.log(date)
 		if(!date)
 			return
 		var s = date.getDate()+'-'+(date.getMonth()+1)+'-'+date.getFullYear()
-		console.log(s)
 		this[dateName+'_ts'] = date
 		this[dateName] = s
 	}
 	$scope.filter.checkDate = function(dateName){
 		var date = new Date()
 		date.setHours(10)
-		console.log(dateName)
 		var checkDate = this[dateName]
-		console.log(checkDate)
 		if(!checkDate)
 			return
 		checkDate = checkDate.replace(/-/g,' ')
 		var checkDateSplit = checkDate.split(' ')
-		console.log(checkDateSplit)
 		if(checkDateSplit[1]){
 			var m = checkDateSplit[1]*1-1
-			console.log(m)
 			date.setMonth(m)
 	//			date.setDate(checkDateSplit[2])
 		}
@@ -332,8 +343,8 @@ $scope.lastDbRead = {
 	afterRead : function(){
 //		this.importCnt++
 		this.maxInDB = this.list[0].max
-		console.log($filter('date')(new Date(this.maxInDB), 'medium'))
-		console.log($scope.dataToImport.max)
+//		console.log($filter('date')(new Date(this.maxInDB), 'medium'))
+//		console.log($scope.dataToImport.max)
 		if($scope.dataToImport.max>this.maxInDB){
 			console.log('--------importToDb-------------')
 			var i = 0
@@ -386,8 +397,6 @@ $scope.callDbImport = function() {
 	if($scope.patientList){
 		if($scope.patientList.pl){
 			$scope.lastDbRead.lastCallTime = new Date()
-			console.log($scope.patientList.pl)
-			console.log($scope.patientList.pl.sql)
 			$scope.lastDbRead.sql =
 				sql.read_table_max_min_date()
 				.replace(':read_table_sql',$scope.patientList.config.sql_read_table_data)
@@ -799,15 +808,20 @@ var sql = {
 		":read_table_sql " +
 		" ) x WHERE col_5218 = :payment_privilege"
 	},
-	read_table_betweenDates:function(){
-		return "SELECT * FROM ( " +
-		":read_table_sql " +
-		" ) x WHERE col_236 between :fromDate_sql AND :toDate_sql "
-	},
 	read_table_payment:function(){
 		return "SELECT * FROM ( " +
 		":read_table_sql " +
 		" ) x WHERE col_240 > :minPayment AND col_240 <= :maxPayment "
+	},
+	read_table_betweenDates:function(){
+		return "SELECT * FROM ( " +
+		":read_table_sql " +
+		" ) x WHERE col_236 BETWEEN :fromDate_sql AND :toDate_sql "
+	},
+	read_table_group_apparat:function(){
+		return "SELECT col_238 groupName, COUNT(col_238) cnt, SUM(col_240) sum FROM (" +
+				":read_table_sql " +
+				" ) GROUP BY col_238"
 	},
 	read_table_seek:function(){
 		return "SELECT * FROM ( " +

@@ -37,6 +37,29 @@
 	<div class="w3-container">
 		<div class="w3-row">
 			<div class="w3-col w3-container" style="width: 80%">
+				Виборка
+				<div>
+					<button class="w3-border" ng-click="filter.filterOnDateClean()">Скасувати</button>
+					{{gui.filterOnDate}} з <input class="w3-border" type="text"
+						data-ng-blur="filter.blurDate('fromDate')"
+						data-ng-change="filter.checkDate('fromDate')"
+						data-ng-model="filter.fromDate" placeholder="дд-мм-рр"> до
+					<input data-ng-blur="filter.blurDate('toDate')"
+						data-ng-change="filter.checkDate('toDate')" class="w3-border"
+						type="text" data-ng-model="filter.toDate" placeholder="дд-мм-рр">
+					<button class="w3-border" ng-click="filter.filterOnPayment()">OK</button>
+				</div>
+				<div>
+					<button class="w3-border"
+						data-ng-click="filter.filterOnPayTypeClean()">Скасувати</button>
+					{{gui.filterOnPayType}} <select class="w3-border"
+						ng-model="filter.payment_type">
+						<option data-ng-repeat="x in pageVar.site_config.payment_type"
+							value="{{x.name}}">{{x.name}}</option>
+					</select> <span data-ng-if="true||filter.payment_type"> <span
+						class="am-b">∑</span> {{filter.payment_type_sum()}}
+					</span>
+				</div>
 				<div>
 					<button class="w3-border" ng-click="filter.filterOnPaymentClean()">Скасувати</button>
 					{{gui.filterOnPayment}} <input class="w3-border" type="number"
@@ -62,28 +85,13 @@
 							value="{{x.name}}">{{x.name}}</option>
 					</select>
 				</div>
+				Групіровка по: <a href="#"
+					data-ng-click="filter.filterGroup('apparat')"
+					data-ng-class="{'w3-green':filter.group=='apparat'}">
+					аппарату </a>
 				<div>
-					<button class="w3-border"
-						data-ng-click="filter.filterOnPayTypeClean()">Скасувати</button>
-					{{gui.filterOnPayType}} <select class="w3-border"
-						ng-model="filter.payment_type">
-						<option data-ng-repeat="x in pageVar.site_config.payment_type"
-							value="{{x.name}}">{{x.name}}</option>
-					</select> <span data-ng-if="true||filter.payment_type"> <span class="am-b">∑</span>
-						{{filter.payment_type_sum()}}
-					</span>
+					<button class="w3-border" ng-click="filter.filterOnPayment()">OK</button>
 				</div>
-				<div>
-					<button class="w3-border" ng-click="filter.filterOnDateClean()">Скасувати</button>
-					{{gui.filterOnDate}} з<input class="w3-border" type="text"
-						data-ng-blur="filter.blurDate('fromDate')"
-						data-ng-change="filter.checkDate('fromDate')"
-						data-ng-model="filter.fromDate" placeholder="дд-мм-рр"> до<input
-						data-ng-blur="filter.blurDate('toDate')"
-						data-ng-change="filter.checkDate('toDate')" class="w3-border"
-						type="text" data-ng-model="filter.toDate" placeholder="дд-мм-рр">
-				</div>
-				<button class="w3-border" ng-click="filter.filterOnPayment()">OK</button>
 			</div>
 			<div class="w3-col w3-container" style="width: 20%">
 				<button class="w3-border" data-ng-click="filter.filterToExcellCsv()">
@@ -91,6 +99,8 @@
 				</button>
 			</div>
 		</div>
+		<div data-ng-if="patientList.pl.list[0].cnt"
+			ng-include="'/f/patient-list-group.html'"></div>
 		<div ng-include="'/f/patient-list-table.html'"></div>
 	</div>
 </body>

@@ -1,0 +1,13 @@
+<div class="w13-code" style="width: 333px;">
+	<table class="w3-table">
+		<tr>
+			<th>Назва</th>
+			<th>Кількість</th>
+			<th>Сума</th>
+		</tr>
+		<tr data-ng-repeat="r in patientList.pl.list">
+			<td data-ng-repeat="c in ['groupName','cnt','sum']"
+				class="w3-border w3-border-white w3-hover-border-gray">{{r[c]}}</td>
+		</tr>
+	</table>
+</div>
