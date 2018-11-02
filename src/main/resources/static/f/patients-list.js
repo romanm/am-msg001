@@ -614,6 +614,7 @@ $scope.callDbImport = function() {
 		this.o.col_5218 = this.payment_privilege
 		this.o.col_18972 = this.paymentData_F_P.name
 		var col_data = {}
+		col_data[238] = $scope.patientList.config.json_create_table[238]
 		col_data[240] = $scope.patientList.config.json_create_table[240]
 		col_data[3311] = $scope.patientList.config.json_create_table[3311]
 		col_data[5218] = $scope.patientList.config.json_create_table[5218]
@@ -643,7 +644,8 @@ $scope.callDbImport = function() {
 				|| response.data.list4
 				|| response.data.list5
 				|| response.data.list6
-				$scope.pageVar.o = list[0]
+				if(list)
+					$scope.pageVar.o = list[0]
 			},
 		}
 		writeSql(data)

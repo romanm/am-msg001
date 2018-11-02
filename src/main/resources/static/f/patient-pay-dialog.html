@@ -21,15 +21,30 @@
 				class="w3-button w3-display-topright">&times;</span> 
 			<p data-ng-if="!pageVar.o">Не вибрані дані для редагування.</p>
 			<p data-ng-if="pageVar.o">
-				|{{pageVar.o.col_237}} | {{pageVar.o.col_238}} |
-				{{pageVar.o.col_240}} | {{pageVar.o.col_241}} | <span
+				| {{pageVar.o.col_237}} | {{pageVar.o.col_241}} | <span
 					class="w3-right w3-btn"
 					data-ng-if="pageVar.o.col_239.indexOf(',')>0"
 					data-ng-click="pageVar.multiple_examination_split()"> split
 					examination </span>
 			</p>
 			<div class="w3-row">
-				<div class="w3-half w3-container "></div>
+				<div class="w3-half w3-container">
+					<div class=" w3-right">
+						<span class="w3-border w3-hover-shadow"
+							data-ng-click="ekkr.config.config_tab_click('apparat')"> <span
+							class="w3-tiny am-b">Аппарат:</span> {{pageVar.o.col_238}}
+						</span>
+						<div class="w3-dropdown-content w3-border" style="w1idth: 322px;"
+							data-ng-class="{'w3-show':ekkr.config.config_tab=='apparat'}">
+							<a href="#" class="w3-bar-item w3-button"
+								data-ng-click="pageVar.o.col_238='КТ';ekkr.config.config_tab=null">КТ</a> <a
+								href="#" data-ng-click="pageVar.o.col_238='МРТ';ekkr.config.config_tab=null"
+								class="w3-bar-item w3-button">МРТ</a> <span
+								data-ng-click="ekkr.config.config_tab=null"
+								class="w3-button w3-display-topright w3-tiny">×</span>
+						</div>
+					</div>
+				</div>
 				<div class="w3-half">
 					<span class="w3-tiny am-b">Обстеження:</span> {{pageVar.o.col_239}}
 				</div>
