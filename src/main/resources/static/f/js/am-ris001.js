@@ -104,7 +104,11 @@ function build_sqlJ2c_cell_write_parameters(col_data, v, n){
 		cell_v = "'"+v+"'"
 	}else
 	if('timestamp'==col_data[n].fieldtype){
-		cell_v = "'"+v+":00.0'"
+console.log(v)
+		if(19==v.length)
+			cell_v = "'"+v+".0'"
+		else
+			cell_v = "'"+v+":00.0'"
 	}else{
 		cell_v = v
 	}

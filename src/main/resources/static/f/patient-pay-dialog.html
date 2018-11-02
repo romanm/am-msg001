@@ -20,9 +20,14 @@
 			<span data-ng-click="pageVar.ngStyleModal={display:'none'}"
 				class="w3-button w3-display-topright">&times;</span> 
 			<p data-ng-if="!pageVar.o">Не вибрані дані для редагування.</p>
-			<p data-ng-if="pageVar.o">|{{pageVar.o.col_237}} |
-				{{pageVar.o.col_238}} | {{pageVar.o.col_240}} |
-				{{pageVar.o.col_241}} |</p>
+			<p data-ng-if="pageVar.o">
+				|{{pageVar.o.col_237}} | {{pageVar.o.col_238}} |
+				{{pageVar.o.col_240}} | {{pageVar.o.col_241}} | <span
+					class="w3-right w3-btn"
+					data-ng-if="pageVar.o.col_239.indexOf(',')>0"
+					data-ng-click="pageVar.multiple_examination_split()"> split
+					examination </span>
+			</p>
 			<div class="w3-row">
 				<div class="w3-half w3-container "></div>
 				<div class="w3-half">

@@ -63,9 +63,11 @@ public class Db1Rest  extends DbCommon{
 			,HttpServletRequest request
 		) {
 		Map<String, Object> map = sqlParamToMap(request);
-		Map m = new HashMap();
-		m.put("k", "v");
-		m.put("sql", sql);
+//		Map m = new HashMap();
+//		m.put("k", "v");
+//		m.put("sql", sql);
+		System.out.println(map);
+		System.out.println(sql);
 		List<Map<String, Object>> list = dbParamJdbcTemplate.queryForList(sql, map);
 		map.put("list", list);
 

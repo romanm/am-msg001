@@ -353,10 +353,6 @@ $scope.lastDbRead = {
 			angular.forEach($scope.dataToImport.rows, function(rowObj){
 				if(true || i++<1){
 //					console.log(rowObj)
-					var col_data = $scope.patientList.config.json_create_table
-					col_data.nextDbIdCounter = 3
-					col_data.sql_row = ''
-//					console.log(col_data)
 					rowObj.col_236 = $filter('date')(new Date(rowObj.visit_ts), 'yyyy-MM-ddTHH:mm')
 					rowObj.col_237 = rowObj.patient_pip
 					rowObj.col_238 = rowObj.cabinet.split(' ')[1]
@@ -366,7 +362,11 @@ $scope.lastDbRead = {
 					rowObj.col_415 = rowObj.sales
 					rowObj.col_33504 = rowObj.patient_birthdate
 					rowObj.col_33505 = rowObj.patient_phone
-					/build_sqlJ2c_row_insert(rowObj, col_data)
+					var col_data = $scope.patientList.config.json_create_table
+					col_data.nextDbIdCounter = 3
+					col_data.sql_row = ''
+//					console.log(col_data)
+					build_sqlJ2c_row_insert(rowObj, col_data)
 					var data = {
 						sql:col_data.sql_row,
 						table_id:col_data.table_id,
@@ -475,6 +475,48 @@ $scope.callDbImport = function() {
 	readSql($scope.patientList)
 
 	$scope.pageVar = {}
+	$scope.pageVar.multiple_examination_split = function(){
+		console.log(this.o)
+		var d = new Date(this.o.col_236)
+		console.log(d)
+		var splitExamination = this.o.col_239.split(', ')
+		angular.forEach(splitExamination, function(v,k){
+			var col_data = $scope.patientList.config.json_create_table
+			col_data.nextDbIdCounter = 3
+			col_data.sql_row = ''
+			var sourceObj = $scope.pageVar.o
+			if(k>0){
+				d.setSeconds(k)
+				console.log(d)
+				console.log(v)
+				var rowObj = {}
+				rowObj.col_236 = $filter('date')(d, 'yyyy-MM-ddTHH:mm:ss')
+				rowObj.col_237 = sourceObj.col_237
+				rowObj.col_238 = sourceObj.col_238
+				rowObj.col_239 = v
+				rowObj.col_241 = sourceObj.col_241
+				rowObj.col_242 = sourceObj.col_242
+				rowObj.col_415 = sourceObj.col_415
+				rowObj.col_33504 = sourceObj.col_33504
+				rowObj.col_33505 = sourceObj.col_33505
+				console.log(rowObj)
+//					console.log(col_data)
+				build_sqlJ2c_row_insert(rowObj, col_data)
+				var data = {
+					sql:col_data.sql_row,
+					table_id:col_data.table_id,
+				}
+//				console.log(data)
+				writeSql(data)
+			}else{// k==0
+				$scope.pageVar.o.col_239 = v
+				var col_data = {}
+				col_data[239] = $scope.patientList.config.json_create_table[239]
+				$scope.pageVar.writeUpdate(col_data, $scope.pageVar.o)
+			}
+		})
+	}
+	
 	$scope.pageVar.payCount = {}
 	$scope.pageVar.payCount.open = function(){
 		if(this.isOpened){
@@ -824,10 +866,10 @@ var sql = {
 	},
 	read_table_group_col:function(col_nnn){
 		return ("SELECT * FROM ( " +
-				"SELECT :col_nnn groupName, COUNT(:col_nnn) cnt, SUM(col_240) sum FROM (" +
+				"SELECT :col_nnn groupName, COUNT(:col_nnn) cnt, SUM(col_240) sum FROM ( " +
 				":read_table_sql " +
 				" ) GROUP BY :col_nnn " +
-				" ) x ORDER BY CNT DESC").replace(/:col_nnn/g,col_nnn)
+				" ) x ORDER BY CNT DESC ").replace(/:col_nnn/g,col_nnn)
 	},
 	read_table_seek:function(){
 		return "SELECT * FROM ( " +
