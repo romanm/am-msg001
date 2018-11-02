@@ -33,110 +33,122 @@
 			<span ng-include="'/f/login-link.html'"> </span>
 		</div>
 	</div>
-	<div class="w3-row w3-container">
-		<div class="w3-container w3-half">
-			<h4>Звіти ЕККР</h4>
-			<div class="w3-row w3-container">
-				<div class="w3-container w3-half">
-					<div>
-						<button class="w3-border" data-ng-click="ekkr.xReport()">Х-Звіт</button>
+	<div class="w3-container" data-ng-if="principal.name">
+		<div class="w3-row">
+			<div class="w3-container w3-half">
+				<h4>Звіти ЕККР</h4>
+				<div class="w3-row w3-container">
+					<div class="w3-container w3-half">
+						<div>
+							<button class="w3-border" data-ng-click="ekkr.xReport()">Х-Звіт</button>
+						</div>
 					</div>
-				</div>
-				<div class="w3-container w3-half">
-					<div>
-						<a class="w3-btn"
-							data-ng-click="ekkr.config.config_tab_click('zReport')" href="#">Z-Звіт</a>
-						<div class="w3-border"
-							data-ng-if="ekkr.config.config_tab=='zReport'">
-							<p
-								class="w3-panel w3-leftbar w3-green w3-card-4 w3-display-container">Підтвердіть
-								виконання Z-Звіту:</p>
-							<div class="w3-tiny w3-right">Якщо ви впевнені &nbsp;</div>
-							<button class="w3-border" data-ng-click="ekkr.zReport()">Z-Звіт</button>
+					<div class="w3-container w3-half">
+						<div>
+							<a class="w3-btn"
+								data-ng-click="ekkr.config.config_tab_click('zReport')" href="#">Z-Звіт</a>
+							<div class="w3-border"
+								data-ng-if="ekkr.config.config_tab=='zReport'">
+								<p
+									class="w3-panel w3-leftbar w3-green w3-card-4 w3-display-container">Підтвердіть
+									виконання Z-Звіту:</p>
+								<div class="w3-tiny w3-right">Якщо ви впевнені &nbsp;</div>
+								<button class="w3-border" data-ng-click="ekkr.zReport()">Z-Звіт</button>
+							</div>
 						</div>
 					</div>
 				</div>
+				<div data-ng-if="ekkr.error"
+					class="w3-panel w3-leftbar w3-red w3-card-4 w3-display-container"
+					title="{{ekkr.error}}">
+					<span onclick="this.parentElement.style.display='none'"
+						class="w3-button w3-display-topright">x</span>
+					<h3>
+						Помилка! <span class="w3-small"> {{ekkr.error.error}} </span>
+					</h3>
+					Код стану HTTP: {{ekkr.error.status}}
+				</div>
 			</div>
-			<div data-ng-if="ekkr.error"
-				class="w3-panel w3-leftbar w3-red w3-card-4 w3-display-container"
-				title="{{ekkr.error}}">
-				<span onclick="this.parentElement.style.display='none'"
-					class="w3-button w3-display-topright">x</span>
-				<h3>
-					Помилка! <span class="w3-small"> {{ekkr.error.error}} </span>
-				</h3>
-				Код стану HTTP: {{ekkr.error.status}}
-			</div>
-		</div>
-		<div class="w3-container w3-half w3-border">
-			<h4>Config</h4>
-			<div>
-				<a href="#" data-ng-click="ekkr.config.change_paymentId()"
-					class="w3-btn w3-small"> рахівник чеків </a>
-				<div class="w3-border"
-					data-ng-if="ekkr.config.config_tab=='sequence_paymentId'">
-					Поточне значення лічільника чеків: {{ekkr.config.currentPaymentId}}
-					<div>
-						<i class="fa fa-plus" aria-hidden="true"></i> <input
-							class="w3-border" type="number"
-							data-ng-change="ekkr.config.change_addPaymentId()"
-							data-ng-model="ekkr.config.addPaymentId" max="100" min="1">
+			<div class="w3-container w3-half w3-border">
+				<h4>Config</h4>
+				<div>
+					<a href="#" data-ng-click="ekkr.config.change_paymentId()"
+						class="w3-btn w3-small"> рахівник чеків </a>
+					<div class="w3-border"
+						data-ng-if="ekkr.config.config_tab=='sequence_paymentId'">
+						Поточне значення лічільника чеків:
+						{{ekkr.config.currentPaymentId}}
+						<div>
+							<i class="fa fa-plus" aria-hidden="true"></i> <input
+								class="w3-border" type="number"
+								data-ng-change="ekkr.config.change_addPaymentId()"
+								data-ng-model="ekkr.config.addPaymentId" max="100" min="1">
+						</div>
+						<div>
+							Нове значення лічільника чеків стартувати з: <span
+								data-ng-if="ekkr.config.addPaymentId">
+								{{ekkr.config.newPaymentId}}</span>
+						</div>
+						<button class="w3-border"
+							data-ng-click="ekkr.config.set_newPaymentId()">Встновити</button>
 					</div>
-					<div>
-						Нове значення лічільника чеків стартувати з: <span
-							data-ng-if="ekkr.config.addPaymentId">
-							{{ekkr.config.newPaymentId}}</span>
-					</div>
-					<button class="w3-border"
-						data-ng-click="ekkr.config.set_newPaymentId()">Встновити</button>
 				</div>
 			</div>
 		</div>
-	</div>
-	<table>
-		<tr> <td>СУМА ПРОДАЖ</td> <td>{{cgi_chk_X_report.sum}}</td> </tr>
-		<tr> <td>КАРТКОЮ</td> <td>{{cgi_chk_X_report.carte}}</td> </tr>
-		<tr> <td>ГОТІВКОЮ</td> <td>{{cgi_chk_X_report.cash}}</td> </tr>
-		<tr data-ng-if="cgi_chk_X_report.safe_minus_sum<0">
-			<td>СЛУЖБОВА ВИДАЧА</td>
-			<td>{{cgi_chk_X_report.safe_minus_sum}}</td>
-		</tr>
-		<tr>
-			<td class="w3-border-bottom">В СЕЙФІ</td>
-			<td class="w3-border-bottom"><a class=""
-				data-ng-click="ekkr.config.config_tab_click('minusSafe')" href="#">
-					{{cgi_chk_X_report.safe}}</a></td>
-			<td colspan="2" data-ng-if="cgi_chk_X_report.safe>0"><a
-				class="w3-btn"
-				data-ng-click="ekkr.config.config_tab_click('minusSafe')" href="#">Службове
-					винесення </a>
-				<div class="w3-border"
-					data-ng-if="ekkr.config.config_tab=='minusSafe'">
-					<p
-						class="w3-panel w3-leftbar w3-green w3-card-4 w3-display-container">
-						Виконати службове винесення</p>
-					<i class="fa fa-minus" aria-hidden="true"></i> <input
-						class="w3-border" type="number"
-						data-ng-model="cgi_chk_X_report.safe_minus"
-						max="{{cgi_chk_X_report.safe}}" min="1">
-					<button class="w3-border"
-						data-ng-click="ekkr.config.safeMinusSumSave()">Запис</button>
-				</div></td>
-		</tr>
-		<tbody data-ng-repeat="chk in cgi_chk">
-			<tr data-ng-if="chk.IO">
-				<td>{{chk.IO[1].IO.name}}</td>
-				<td>{{chk.IO[1].IO.sum}}</td>
+		<table>
+			<tr>
+				<td>СУМА ПРОДАЖ</td>
+				<td>{{cgi_chk_X_report.sum}}</td>
+			</tr>
+			<tr>
+				<td>КАРТКОЮ</td>
+				<td>{{cgi_chk_X_report.carte}}</td>
+			</tr>
+			<tr>
+				<td>ГОТІВКОЮ</td>
+				<td>{{cgi_chk_X_report.cash}}</td>
+			</tr>
+			<tr data-ng-if="cgi_chk_X_report.safe_minus_sum<0">
 				<td>СЛУЖБОВА ВИДАЧА</td>
+				<td>{{cgi_chk_X_report.safe_minus_sum}}</td>
 			</tr>
-			<tr data-ng-if="chk.F">
-				<td>{{chk.F[1].P.name}}</td>
-				<td>{{chk.F[1].P.sum}}</td>
-				<td>{{chk.F[0].S.name}}</td>
-				<td>{{chk.F[0].S.code}}</td>
-				<!-- <td>{{chk.F[0].S}}</td> -->
+			<tr>
+				<td class="w3-border-bottom">В СЕЙФІ</td>
+				<td class="w3-border-bottom"><a class=""
+					data-ng-click="ekkr.config.config_tab_click('minusSafe')" href="#">
+						{{cgi_chk_X_report.safe}}</a></td>
+				<td colspan="2" data-ng-if="cgi_chk_X_report.safe>0"><a
+					class="w3-btn"
+					data-ng-click="ekkr.config.config_tab_click('minusSafe')" href="#">Службове
+						винесення </a>
+					<div class="w3-border"
+						data-ng-if="ekkr.config.config_tab=='minusSafe'">
+						<p
+							class="w3-panel w3-leftbar w3-green w3-card-4 w3-display-container">
+							Виконати службове винесення</p>
+						<i class="fa fa-minus" aria-hidden="true"></i> <input
+							class="w3-border" type="number"
+							data-ng-model="cgi_chk_X_report.safe_minus"
+							max="{{cgi_chk_X_report.safe}}" min="1">
+						<button class="w3-border"
+							data-ng-click="ekkr.config.safeMinusSumSave()">Запис</button>
+					</div></td>
 			</tr>
-		</tbody>
-	</table>
+			<tbody data-ng-repeat="chk in cgi_chk">
+				<tr data-ng-if="chk.IO">
+					<td>{{chk.IO[1].IO.name}}</td>
+					<td>{{chk.IO[1].IO.sum}}</td>
+					<td>СЛУЖБОВА ВИДАЧА</td>
+				</tr>
+				<tr data-ng-if="chk.F">
+					<td>{{chk.F[1].P.name}}</td>
+					<td>{{chk.F[1].P.sum}}</td>
+					<td>{{chk.F[0].S.name}}</td>
+					<td>{{chk.F[0].S.code}}</td>
+					<!-- <td>{{chk.F[0].S}}</td> -->
+				</tr>
+			</tbody>
+		</table>
+	</div>
 </body>
 </html>
