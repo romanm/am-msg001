@@ -240,7 +240,7 @@ app.controller('myCtrl', function($scope, $http, $interval, $filter) {
 //		console.log(ts)
 		loadVarAsFile('\uFEFF'+csvFile, 'export-'+ts+'.csv', 'text/csv;charset=utf-8')
 	}
-	$scope.filter.filterOnPayment = function(){
+	$scope.filter.filterOnPayment = function(sourceObject,addObjectName){
 		this.sql = $scope.patientList.config.sql_read_table_data
 		console.log(this.payment_privilege)
 		if(this.minPayment && !this.maxPayment){
@@ -284,11 +284,15 @@ app.controller('myCtrl', function($scope, $http, $interval, $filter) {
 		}
 		console.log(this)
 	//	console.log(this.sql)
-if($scope.patientList.pl)
-		$scope.patientList.pl.afterRead = function(response){
-//			console.log(response.data)
-			console.log($scope.patientList.pl)
-		}
+		if($scope.patientList.pl)
+			$scope.patientList.pl.afterRead = function(response){
+				//			console.log(response.data)
+				console.log($scope.patientList.pl)
+				if(sourceObject){
+					sourceObject[addObjectName] =  
+						$scope.patientList.pl
+				}
+			}
 		readSql(this, $scope.patientList.pl)
 	}
 	$scope.filter.blurDate = function(dateName){
@@ -478,12 +482,18 @@ $scope.callDbImport = function() {
 
 	if('analytics'==$scope.request.pathNameValue){
 		$scope.ekkr.config.config_tab = 'dayPatientReport'
-		console.log($scope.ekkr.config.config_tab)
 //		$scope.filter.fromDate = 3
 		$scope.filter.fromDate = ''+new Date().getDate()
 		$scope.filter.blurDate('fromDate')
 		$scope.filter.filterGroup('col_237')
-		//$scope.filter.filterOnPayment()
+		$scope.dayPatientReport = {}
+		console.log($scope.dayPatientReport)
+		var unbindWatcherSql = $scope.$watch('patientList.config.sql_read_table_data',function(newValue){
+			if(newValue){
+				$scope.filter.filterOnPayment($scope.dayPatientReport, 'patientList')
+				unbindWatcherSql()
+			}
+		})
 	}
 
 	$scope.pageVar = {}

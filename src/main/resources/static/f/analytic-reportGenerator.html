@@ -75,7 +75,11 @@
 			</button>
 		</div>
 	</div>
-	<div data-ng-if="patientList.pl.list[0].cnt"
+
+<div data-ng-if="filter.group">
+	<div  data-ng-repeat="oo in [patientList.pl]"
 		data-ng-include="'/f/patient-list-group.html'"></div>
-	<div data-ng-include="'/f/patient-list-table.html'"></div>
+</div>
+	<div data-ng-if="!filter.group"
+		data-ng-include="'/f/patient-list-table.html'"></div>
 </div>
