@@ -1,6 +1,7 @@
 var app = angular.module('myApp', ['ngSanitize']);
 var initApp = function($scope, $http){
 	console.log('initApp')
+	$scope.pageVar = {}
 	build_request($scope)
 	exe_fn = new Exe_fn($scope, $http);
 	exe_fn.httpGet_j2c_table_db1_params_then_fn = function(params, then_fn){

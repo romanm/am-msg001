@@ -1,6 +1,8 @@
 app.controller('myCtrl', function($scope, $http, $interval, $filter) {
 	initApp($scope, $http)
-		
+	initConfig($scope, $http, $interval)
+	initFilter($scope, $http)
+
 	$scope.db_validation = {
 		removeDupletRows:function(){
 			var data = {
@@ -162,7 +164,6 @@ app.controller('myCtrl', function($scope, $http, $interval, $filter) {
 		filterOnApparat:'по аппаратам:',
 	}
 
-	$scope.filter = {}
 	$scope.filter.payment_type_sum = function(){
 		var sum = 0
 		if($scope.patientList.pl)
@@ -240,61 +241,6 @@ app.controller('myCtrl', function($scope, $http, $interval, $filter) {
 //		console.log(ts)
 		loadVarAsFile('\uFEFF'+csvFile, 'export-'+ts+'.csv', 'text/csv;charset=utf-8')
 	}
-	$scope.filter.filterOnPayment = function(sourceObject,addObjectName){
-		this.sql = $scope.patientList.config.sql_read_table_data
-		console.log(this.payment_privilege)
-		if(this.minPayment && !this.maxPayment){
-			this.maxPayment = 99999
-		}else
-		if(!this.minPayment && this.maxPayment){
-			this.minPayment = 1
-		}
-		if(this.minPayment && this.maxPayment){
-			this.sql = sql.read_table_payment().replace(':read_table_sql',this.sql)
-		}
-		if(this.payment_privilege){
-			this.sql = sql.read_table_privilege().replace(':read_table_sql',this.sql)
-		}
-		if(this.apparat_type){
-			this.sql = sql.read_table_apparat_type().replace(':read_table_sql',this.sql)
-		}
-		if(this.payment_type){
-			console.log(this.payment_type)
-			if('ІНШЕ'==this.payment_type){
-				console.log(sql.read_table_payment_type2())
-				this.sql = sql.read_table_payment_type2().replace(':read_table_sql',this.sql)
-			}else{
-				this.sql = sql.read_table_payment_type().replace(':read_table_sql',this.sql)
-			}
-//			this.sql = sql.read_table_payment_type().replace(':read_table_sql',this.sql)
-		}
-		if(this.fromDate_ts){
-			this.fromDate_sql = this.fromDate_ts.toISOString().split('T')[0]
-			console.log(this.fromDate_sql)
-			if(!this.toDate){
-				this.toDate_ts = new Date(this.fromDate_ts)
-			}
-			console.log(this.toDate_ts)
-			this.toDate_ts.setDate(this.toDate_ts.getDate()+1)
-			this.toDate_sql = this.toDate_ts.toISOString().split('T')[0]
-			this.sql = sql.read_table_betweenDates().replace(':read_table_sql',this.sql)
-		}
-		if(this.group){
-			this.sql = sql.read_table_group_col(this.group).replace(':read_table_sql',this.sql)
-		}
-		console.log(this)
-	//	console.log(this.sql)
-		if($scope.patientList.pl)
-			$scope.patientList.pl.afterRead = function(response){
-				//			console.log(response.data)
-				console.log($scope.patientList.pl)
-				if(sourceObject){
-					sourceObject[addObjectName] =  
-						$scope.patientList.pl
-				}
-			}
-		readSql(this, $scope.patientList.pl)
-	}
 	$scope.filter.blurDate = function(dateName){
 		var date = this.checkDate(dateName)
 		if(!date)
@@ -344,11 +290,8 @@ app.controller('myCtrl', function($scope, $http, $interval, $filter) {
 		},
 	}
 
-$scope.lastDbRead = {
-	timeout : 15*60*1000,
-	lastCallTime : new Date(),
-	importCnt:0,
-	afterRead : function(){
+
+$scope.lastDbRead.afterRead = function(){
 //		this.importCnt++
 		this.maxInDB = this.list[0].max
 //		console.log($filter('date')(new Date(this.maxInDB), 'medium'))
@@ -384,36 +327,12 @@ $scope.lastDbRead = {
 		}
 //		exe_fn.httpGet($scope.lastDbRead.requestToImport)
 	},
-}
+
 	$scope.lastDbRead.reread = function(){
 		console.log($filter('date')(new Date(this.maxInDB), 'medium'))
 		exe_fn.httpGet($scope.lastDbRead.requestToImport)
 	}
 
-	$scope.lastDbRead.requestToImport = {
-//		url:'/f/js/li159-10-test1.json',
-		url:'/li159-10',
-		then_fn:function(response){
-			$scope.lastDbRead.importCnt++
-			if(!$scope.dataToImport || response.data.max>$scope.dataToImport.max){
-				$scope.dataToImport = response.data
-				console.log($scope.dataToImport)
-				$scope.callDbImport()
-			}
-		},
-	}
-
-$scope.callDbImport = function() {
-	if($scope.patientList){
-		if($scope.patientList.pl){
-			$scope.lastDbRead.lastCallTime = new Date()
-			$scope.lastDbRead.sql =
-				sql.read_table_max_min_date()
-				.replace(':read_table_sql',$scope.patientList.config.sql_read_table_data)
-				readSql($scope.lastDbRead)
-		}
-	}
-}
 //	$interval( function(){ $scope.callDbImport(); }, $scope.lastDbRead.timeout)
 
 	$scope.$watch('patientList.seek',function(newValue){ if(true){
@@ -496,7 +415,7 @@ $scope.callDbImport = function() {
 		})
 	}
 
-	$scope.pageVar = {}
+//	$scope.pageVar = {}
 	$scope.pageVar.multiple_examination_split = function(){
 		console.log(this.o)
 		var d = new Date(this.o.col_236)
@@ -783,42 +702,6 @@ $scope.callDbImport = function() {
 		}, $scope.priceCalcHelpData.destination)
 
 	}
-
-	$scope.pageVar.colortheme = {}
-	$scope.pageVar.colortheme.changeTheme = function(){
-		this.theme = (this.theme == 'night')?'day':'night'
-		console.log($scope.pageVar.site_config)
-		var data = $scope.pageVar.site_config
-		data.colortheme
-			= $scope.pageVar.colortheme
-		console.log(data)
-		exe_fn.httpPost({ url:'/url_file_write',
-			then_fn:function(response) {
-				console.log(response.data)
-			},
-			data:data,
-		})
-	}
-
-	exe_fn.httpGet({
-		url:'/r/principal',
-		then_fn:function(response){
-			$scope.principal = response.data.m
-			console.log($scope.principal)
-			$scope.pageVar.site_config
-				= response.data.config
-			if($scope.pageVar.site_config)
-				if($scope.pageVar.site_config.colortheme){
-					$scope.pageVar.colortheme.theme
-						= $scope.pageVar.site_config.colortheme.theme
-					console.log($scope.pageVar.site_config.colortheme)
-				}
-
-			exe_fn.httpGet($scope.lastDbRead.requestToImport)
-			$interval( function(){ exe_fn.httpGet($scope.lastDbRead.requestToImport) }, $scope.lastDbRead.timeout)
-
-		},
-	})
 
 	$scope.random3=getRandomInt(3)
 });
