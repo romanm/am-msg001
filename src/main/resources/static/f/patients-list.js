@@ -1,26 +1,24 @@
 app.controller('myCtrl', function($scope, $http, $interval, $filter) {
 	initApp($scope, $http)
 		
-	if(true || 'analytics'==pathNameValue){
-		$scope.db_validation = {
-			removeDupletRows:function(){
-				var data = {
-					sql : sql.duplet_rows_remove(),
-					dataAfterSave:function(response){
-						console.log(response)
-					}
+	$scope.db_validation = {
+		removeDupletRows:function(){
+			var data = {
+				sql : sql.duplet_rows_remove(),
+				dataAfterSave:function(response){
+					console.log(response)
 				}
-				writeSql(data)
-			},
-			duplet_rows_count:null,
-			sql:sql.duplet_rows_count(),
-			afterRead:function(response){
-				this.duplet_rows_count = 
-					response.data.list[0].cnt
 			}
+			writeSql(data)
+		},
+		duplet_rows_count:null,
+		sql:sql.duplet_rows_count(),
+		afterRead:function(response){
+			this.duplet_rows_count = 
+				response.data.list[0].cnt
 		}
-		readSql($scope.db_validation)
 	}
+	readSql($scope.db_validation)
 
 	$scope.ekkr = {}
 	if('ekkr'==$scope.request.pathNameValue){
@@ -69,6 +67,19 @@ app.controller('myCtrl', function($scope, $http, $interval, $filter) {
 		})
 	}
 	$scope.ekkr.config = {}
+	$scope.ekkr.config.config_tab_click = function(tab){
+		if(this.config_tab == tab)
+			this.config_tab = null
+		else
+			this.config_tab = tab
+		console.log($scope.ekkr.config)
+		console.log($scope.ekkr.config.config_tab)
+	}
+	$scope.ekkr.config.change_paymentId = function(){
+		this.config_tab_click('sequence_paymentId')
+		if(this.config_tab == 'sequence_paymentId')
+			$scope.ekkr.config.read_paymentId()
+	}
 	$scope.ekkr.config.safeMinusSumSave = function(){
 		if($scope.cgi_chk_X_report.safe_minus <= $scope.cgi_chk_X_report.safe){
 			console.log($scope.cgi_chk_X_report.safe_minus)
@@ -120,22 +131,11 @@ app.controller('myCtrl', function($scope, $http, $interval, $filter) {
 			sql:sql+" "+sql_var,
 			afterRead:function(response){
 				$scope.ekkr.config[sql_var] 
-				= response.data.list[0][sql_var]
+					= response.data.list[0][sql_var]
 				$scope.ekkr.config.newPaymentId
-				= $scope.ekkr.config[sql_var]
+					= $scope.ekkr.config[sql_var]
 			},
 		})
-	}
-	$scope.ekkr.config.change_paymentId = function(){
-		this.config_tab_click('sequence_paymentId')
-		if(this.config_tab == 'sequence_paymentId')
-			$scope.ekkr.config.read_paymentId()
-	}
-	$scope.ekkr.config.config_tab_click = function(tab){
-		if(this.config_tab == tab)
-			this.config_tab = null
-		else
-			this.config_tab = tab
 	}
 	$scope.ekkr.zReport = function(){ $scope.ekkr.xzReport('/getZReport2') }
 	$scope.ekkr.xReport = function(){ $scope.ekkr.xzReport('/getXReport2') }
@@ -282,8 +282,9 @@ app.controller('myCtrl', function($scope, $http, $interval, $filter) {
 		if(this.group){
 			this.sql = sql.read_table_group_col(this.group).replace(':read_table_sql',this.sql)
 		}
-//		console.log(this)
-//		console.log(this.sql)
+		console.log(this)
+	//	console.log(this.sql)
+if($scope.patientList.pl)
 		$scope.patientList.pl.afterRead = function(response){
 //			console.log(response.data)
 			console.log($scope.patientList.pl)
@@ -302,6 +303,7 @@ app.controller('myCtrl', function($scope, $http, $interval, $filter) {
 		var date = new Date()
 		date.setHours(10)
 		var checkDate = this[dateName]
+		console.log(checkDate)
 		if(!checkDate)
 			return
 		checkDate = checkDate.replace(/-/g,' ')
@@ -473,6 +475,16 @@ $scope.callDbImport = function() {
 		},
 	}
 	readSql($scope.patientList)
+
+	if('analytics'==$scope.request.pathNameValue){
+		$scope.ekkr.config.config_tab = 'dayPatientReport'
+		console.log($scope.ekkr.config.config_tab)
+//		$scope.filter.fromDate = 3
+		$scope.filter.fromDate = ''+new Date().getDate()
+		$scope.filter.blurDate('fromDate')
+		$scope.filter.filterGroup('col_237')
+		//$scope.filter.filterOnPayment()
+	}
 
 	$scope.pageVar = {}
 	$scope.pageVar.multiple_examination_split = function(){
@@ -868,10 +880,13 @@ var sql = {
 	},
 	read_table_group_col:function(col_nnn){
 		return ("SELECT * FROM ( " +
-				"SELECT :col_nnn groupName, COUNT(:col_nnn) cnt, SUM(col_240) sum FROM ( " +
+				"SELECT :col_nnn groupName, COUNT(:col_nnn) cnt, SUM(col_240) sum, " +
+				"min(col_236) col_236, min(col_239) col_239, min(col_5218) col_5218 " +
+				"FROM ( " +
 				":read_table_sql " +
 				" ) GROUP BY :col_nnn " +
-				" ) x ORDER BY CNT DESC ").replace(/:col_nnn/g,col_nnn)
+				" ) x ORDER BY col_236 ").replace(/:col_nnn/g,col_nnn)
+				//" ) x ORDER BY CNT DESC ").replace(/:col_nnn/g,col_nnn)
 	},
 	read_table_seek:function(){
 		return "SELECT * FROM ( " +

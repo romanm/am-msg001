@@ -1,13 +1,23 @@
-<div class="w13-code" style="width: 333px;">
+<div class="w13-code" s1tyle="width: 333px;">
 	<table class="w3-table">
-		<tr>
-			<th>Назва</th>
-			<th>Кількість</th>
-			<th>Сума</th>
-		</tr>
+		<thead>
+			<tr class="w3-tiny">
+				<th>Дата-час обстеженя</th>
+				<th>П.І.Б.</th>
+				<th>Кількість</th>
+				<th>Обстеження</th>
+				<th>Сума</th>
+				<th>Пільги</th>
+			</tr>
+		</thead>
 		<tr data-ng-repeat="r in patientList.pl.list">
-			<td data-ng-repeat="c in ['groupName','cnt','sum']"
-				class="w3-border w3-border-white w3-hover-border-gray">{{r[c]}}</td>
+			<td
+				data-ng-repeat="c in ['col_236', 'groupName','cnt','col_239','sum', 'col_5218']"
+				class="w3-border w13-border-white w3-hover-border-gray"
+				data-ng-class="{'w3-tiny':'col_236'==c}" data-ng-switch="c">
+				<div data-ng-switch-when="col_236">{{r[c] | date:'short'}}</div>
+				<div data-ng-switch-default>{{r[c]}}</div>
+			</td>
 		</tr>
 	</table>
 </div>
