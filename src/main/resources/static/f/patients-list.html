@@ -41,10 +41,10 @@
 					ng-if="'admin'==principal.name" href="/f/admin.html">адніністратор</a>
 				<div class="w3-right">
 				<!-- 
+				 -->
 					<a href="#" ng-click="db_validation.removeDupletRows()"
 						class="w3-btn" ng-if="db_validation.duplet_rows_count>0">
 						{{db_validation.duplet_rows_count}} - дуплет для видаленя</a>
-				 -->
 						
 						 <a
 						href="#" ng-click="lastDbRead.reread()" class="w3-btn">reread
