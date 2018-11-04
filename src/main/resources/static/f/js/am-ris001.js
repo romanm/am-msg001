@@ -100,12 +100,11 @@ function build_sqlJ2c_row_write(rowObj,col_data,fn){
 }
 
 function build_sqlJ2c_cell_write_parameters(col_data, v, n){
-	var cell_v 
+	var cell_v
 	if('string'==col_data[n].fieldtype){
 		cell_v = "'"+v+"'"
 	}else
 	if('timestamp'==col_data[n].fieldtype){
-console.log(v)
 		if(19==v.length)
 			cell_v = "'"+v+".0'"
 		else

@@ -20,6 +20,7 @@ app.controller('myCtrl', function($scope, $http, $interval, $filter) {
 				response.data.list[0].cnt
 		}
 	}
+	console.log(sql.duplet_rows_count())
 	readSql($scope.db_validation)
 
 	$scope.ekkr = {}
@@ -290,13 +291,12 @@ app.controller('myCtrl', function($scope, $http, $interval, $filter) {
 		},
 	}
 
-
 $scope.lastDbRead.afterRead = function(){
 //		this.importCnt++
 		this.maxInDB = this.list[0].max
 //		console.log($filter('date')(new Date(this.maxInDB), 'medium'))
 //		console.log($scope.dataToImport.max)
-		if($scope.dataToImport.max>this.maxInDB){
+		if(true || $scope.dataToImport.max > this.maxInDB){
 			console.log('--------importToDb-------------')
 			var i = 0
 			angular.forEach($scope.dataToImport.rows, function(rowObj){
@@ -312,16 +312,50 @@ $scope.lastDbRead.afterRead = function(){
 					rowObj.col_33504 = rowObj.patient_birthdate
 					rowObj.col_33505 = rowObj.patient_phone
 					var col_data = $scope.patientList.config.json_create_table
-					col_data.nextDbIdCounter = 3
-					col_data.sql_row = ''
-//					console.log(col_data)
-					build_sqlJ2c_row_insert(rowObj, col_data)
-					var data = {
-						sql:col_data.sql_row,
-						table_id:col_data.table_id,
-					}
-//					console.log(data)
-					writeSql(data)
+					readSql({
+						sql:sql.read_table_visit()
+							.replace(':read_table_sql', $scope.patientList.config.sql_read_table_data),
+						col_236:rowObj.col_236+':00.0',
+						col_237:rowObj.col_237,
+						col_239:rowObj.col_239,
+						afterRead:function(response){
+//							console.log(response.data)
+							if(!response.data.list[0]){
+								col_data.nextDbIdCounter = 3
+								col_data.sql_row = ''
+//									console.log(col_data)
+								build_sqlJ2c_row_insert(rowObj, col_data)
+								var data = {
+									sql:col_data.sql_row,
+									table_id:col_data.table_id,
+								}
+								console.log(data)
+								console.log(data.sql)
+								writeSql(data)
+							}else{
+								var savedObj = response.data.list[0]
+								var isToUpdate = false
+								angular.forEach([238,239,241,415], function(n){
+									var k = 'col_'+n
+									if(savedObj[k]!=rowObj[k]){
+										var v = rowObj[k]
+										console.log(k+'/'+v)
+										build_sqlJ2c_cell_write(v,k,n,col_data,savedObj)
+										console.log(col_data)
+										console.log(col_data.sql)
+										writeSql({sql:col_data.sql})
+										isToUpdate = true
+									}
+								})
+								if(isToUpdate){
+									console.log(savedObj)
+									console.log(rowObj)
+								}
+							}
+						},
+					})
+
+					
 				}
 			})
 		}
@@ -735,6 +769,11 @@ var sql = {
 		"WHERE x.parent=d.parent " +
 		") x GROUP BY value " +
 		") x ORDER BY cnt DESC"
+	},
+	read_table_visit:function(){
+		return "SELECT * FROM ( \n" +
+		":read_table_sql " +
+		" ) x WHERE col_236 = :col_236 AND col_237 = :col_237  AND col_239 = :col_239"
 	},
 	read_table_one_row:function(){
 		return "SELECT * FROM ( \n" +
