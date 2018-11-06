@@ -312,7 +312,8 @@ $scope.lastDbRead.afterRead = function(){
 					rowObj.col_241 = rowObj.physician
 					rowObj.col_242 = rowObj.referral
 					rowObj.col_415 = rowObj.sales
-					rowObj.col_33504 = rowObj.patient_birthdate
+//					rowObj.col_33504 = rowObj.patient_birthdate
+					rowObj.col_33504 = "'"+rowObj.patient_birthdate.split('\.').reverse().toString().replace(/,/g,'-')+"'"
 					rowObj.col_33505 = rowObj.patient_phone
 					var col_data = $scope.patientList.config.json_create_table
 					readSql({
