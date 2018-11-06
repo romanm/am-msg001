@@ -20,6 +20,7 @@ import org.springframework.security.config.annotation.authentication.configurers
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
+import org.springframework.transaction.annotation.EnableTransactionManagement;
 
 /**
  * Права доступу
@@ -28,6 +29,7 @@ import org.springframework.security.config.annotation.web.configuration.WebSecur
  */
 @Configuration
 @EnableWebSecurity
+@EnableTransactionManagement
 @PropertySource("classpath:a2.properties")
 public class AmMsg001ConfigAndSecurity extends WebSecurityConfigurerAdapter {
 	

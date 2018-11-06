@@ -1,7 +1,6 @@
 package org.algoritmed.ammsg001.amdb;
 
 import java.security.Principal;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -14,6 +13,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.stereotype.Controller;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -26,6 +26,7 @@ public class Db1Rest  extends DbCommon{
 	protected static final Logger logger = LoggerFactory.getLogger(DbCommon.class);
 	protected @Autowired @Qualifier("db1ExecuteSqlBlock")	ExecuteSqlBlock executeSqlBlock;
 
+//	@Transactional
 	@PostMapping("/r/url_sql_read_db1")
 	public @ResponseBody Map<String, Object> url_sql_read_db1(
 			@RequestBody Map<String, Object> data
@@ -66,8 +67,8 @@ public class Db1Rest  extends DbCommon{
 //		Map m = new HashMap();
 //		m.put("k", "v");
 //		m.put("sql", sql);
-		System.out.println(map);
-		System.out.println(sql);
+//		System.out.println(map);
+//		System.out.println(sql);
 		List<Map<String, Object>> list = dbParamJdbcTemplate.queryForList(sql, map);
 		map.put("list", list);
 

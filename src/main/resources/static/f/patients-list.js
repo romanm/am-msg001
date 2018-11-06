@@ -208,7 +208,10 @@ app.controller('myCtrl', function($scope, $http, $interval, $filter) {
 //			csvFile += v.trim()+';'
 ////			csvFile += v.trim()+','
 //		})
+//			console.log($scope.patientList.config.json_create_table)
 		angular.forEach($scope.patientList.config.json_create_table, function(vCol,kn){
+//			console.log(vCol)
+			if(vCol.fieldname)
 			csvFile += vCol.fieldname.trim()+';'
 		})
 		csvFile += '\r\n'
