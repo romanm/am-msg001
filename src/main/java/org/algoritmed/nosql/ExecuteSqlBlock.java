@@ -129,6 +129,7 @@ public class ExecuteSqlBlock {
 			System.err.println(sql);
 			System.err.println(data);
 			System.err.println(e);
+			return;
 		}
 		System.err.println("nextDbId cnt="+split_nextDbId.length);
 		if(split_nextDbId.length > 0) {

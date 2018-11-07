@@ -75,8 +75,6 @@ app.controller('myCtrl', function($scope, $http, $interval, $filter) {
 			this.config_tab = null
 		else
 			this.config_tab = tab
-		console.log($scope.ekkr.config)
-		console.log($scope.ekkr.config.config_tab)
 	}
 	$scope.ekkr.config.change_paymentId = function(){
 		this.config_tab_click('sequence_paymentId')
