@@ -587,6 +587,19 @@ $scope.lastDbRead.afterRead = function(){
 		})
 	}
 
+	$scope.pageVar.removeRow = function(){
+		console.log($scope.pageVar.o)
+			var data = {
+				sql : 'update doc set parent=55172 where doc_id=:row_id',
+				row_id: $scope.pageVar.o.row_id,
+				dataAfterSave:function(response){
+					console.log(response)
+				}
+			}
+		console.log(data)
+			writeSql(data)
+	}
+
 	$scope.pageVar.saveUpdate = function(){
 		this.o.col_240 = this.price
 		this.o.col_3311 = this.procent

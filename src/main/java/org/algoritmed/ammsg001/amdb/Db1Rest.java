@@ -55,6 +55,7 @@ public class Db1Rest  extends DbCommon{
 			i++;
 			
 		}
+		data.remove("sql");
 		return data;
 	}
 

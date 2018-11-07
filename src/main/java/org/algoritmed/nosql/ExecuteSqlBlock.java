@@ -122,7 +122,14 @@ public class ExecuteSqlBlock {
 
 	public void updateNewIds(String sql, Map<String, Object> data, Environment env) {
 		this.env =env;
-		String[] split_nextDbId = sql.split("nextDbId");
+		String[] split_nextDbId = null;
+		try {
+			split_nextDbId = sql.split("nextDbId");
+		}catch (Exception e) {
+			System.err.println(sql);
+			System.err.println(data);
+			System.err.println(e);
+		}
 		System.err.println("nextDbId cnt="+split_nextDbId.length);
 		if(split_nextDbId.length > 0) {
 			HashMap<Integer, Integer> nextDbMap = new HashMap<>();
