@@ -319,7 +319,8 @@ $scope.lastDbRead.afterRead = function(){
 							.replace(':read_table_sql', $scope.patientList.config.sql_read_table_data),
 						col_236:rowObj.col_236+':00.0',
 						col_237:rowObj.col_237,
-						col_239:rowObj.col_239,
+						col_239:rowObj.col_239.replace(';',':'),
+						//col_239:rowObj.col_239,
 						afterRead:function(response){
 //							console.log(response.data)
 							if(!response.data.list[0]){
