@@ -34,8 +34,11 @@ function readSql(params, obj){
 	params,
 	function(response) {
 		obj.list = response.data.list
-		if(obj.afterRead)
+		if(obj.afterRead){
 			obj.afterRead(response)
+		}else if(params.afterRead){
+			params.afterRead(response)
+		}
 	}))
 }
 

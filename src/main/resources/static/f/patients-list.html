@@ -40,17 +40,22 @@
 				<a ng-if="!principal.name" href="/f/login.html"> логін </a> <a
 					ng-if="'admin'==principal.name" href="/f/admin.html">адніністратор</a>
 				<div class="w3-right">
-				<!-- 
+					<!-- 
 					<a href="#" ng-click="db_validation.removeDupletRows()"
 						class="w3-btn" ng-if="db_validation.duplet_rows_count>0">
 						{{db_validation.duplet_rows_count}} - дуплет для видаленя</a>
 				 -->
-						
-						 <a
-						href="#" ng-click="lastDbRead.reread()" class="w3-btn">reread
-						DB - last record <sup ng-if="lastDbRead.importCnt>0">{{lastDbRead.importCnt}}</sup>
-					</a> <span ng-if="lastDbRead.maxInDB">{{lastDbRead.maxInDB |
-						date : 'medium'}}</span>
+					<span ng-if="lastDbRead.maxInDB">{{lastDbRead.maxInDB | date
+						: 'medium'}} -</span>
+					В:{{lastDbRead.cntImport.length}}/{{lastDbRead.cntImport.lengthP}}
+					/Ч: {{lastDbRead.cntImport.read}} /I:
+					{{lastDbRead.cntImport.insert}} /U: 
+					{{lastDbRead.cntImport.update}}
+					({{lastDbRead.cntImport.iuRead}})
+					<a href="#" ng-click="lastDbRead.reread()" class="w3-btn w3-border"
+					title="reread DB - last record"
+					>Імпорт РІС даних <sup ng-if="lastDbRead.importCnt>0">{{lastDbRead.importCnt}}</sup>
+					</a>
 				</div>
 			</div>
 		</div>

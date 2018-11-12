@@ -53,7 +53,6 @@ public class Db1Rest  extends DbCommon{
 				data.put("update_"+ i, update);
 			}
 			i++;
-			
 		}
 		data.remove("sql");
 		return data;

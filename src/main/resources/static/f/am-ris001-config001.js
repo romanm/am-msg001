@@ -27,12 +27,10 @@ var initConfig = function($scope, $http, $interval){
 //		url:'/f/js/li159-10-test1.json',
 		url:'/li159-10',
 		then_fn:function(response){
-			$scope.lastDbRead.importCnt++
-			if(!$scope.dataToImport || response.data.max>$scope.dataToImport.max){
-				$scope.dataToImport = response.data
-				console.log($scope.dataToImport)
-				$scope.callDbImport()
-			}
+			delete $scope.lastDbRead.cntImport
+			$scope.dataToImport = response.data
+			console.log($scope.dataToImport)
+			$scope.callDbImport()
 		},
 	}
 
@@ -61,11 +59,9 @@ var initConfig = function($scope, $http, $interval){
 						= $scope.pageVar.site_config.colortheme.theme
 					console.log($scope.pageVar.site_config.colortheme)
 				}
-
-			exe_fn.httpGet($scope.lastDbRead.requestToImport)
+			//exe_fn.httpGet($scope.lastDbRead.requestToImport)
 			$interval( function(){ exe_fn.httpGet($scope.lastDbRead.requestToImport) }, $scope.lastDbRead.timeout)
-
 		},
 	})
-	
+
 }

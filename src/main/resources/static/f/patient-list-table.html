@@ -4,8 +4,11 @@
 		<th data-ng-repeat="(ck,cv) in o.col_keys" title="{{ck}}"
 			data-ng-switch="cv">{{cv}}</th>
 	</tr>
-	<tr data-ng-repeat="tr in o.pl.list">
+	<tr data-ng-repeat="tr in o.pl.list"
+		data-ng-class="{'w3-green':tr.inserted}"
+	>
 		<td data-ng-repeat="(ck,cv) in o.col_keys" data-ng-switch="ck"
+		data-ng-class="{'w3-green':tr[ck+'_update']==1}"
 			class="w3-border w3-border-white w3-hover-border-gray">
 			<div data-ng-switch-when="col_236"
 				title="{{tr[ck] | date : 'longDate'}}">{{tr[ck] | date :

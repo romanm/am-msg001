@@ -20,7 +20,7 @@ app.controller('myCtrl', function($scope, $http, $interval, $filter) {
 				response.data.list[0].cnt
 		}
 	}
-	console.log(sql.duplet_rows_count())
+	//console.log(sql.duplet_rows_count())
 	readSql($scope.db_validation)
 
 	$scope.ekkr = {}
@@ -292,12 +292,26 @@ app.controller('myCtrl', function($scope, $http, $interval, $filter) {
 		},
 	}
 
+var cntImport={
+	length:0,
+	lengthP:0,
+	read:0,
+	iuRead:0,
+	insert:0,
+	update:0,
+	error:0,
+}
+
 $scope.lastDbRead.afterRead = function(){
+//	$scope.lastDbRead.cntImport = cntImport
+		$scope.lastDbRead.cntImport = Object.assign({}, cntImport)
 //		this.importCnt++
 		this.maxInDB = this.list[0].max
 //		console.log($filter('date')(new Date(this.maxInDB), 'medium'))
 //		console.log($scope.dataToImport.max)
 		if(true || $scope.dataToImport.max > this.maxInDB){
+			$scope.lastDbRead.cntImport.length = $scope.dataToImport.rows.length
+			$scope.lastDbRead.cntImport.lengthP = $scope.lastDbRead.cntImport.length
 			console.log('--------importToDb-------------')
 			var i = 0
 			angular.forEach($scope.dataToImport.rows, function(rowObj){
@@ -322,6 +336,8 @@ $scope.lastDbRead.afterRead = function(){
 						col_239:rowObj.col_239.replace(';',':'),
 						//col_239:rowObj.col_239,
 						afterRead:function(response){
+							$scope.lastDbRead.cntImport.lengthP--
+							$scope.lastDbRead.cntImport.read++
 //							console.log(response.data)
 							if(!response.data.list[0]){
 								col_data.nextDbIdCounter = 3
@@ -331,39 +347,54 @@ $scope.lastDbRead.afterRead = function(){
 								var data = {
 									sql:col_data.sql_row,
 									table_id:col_data.table_id,
+									dataAfterSave:function(response){
+										var nextDbId1 = response.data.nextDbId1
+										readSql({
+											sql:sql.read_table_one_row()
+												.replace(':read_table_sql', $scope.patientList.config.sql_read_table_data),
+											row_id:nextDbId1,
+											afterRead:function(response){
+												var r = response.data.list[0]
+												r.inserted=true
+												$scope.patientList.pl.list.unshift(r)
+												$scope.lastDbRead.cntImport.iuRead++
+											},
+										})
+									}
 								}
-								console.log(data)
-								console.log(data.sql)
+								$scope.lastDbRead.cntImport.insert++
 								writeSql(data)
 							}else{
 								var savedObj = response.data.list[0]
-								var isToUpdate = false
-								angular.forEach([238,239,241,415], function(n){
+								angular.forEach([238,239,241,242,415], function(n){
 									var k = 'col_'+n
 									if(savedObj[k]!=rowObj[k]){
 										var v = rowObj[k]
 										console.log(k+'/'+v)
 										build_sqlJ2c_cell_write(v,k,n,col_data,savedObj)
-										console.log(col_data)
-										console.log(col_data.sql)
-										writeSql({sql:col_data.sql})
-										isToUpdate = true
+//										console.log(col_data.sql)
+										$scope.lastDbRead.cntImport.update++
+										var data = {sql:col_data.sql,
+											dataAfterSave:function(response){
+												var updateRowObj = $scope.patientList.rowMap[savedObj.row_id]
+												updateRowObj[k+'_update'] = response.data.update_0
+												if(1==response.data.update_0){
+													updateRowObj[k] = v
+												}
+												$scope.lastDbRead.cntImport.iuRead++
+											}
+										}
+										writeSql(data)
 									}
 								})
-								if(isToUpdate){
-									console.log(savedObj)
-									console.log(rowObj)
-								}
 							}
 						},
 					})
-
-					
 				}
 			})
 		}
 //		exe_fn.httpGet($scope.lastDbRead.requestToImport)
-	},
+	}
 
 	$scope.lastDbRead.reread = function(){
 		console.log($filter('date')(new Date(this.maxInDB), 'medium'))
@@ -405,7 +436,7 @@ $scope.lastDbRead.afterRead = function(){
 				sql.read_table_day_date_desc().replace(':read_table_sql',
 					$scope.patientList.config.sql_read_table_data
 				)
-			//console.log(sql_table_data)
+//			console.log(sql_table_data)
 			$scope.patientList.pl = {}
 			$scope.patientList.pl_data = {
 				sql:sql_table_data,
@@ -715,6 +746,7 @@ $scope.lastDbRead.afterRead = function(){
 		this.ngStyleModal = {display:'block'}
 		console.log(o)
 		console.log(o.col_236)
+		if($scope.dataToImport)
 		angular.forEach($scope.dataToImport.rows, function(v,k){
 			if(v.visit_ts==o.col_236){
 				//$scope.pageVar.updateFromImportRow(o,v)
