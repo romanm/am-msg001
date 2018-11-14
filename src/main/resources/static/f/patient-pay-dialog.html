@@ -118,10 +118,10 @@
 					data-ng-click="ekkr.config.config_tab_click('remove_row')">
 						{{pageVar.o.row_id}} </span>
 					<div class="w3-dropdown-content w3-border" style="right: -11px;"
+					data-ng-if="'ROLE_ADVANCED_USER'==principal.authorities[0].authority"
 						data-ng-class="{'w3-show':ekkr.config.config_tab=='remove_row'}">
 						<button class="w3-border" data-ng-click="pageVar.removeRow()">remove</button>
-						<p
-							class="w3-panel w3-leftbar w3-green w3-card-4 w3-display-container">
+						<p class="w3-panel w3-leftbar w3-green w3-card-4 w3-display-container">
 							Якщо ви впевнені!</p>
 						<span data-ng-click="ekkr.config.config_tab=null"
 							class="w3-button w3-display-topright w3-tiny">×</span>
