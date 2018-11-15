@@ -8,6 +8,15 @@
 
 	<bean id="objectMapper"
 		class="com.fasterxml.jackson.databind.ObjectMapper" />
+	<!-- 
+	<bean id="dataSourceDb1" class="com.zaxxer.hikari.HikariDataSource"
+		destroy-method="close">
+		<property name="driverClassName" value="org.postgresql.Driver" />
+		<property name="jdbcUrl" value="${config.dataSourceDb1.url}" />
+		<property name="username" value="am2pg1" />
+		<property name="password" value="am2pg1" />
+	</bean>
+	 -->
 	<bean id="dataSourceDb1" class="com.zaxxer.hikari.HikariDataSource"
 		destroy-method="close">
 		<property name="driverClassName" value="org.h2.Driver" />
