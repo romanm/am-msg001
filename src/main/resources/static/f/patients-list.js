@@ -36,19 +36,23 @@ app.controller('myCtrl', function($scope, $http, $interval, $filter) {
 		$scope.cgi_chk_X_report.codeMap={}
 
 		console.log($scope.cgi_chk_X_report)
+		var payIdList = [41907, 41913, 41914, 41919, 41920]
+		console.log(payIdList)
+		console.log(payIdList.toString())
+		$scope.tableData.readData()
 		exe_fn.httpGet({
 			url:'/cgi_chk',
 			then_fn:function(response){
 				$scope.cgi_chk = response.data
 				console.log($scope.cgi_chk_X_report)
 				angular.forEach($scope.cgi_chk, function(chk){
-					$scope.cgi_chk_X_report.codeMap[chk.code]=chk
 					console.log(chk)
 					if(chk.IO){
 						$scope.cgi_chk_X_report.safe_minus_sum
 						+= chk.IO[1].IO.sum
 					}else
 					if(chk.F){
+						$scope.cgi_chk_X_report.codeMap[chk.F[1].S.code]=chk
 						if(1==chk.F[1].P.no){
 							$scope.cgi_chk_X_report.cash
 							+= chk.F[1].P.sum
@@ -69,6 +73,8 @@ app.controller('myCtrl', function($scope, $http, $interval, $filter) {
 				- $scope.cgi_chk_X_report.carte
 				+ $scope.cgi_chk_X_report.safe_minus_sum
 				console.log($scope.cgi_chk_X_report)
+				
+
 			},
 			error_fn:function(response){
 				console.error('-----error-----------')
@@ -278,28 +284,6 @@ app.controller('myCtrl', function($scope, $http, $interval, $filter) {
 		return date
 	}
 
-	$scope.date = {
-		today : new Date(),
-		seekDay : new Date(),
-		addDayUrl : function(addDay){
-			if($scope.request.parameters.addDay)
-				return addDay + $scope.request.parameters.addDay*1
-			return addDay
-		},
-		setDay_pl_data:function(){
-			$scope.patientList.pl_data.year=$scope.date.seekDay.getFullYear()
-			$scope.patientList.pl_data.month=$scope.date.seekDay.getMonth()+1
-			$scope.patientList.pl_data.day=$scope.date.seekDay.getDate()
-		},
-		seekDayReadSql:function(){
-			this.setDay_pl_data()
-			readSql($scope.patientList.pl_data, $scope.patientList.pl)
-		},
-		addDayToSeekDay:function(addDay){
-			this.seekDay.setDate(this.seekDay.getDate() + addDay)
-		},
-	}
-
 var cntImport={
 	length:0,
 	lengthP:0,
@@ -430,51 +414,42 @@ $scope.lastDbRead.afterRead = function(){
 		}
 	}})
 
-	$scope.patientList = {
-		tableId:235,
-		sql:sql.read_table_config(),
-		config:{},
-		afterRead:function(){
-			angular.forEach($scope.patientList.list, function(v){
-				if(19==v.doctype)
-					$scope.patientList.config.sql_read_table_data = v.docbody
-				if(20==v.doctype)
-					$scope.patientList.config.json_create_table = JSON.parse(v.docbody)
-			})
-			var sql_table_data =
-				sql.read_table_day_date_desc().replace(':read_table_sql',
-					$scope.patientList.config.sql_read_table_data
-				)
-//			console.log(sql_table_data)
-			$scope.patientList.pl = {}
-			$scope.patientList.pl_data = {
-				sql:sql_table_data,
-				afterRead:function(){
-					console.log($scope.patientList.pl)
-					$scope.patientList.rowMap = {}
-					console.log($scope.patientList.pl.list.length)
-					angular.forEach($scope.patientList.pl.list, function(v){
-						$scope.patientList.rowMap[v.row_id] = v
-					})
-				}
-			}
-			if($scope.request.parameters.addDay) {
-				$scope.date.addDayToSeekDay($scope.request.parameters.addDay*1)
-			}
-			$scope.date.setDay_pl_data()
-			readSql($scope.patientList.pl_data, $scope.patientList.pl)
-		},
-		col_keys:{
-			col_236:'дата-час обстеженя',
-			col_237:' П.І.Б.',
-			col_238:' аппарат ',
-			col_239:' дослідження ',
-			col_240:' вартість ',
-			col_241:' лікар ',
-			col_242:' ЗОЗ направленя ',
-		},
-	}
+	$scope.patientList = {config:{}}
+	$scope.patientList.tableId=235,
+	$scope.patientList.sql=sql.read_table_config(),
 	readSql($scope.patientList)
+	$scope.patientList.afterRead=function(){
+		read_j2c_table($scope.patientList, $scope)
+		var o = $scope.patientList
+		o.pl_data = {}
+		o.pl_data.sql = sql.read_table_day_date_desc().replace(':read_table_sql',
+			o.config.sql_read_table_data
+		)
+//		console.log(o.pl_data.sql)
+		o.pl_data.afterRead=function(){
+			console.log(o.pl)
+			o.rowMap = {}
+			console.log(o.pl.list.length)
+			angular.forEach(o.pl.list, function(v){
+				o.rowMap[v.row_id] = v
+			})
+		}
+		if($scope.request.parameters.addDay) {
+			$scope.date.addDayToSeekDay($scope.request.parameters.addDay*1)
+		}
+		$scope.date.setDay_pl_data(o)
+		o.pl = {}
+		readSql(o.pl_data, o.pl)
+	},
+	$scope.patientList.col_keys={
+		col_236:'дата-час обстеженя',
+		col_237:' П.І.Б.',
+		col_238:' аппарат ',
+		col_239:' дослідження ',
+		col_240:' вартість ',
+		col_241:' лікар ',
+		col_242:' ЗОЗ направленя ',
+	}
 
 	if('analytics'==$scope.request.pathNameValue){
 		$scope.ekkr.config.config_tab = 'dayPatientReport'
@@ -798,25 +773,30 @@ $scope.lastDbRead.afterRead = function(){
 	$scope.random3=getRandomInt(3)
 });
 
-var sql = {
-	table_data_row_insert:function(){
+sql.read_table_day_date_desc=function(){
+	return "SELECT * FROM ( \n" +
+	":read_table_sql " +
+	") x WHERE MONTH(col_236)=:month AND YEAR(col_236)=:year AND DAY(col_236)=:day ORDER BY col_236 DESC"
+}
+
+	sql.table_data_row_insert=function(){
 		return "INSERT INTO doc (doc_id, parent, doctype) VALUES (:nextDbId1 , :table_id , 4) ;"
 	},
-	table_data_cell_update:function(){
+	sql.table_data_cell_update=function(){
 		return "UPDATE :fieldtype SET value =:value WHERE :fieldtype_id=:cell_id ;"
 	},
-	table_data_cell_insert:function(){
+	sql.table_data_cell_insert=function(){
 		return "INSERT INTO doc (doc_id, parent, reference, doctype) VALUES (:nextDbId2, :row_id , :column_id,  5) ;" +
 		"INSERT INTO :fieldtype (value,:fieldtype_id) VALUES (:value, :nextDbId2 ) ;"
 	},
-	read_destination_procents:function(){
+	sql.read_destination_procents=function(){
 		return "SELECT * FROM ( SELECT COUNT(value) cnt, value FROM ( SELECT d.* FROM ( \n" +
 		"SELECT * FROM doc, integer WHERE reference =3311 AND doc_id=integer_id \n" +
 		") d, ( \n" +
 		"SELECT * FROM doc, string WHERE reference =242 AND doc_id=string_id AND value = :destination \n" +
 		") x WHERE x.parent=d.parent ) x GROUP BY value ) x ORDER BY cnt DESC"
 	},
-	read_examination_prices:function(){
+	sql.read_examination_prices=function(){
 		return "SELECT * FROM ( " +
 		"SELECT COUNT(value) cnt, value FROM ( " +
 		"SELECT d.* FROM ( \n" +
@@ -828,47 +808,47 @@ var sql = {
 		") x GROUP BY value " +
 		") x ORDER BY cnt DESC"
 	},
-	read_table_visit:function(){
+	sql.read_table_visit=function(){
 		return "SELECT * FROM ( \n" +
 		":read_table_sql " +
 		" ) x WHERE col_236 = :col_236 AND col_237 = :col_237  AND col_239 = :col_239"
 	},
-	read_table_one_row:function(){
+	sql.read_table_one_row=function(){
 		return "SELECT * FROM ( \n" +
 		":read_table_sql " +
 		" ) x WHERE row_id = :row_id"
 	},
-	read_table_payment_type2:function(){
+	sql.read_table_payment_type2=function(){
 		return "SELECT * FROM ( " +
 		":read_table_sql " +
 		" ) x WHERE col_18972 = 'ІНШЕ' OR col_18972 IS NULL"
 	},
-	read_table_apparat_type:function(){
+	sql.read_table_apparat_type=function(){
 		return "SELECT * FROM ( " +
 		":read_table_sql " +
 		" ) x WHERE col_238 = :apparat_type"
 	},
-	read_table_payment_type:function(){
+	sql.read_table_payment_type=function(){
 		return "SELECT * FROM ( " +
 		":read_table_sql " +
 		" ) x WHERE col_18972 = :payment_type"
 	},
-	read_table_privilege:function(){
+	sql.read_table_privilege=function(){
 		return "SELECT * FROM ( " +
 		":read_table_sql " +
 		" ) x WHERE col_5218 = :payment_privilege"
 	},
-	read_table_payment:function(){
+	sql.read_table_payment=function(){
 		return "SELECT * FROM ( " +
 		":read_table_sql " +
 		" ) x WHERE col_240 > :minPayment AND col_240 <= :maxPayment "
 	},
-	read_table_betweenDates:function(){
+	sql.read_table_betweenDates=function(){
 		return "SELECT * FROM ( " +
 		":read_table_sql " +
 		" ) x WHERE col_236 BETWEEN :fromDate_sql AND :toDate_sql "
 	},
-	read_table_group_col:function(col_nnn){
+	sql.read_table_group_col=function(col_nnn){
 		return ("SELECT * FROM ( " +
 				"SELECT :col_nnn groupName, COUNT(:col_nnn) cnt, SUM(col_240) sum, " +
 				"min(col_236) col_236, min(col_239) col_239, min(col_5218) col_5218 " +
@@ -878,7 +858,7 @@ var sql = {
 				" ) x ORDER BY col_236 ").replace(/:col_nnn/g,col_nnn)
 				//" ) x ORDER BY CNT DESC ").replace(/:col_nnn/g,col_nnn)
 	},
-	read_table_seek:function(){
+	sql.read_table_seek=function(){
 		return "SELECT * FROM ( " +
 		":read_table_sql" +
 		" ) x WHERE LOWER(col_237) LIKE LOWER(:seek)" +
@@ -889,31 +869,22 @@ var sql = {
 		" OR LOWER(col_242) LIKE LOWER(:seek) " +
 		" ORDER BY col_236 DESC"
 	},
-	read_table_day_date_desc:function(){
-		return "SELECT * FROM ( \n" +
-		":read_table_sql " +
-		") x WHERE MONTH(col_236)=:month AND YEAR(col_236)=:year AND DAY(col_236)=:day ORDER BY col_236 DESC"
-	},
-	read_table_date_desc:function(){
+	sql.read_table_date_desc=function(){
 		return "SELECT * FROM ( \n" +
 		":read_table_sql" +
 		") x ORDER BY col_236 DESC"
 	},
-	read_table_max_min_date:function(){
+	sql.read_table_max_min_date=function(){
 		return "SELECT min(col_236) min, max(col_236) max, count(*) FROM (" +
 		":read_table_sql" +
 		") x"
 	},
-	read_table_config:function(){
-		return "SELECT * FROM doc d, docbody s \n" +
-		"WHERE parent = :tableId AND s.docbody_id=d.doc_id AND doctype!=4"
-	},
-	duplet_rows_count:function(){
+	sql.duplet_rows_count=function(){
 		return "SELECT count(*) cnt FROM (" +
 		this.duplet_rows() +
 		") x"
 	},
-	duplet_rows_remove:function(){
+	sql.duplet_rows_remove=function(){
 		return "DELETE FROM doc WHERE parent IN (" + this.duplet_rows() +");\n" +
 		"DELETE FROM doc WHERE doc_id IN (" + this.duplet_rows() +");\n" +
 		"DELETE FROM doc WHERE doc_id IN (" +
@@ -921,7 +892,7 @@ var sql = {
 		"WHERE d.parent = 235 AND d.doctype=4 AND d2.doc_id IS NULL " +
 		");"
 	},
-	duplet_rows:function(){
+	sql.duplet_rows=function(){
 		return "SELECT max FROM ( " +
 		"SELECT * FROM ( " +
 		"SELECT MIN(doc_id) min, MAX(doc_id) max, COUNT(value) cnt, value  FROM ( " +
@@ -935,8 +906,5 @@ var sql = {
 		"LEFT JOIN (SELECT d2.*, i.* FROM integer i, doc d1, doc d2 " +
 		"WHERE d1.reference=240 AND d2.parent=235 AND d2.doctype=4 AND d2.doc_id=d1.parent AND d1.doc_id=integer_id) z ON max=z.doc_id " +
 		"WHERE z.doc_id IS NULL AND y.doc_id IS NULL "
-	},
-}
-
-var sql_1c = sql
+	}
 
