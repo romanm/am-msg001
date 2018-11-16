@@ -1,6 +1,5 @@
-<div class="w3-container"
-data-ng-if="principal.name"
->
+<div class="w3-container" data-ng-if="principal.name">
 	<div data-ng-repeat="oo in [dayPatientReport.patientList]"
 		data-ng-include="'/f/patient-list-group.html'"></div>
+	<div class="w3-tiny">{{dayPatientReport.patientList}}</div>
 </div>

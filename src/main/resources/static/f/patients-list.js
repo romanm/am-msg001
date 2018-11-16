@@ -26,11 +26,15 @@ app.controller('myCtrl', function($scope, $http, $interval, $filter) {
 	$scope.ekkr = {}
 	if('ekkr'==$scope.request.pathNameValue){
 		$scope.cgi_chk_X_report = {
-			sum:0,carte:0,cash:0
-			,safe:0
-			,safe_minus:0
-			,safe_minus_sum:0
+			sum:0,
+			carte:0,
+			cash:0,
+			safe:0,
+			safe_minus:0,
+			safe_minus_sum:0,
 		}
+		$scope.cgi_chk_X_report.codeMap={}
+
 		console.log($scope.cgi_chk_X_report)
 		exe_fn.httpGet({
 			url:'/cgi_chk',
@@ -38,6 +42,7 @@ app.controller('myCtrl', function($scope, $http, $interval, $filter) {
 				$scope.cgi_chk = response.data
 				console.log($scope.cgi_chk_X_report)
 				angular.forEach($scope.cgi_chk, function(chk){
+					$scope.cgi_chk_X_report.codeMap[chk.code]=chk
 					console.log(chk)
 					if(chk.IO){
 						$scope.cgi_chk_X_report.safe_minus_sum
@@ -56,6 +61,9 @@ app.controller('myCtrl', function($scope, $http, $interval, $filter) {
 							+= chk.F[1].P.sum
 					}
 				})
+				console.log($scope.cgi_chk_X_report.codeMap)
+				console.log(Object.keys($scope.cgi_chk_X_report.codeMap))
+				console.log(Object.keys($scope.cgi_chk_X_report.codeMap).toString())
 				$scope.cgi_chk_X_report.safe
 				= $scope.cgi_chk_X_report.sum
 				- $scope.cgi_chk_X_report.carte
@@ -273,7 +281,7 @@ app.controller('myCtrl', function($scope, $http, $interval, $filter) {
 	$scope.date = {
 		today : new Date(),
 		seekDay : new Date(),
-		addDayUrl:function(addDay){
+		addDayUrl : function(addDay){
 			if($scope.request.parameters.addDay)
 				return addDay + $scope.request.parameters.addDay*1
 			return addDay
@@ -366,6 +374,7 @@ $scope.lastDbRead.afterRead = function(){
 								writeSql(data)
 							}else{
 								var savedObj = response.data.list[0]
+								console.log(savedObj)
 								angular.forEach([238,239,241,242,415], function(n){
 									var k = 'col_'+n
 									if(savedObj[k]!=rowObj[k]){
@@ -477,6 +486,7 @@ $scope.lastDbRead.afterRead = function(){
 		console.log($scope.dayPatientReport)
 		var unbindWatcherSql = $scope.$watch('patientList.config.sql_read_table_data',function(newValue){
 			if(newValue){
+				console.log($scope.dayPatientReport)
 				$scope.filter.filterOnPayment($scope.dayPatientReport, 'patientList')
 				unbindWatcherSql()
 			}
