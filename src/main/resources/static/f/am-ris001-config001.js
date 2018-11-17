@@ -93,7 +93,7 @@ var initConfig = function($scope, $http, $interval){
 
 	$scope.tableData = {config:{}}
 	$scope.tableData.tableId = 235
-	$scope.tableData.readDataEKKR = function(){
+	$scope.tableData.readDataEKKR = function(checkIds){
 		readSql({
 			tableId:$scope.tableData.tableId,
 			sql:sql.read_table_config(),
@@ -103,10 +103,9 @@ var initConfig = function($scope, $http, $interval){
 				console.log($scope.tableData)
 				var o = $scope.tableData
 				o.pl_data = {}
-				o.pl_data.checkIds = '41907,41913,41914,41919,41920,41935,41936,41941,41958'
 				o.pl_data.sql=sql.read_table_by_checkId()
 					.replace(':read_table_sql', o.config.sql_read_table_data)
-					.replace(':checkIds', o.pl_data.checkIds)
+					.replace(':checkIds', checkIds)
 				o.pl_data.afterRead=function(){
 					o.checkIdMap = {}
 					console.log(o.pl.list.length)

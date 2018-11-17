@@ -36,10 +36,6 @@ app.controller('myCtrl', function($scope, $http, $interval, $filter) {
 		$scope.cgi_chk_X_report.codeMap={}
 
 		console.log($scope.cgi_chk_X_report)
-		var payIdList = [41907, 41913, 41914, 41919, 41920]
-		console.log(payIdList)
-		console.log(payIdList.toString())
-		$scope.tableData.readDataEKKR()
 		exe_fn.httpGet({
 			url:'/cgi_chk',
 			then_fn:function(response){
@@ -65,16 +61,16 @@ app.controller('myCtrl', function($scope, $http, $interval, $filter) {
 							+= chk.F[1].P.sum
 					}
 				})
-				console.log($scope.cgi_chk_X_report.codeMap)
-				console.log(Object.keys($scope.cgi_chk_X_report.codeMap))
-				console.log(Object.keys($scope.cgi_chk_X_report.codeMap).toString())
 				$scope.cgi_chk_X_report.safe
 				= $scope.cgi_chk_X_report.sum
 				- $scope.cgi_chk_X_report.carte
 				+ $scope.cgi_chk_X_report.safe_minus_sum
 				console.log($scope.cgi_chk_X_report)
-				
-
+				console.log($scope.cgi_chk_X_report.codeMap)
+				console.log(Object.keys($scope.cgi_chk_X_report.codeMap))
+				var checkIds = Object.keys($scope.cgi_chk_X_report.codeMap).toString()
+				console.log(checkIds)
+				$scope.tableData.readDataEKKR(checkIds)
 			},
 			error_fn:function(response){
 				console.error('-----error-----------')
