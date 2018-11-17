@@ -157,13 +157,13 @@ sql.read_table_config=function(){
 	"WHERE parent = :tableId AND s.docbody_id=d.doc_id AND doctype!=4"
 }
 
-	sql.read_table_group_col=function(col_nnn){
-		return ("SELECT * FROM ( " +
-				"SELECT :col_nnn groupName, COUNT(:col_nnn) cnt, SUM(col_240) sum, " +
-				"min(col_236) col_236, min(col_239) col_239, min(col_5218) col_5218 " +
-				"FROM ( " +
-				":read_table_sql " +
-				" ) GROUP BY :col_nnn " +
-				" ) x ORDER BY col_236 ").replace(/:col_nnn/g,col_nnn)
-				//" ) x ORDER BY CNT DESC ").replace(/:col_nnn/g,col_nnn)
-	}
+sql.read_table_group_col=function(col_nnn){
+	return ("SELECT * FROM ( " +
+			"SELECT min(col_238) col_238, :col_nnn groupName, COUNT(:col_nnn) cnt, SUM(col_240) sum, " +
+			"min(col_236) col_236, min(col_239) col_239, min(col_5218) col_5218 " +
+			"FROM ( " +
+			":read_table_sql " +
+			" ) GROUP BY :col_nnn " +
+	" ) x ORDER BY col_238, col_236 ").replace(/:col_nnn/g,col_nnn)
+	//" ) x ORDER BY CNT DESC ").replace(/:col_nnn/g,col_nnn)
+}

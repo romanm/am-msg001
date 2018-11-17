@@ -10,7 +10,19 @@
 				<th>Пільги</th>
 			</tr>
 		</thead>
-		<tr data-ng-repeat-start="r in oo.pl_sum.list">
+		<tr data-ng-repeat-start="r in oo.pl_sumA.list">
+			<td colspan="2">{{r.col_238}}</td>
+			<td colspan="1">{{r.cnt_cnt}}</td>
+			<td colspan="1"></td>
+			<td>{{r.cnt}}</td>
+		</tr>
+		<tr data-ng-repeat-end >
+			<td colspan="2"></td>
+			<td colspan="1">{{r.sum_cnt}}</td>
+			<td colspan="1"></td>
+			<td>{{r.sum}}</td>
+		</tr>
+		<tr data-ng-repeat-start="r in oo.pl_sum.list" class="w3-border-top">
 			<td colspan="2"></td>
 			<td colspan="1">{{r.cnt_cnt}}</td>
 			<td colspan="1"></td>

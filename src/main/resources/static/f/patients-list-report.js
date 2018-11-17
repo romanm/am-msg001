@@ -31,9 +31,16 @@ app.controller('myCtrl', function($scope, $http, $interval, $filter) {
 			o.pl_sum = {}
 			o.pl_data_sum = {}
 			o.pl_data_sum.sql = "SELECT " +
-					"sum(sum) sum, count(sum) cnt, sum(cnt) sum_cnt, count(cnt) cnt_cnt FROM ( " + o.pl_data.sql + " ) x"
+					"SUM(sum) sum, COUNT(sum) cnt, SUM(cnt) sum_cnt, COUNT(cnt) cnt_cnt FROM ( " + o.pl_data.sql + " ) x"
 			$scope.date.setDay_to_obj(o.pl_data_sum)
 			readSql(o.pl_data_sum, o.pl_sum)
+			o.pl_sumA = {}
+			o.pl_data_sumA = {}
+			o.pl_data_sumA.sql = "SELECT " +
+			"col_238, SUM(sum) sum, COUNT(sum) cnt, SUM(cnt) sum_cnt, COUNT(cnt) cnt_cnt " +
+			"FROM ( " + o.pl_data.sql + " ) x GROUP BY col_238"
+			$scope.date.setDay_to_obj(o.pl_data_sumA)
+			readSql(o.pl_data_sumA, o.pl_sumA)
 		}
 	})
 
