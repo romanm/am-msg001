@@ -52,7 +52,7 @@ app.controller('myCtrl', function($scope, $http, $interval, $filter) {
 						+= chk.IO[1].IO.sum
 					}else
 					if(chk.F){
-						$scope.cgi_chk_X_report.codeMap[chk.F[1].S.code]=chk
+						$scope.cgi_chk_X_report.codeMap[chk.F[0].S.code]=chk
 						if(1==chk.F[1].P.no){
 							$scope.cgi_chk_X_report.cash
 							+= chk.F[1].P.sum
