@@ -39,7 +39,7 @@ app.controller('myCtrl', function($scope, $http, $interval, $filter) {
 		var payIdList = [41907, 41913, 41914, 41919, 41920]
 		console.log(payIdList)
 		console.log(payIdList.toString())
-		$scope.tableData.readData()
+		$scope.tableData.readDataEKKR()
 		exe_fn.httpGet({
 			url:'/cgi_chk',
 			then_fn:function(response){
@@ -772,12 +772,6 @@ $scope.lastDbRead.afterRead = function(){
 
 	$scope.random3=getRandomInt(3)
 });
-
-sql.read_table_day_date_desc=function(){
-	return "SELECT * FROM ( \n" +
-	":read_table_sql " +
-	") x WHERE MONTH(col_236)=:month AND YEAR(col_236)=:year AND DAY(col_236)=:day ORDER BY col_236 DESC"
-}
 
 	sql.table_data_row_insert=function(){
 		return "INSERT INTO doc (doc_id, parent, doctype) VALUES (:nextDbId1 , :table_id , 4) ;"

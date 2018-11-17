@@ -63,33 +63,37 @@ var initConfig = function($scope, $http, $interval){
 			$interval( function(){ exe_fn.httpGet($scope.lastDbRead.requestToImport) }, $scope.lastDbRead.timeout)
 		},
 	})
-	
-	$scope.date = {
-		today : new Date(),
-		seekDay : new Date(),
-		addDayUrl : function(addDay){
-			if($scope.request.parameters.addDay)
-				return addDay + $scope.request.parameters.addDay*1
-			return addDay
-		},
-		setDay_pl_data:function(o){
-			o.pl_data.year=$scope.date.seekDay.getFullYear()
-			o.pl_data.month=$scope.date.seekDay.getMonth()+1
-			o.pl_data.day=$scope.date.seekDay.getDate()
-		},
-		seekDayReadSql:function(o){
-			this.setDay_pl_data(o)
-			readSql(o.pl_data, o.pl)
-//			readSql($scope.patientList.pl_data, $scope.patientList.pl)
-		},
-		addDayToSeekDay:function(addDay){
-			this.seekDay.setDate(this.seekDay.getDate() + addDay)
-		},
+
+	$scope.date = {}
+	$scope.date.today = new Date()
+	$scope.date.seekDay = new Date()
+	$scope.date.parameterAddDay = function(){
+		if($scope.request.parameters.addDay)
+			return '?addDay=' + $scope.request.parameters.addDay
+		return ''
+	}
+	$scope.date.addDayUrl = function(addDay){
+		if($scope.request.parameters.addDay)
+			return addDay + $scope.request.parameters.addDay*1
+		return addDay
+	}
+	$scope.date.setDay_pl_data=function(o){
+		o.pl_data.year=$scope.date.seekDay.getFullYear()
+		o.pl_data.month=$scope.date.seekDay.getMonth()+1
+		o.pl_data.day=$scope.date.seekDay.getDate()
+	}
+	$scope.date.seekDayReadSql=function(o){
+		this.setDay_pl_data(o)
+		readSql(o.pl_data, o.pl)
+//		readSql($scope.patientList.pl_data, $scope.patientList.pl)
+	}
+	$scope.date.addDayToSeekDay=function(addDay){
+		this.seekDay.setDate(this.seekDay.getDate() + addDay)
 	}
 
 	$scope.tableData = {config:{}}
 	$scope.tableData.tableId = 235
-	$scope.tableData.readData = function(){
+	$scope.tableData.readDataEKKR = function(){
 		readSql({
 			tableId:$scope.tableData.tableId,
 			sql:sql.read_table_config(),
@@ -100,10 +104,10 @@ var initConfig = function($scope, $http, $interval){
 				var o = $scope.tableData
 				o.pl_data = {}
 				o.pl_data.checkIds = '41907,41913,41914,41919,41920,41935,41936,41941,41958'
-					o.pl_data.sql=sql.read_table_by_checkId()
+				o.pl_data.sql=sql.read_table_by_checkId()
 					.replace(':read_table_sql', o.config.sql_read_table_data)
 					.replace(':checkIds', o.pl_data.checkIds)
-					o.pl_data.afterRead=function(){
+				o.pl_data.afterRead=function(){
 					o.checkIdMap = {}
 					console.log(o.pl.list.length)
 					angular.forEach(o.pl.list, function(v){
@@ -130,6 +134,13 @@ var read_j2c_table = function(o, $scope){
 
 var sql = {}
 var sql_1c = sql
+
+sql.read_table_day_date_desc=function(){
+	return "SELECT * FROM ( \n" +
+	":read_table_sql " +
+	") x WHERE MONTH(col_236)=:month AND YEAR(col_236)=:year AND DAY(col_236)=:day ORDER BY col_236 DESC"
+}
+
 sql.read_table_by_checkId=function(){
 	return "SELECT * FROM ( \n" +
 	":read_table_sql " +

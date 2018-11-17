@@ -30,15 +30,23 @@
 			<span ng-include="'/f/login-link.html'"> </span>
 		</div>
 	</div>
-	<div class="w3-center w3-tiny">
+	<div class="w3-center w3-tiny w3-container">
 		<a class="w3-btn w3-padding-small"
 			href="?addDay={{date.addDayUrl(-1)}}"><</a> {{date.seekDay | date :
 		'mediumDate'}} <a href="?addDay={{date.addDayUrl(1)}}"
 			class="w3-btn w3-padding-small">></a> <a href="?"
 			class="w3-btn w3-padding-small"> сьогодні: {{date.today | date :
 			'shortDate'}} </a>
+		<div class="w3-right">
+			<button class="w3-border w3-small"
+				data-ng-click="filter.filterToExcellCsv()">
+				<i class="fa fa-file-excel-o" aria-hidden="true"></i> excel
+			</button>
+			<a href="/f/analytics.html{{date.parameterAddDay()}}" class="w3-btn">Аналітика
+			</a>
+		</div>
 	</div>
-	
+
 	Hello World reports
 	дений звіт
 	місячний звіт
