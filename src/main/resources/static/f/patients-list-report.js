@@ -38,7 +38,7 @@ app.controller('myCtrl', function($scope, $http, $interval, $filter) {
 			o.pl_data_sumA = {}
 			o.pl_data_sumA.sql = "SELECT " +
 			"col_238, SUM(sum) sum, COUNT(sum) cnt, SUM(cnt) sum_cnt, COUNT(cnt) cnt_cnt " +
-			"FROM ( " + o.pl_data.sql + " ) x GROUP BY col_238"
+			"FROM ( " + o.pl_data.sql + " ) x GROUP BY col_238 ORDER BY col_238"
 			$scope.date.setDay_to_obj(o.pl_data_sumA)
 			readSql(o.pl_data_sumA, o.pl_sumA)
 		}
