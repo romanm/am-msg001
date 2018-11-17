@@ -1,6 +1,6 @@
-<div class="w13-code" s1tyle="width: 333px;">
-	<table class="w3-table">
-		<thead>
+<div >
+	<table style="border-collapse: collapse; ">
+		<thead class="w3-blue-grey">
 			<tr class="w3-tiny">
 				<th>Дата-час обстеженя</th>
 				<th>П.І.Б.</th>
@@ -10,7 +10,19 @@
 				<th>Пільги</th>
 			</tr>
 		</thead>
-		<tr data-ng-repeat="r in oo.list">
+		<tr data-ng-repeat-start="r in oo.pl_sum.list">
+			<td colspan="2"></td>
+			<td colspan="1">{{r.cnt_cnt}}</td>
+			<td colspan="1"></td>
+			<td>{{r.cnt}}</td>
+		</tr>
+		<tr data-ng-repeat-end>
+			<td colspan="2"></td>
+			<td colspan="1">{{r.sum_cnt}}</td>
+			<td colspan="1"></td>
+			<td>{{r.sum}}</td>
+		</tr>
+		<tr data-ng-repeat="r in oo.pl.list">
 			<td
 				data-ng-repeat="c in ['col_236', 'groupName','cnt','col_239','sum', 'col_5218']"
 				class="w3-border w13-border-white w3-hover-border-gray"

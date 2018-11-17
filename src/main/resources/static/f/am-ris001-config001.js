@@ -77,10 +77,16 @@ var initConfig = function($scope, $http, $interval){
 			return addDay + $scope.request.parameters.addDay*1
 		return addDay
 	}
+	$scope.date.setDay_to_obj=function(o){
+		o.year=$scope.date.seekDay.getFullYear()
+		o.month=$scope.date.seekDay.getMonth()+1
+		o.day=$scope.date.seekDay.getDate()
+	}
 	$scope.date.setDay_pl_data=function(o){
-		o.pl_data.year=$scope.date.seekDay.getFullYear()
-		o.pl_data.month=$scope.date.seekDay.getMonth()+1
-		o.pl_data.day=$scope.date.seekDay.getDate()
+		$scope.date.setDay_to_obj(o.pl_data)
+//		o.pl_data.year=$scope.date.seekDay.getFullYear()
+//		o.pl_data.month=$scope.date.seekDay.getMonth()+1
+//		o.pl_data.day=$scope.date.seekDay.getDate()
 	}
 	$scope.date.seekDayReadSql=function(o){
 		this.setDay_pl_data(o)
@@ -150,3 +156,14 @@ sql.read_table_config=function(){
 	return "SELECT * FROM doc d, docbody s \n" +
 	"WHERE parent = :tableId AND s.docbody_id=d.doc_id AND doctype!=4"
 }
+
+	sql.read_table_group_col=function(col_nnn){
+		return ("SELECT * FROM ( " +
+				"SELECT :col_nnn groupName, COUNT(:col_nnn) cnt, SUM(col_240) sum, " +
+				"min(col_236) col_236, min(col_239) col_239, min(col_5218) col_5218 " +
+				"FROM ( " +
+				":read_table_sql " +
+				" ) GROUP BY :col_nnn " +
+				" ) x ORDER BY col_236 ").replace(/:col_nnn/g,col_nnn)
+				//" ) x ORDER BY CNT DESC ").replace(/:col_nnn/g,col_nnn)
+	}
