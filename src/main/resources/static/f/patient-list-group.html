@@ -1,5 +1,31 @@
-<div >
-	<table style="border-collapse: collapse; ">
+<div data-ng-if="principal.name">
+	<table style="border-collapse: collapse;">
+		<tbody>
+			<tr data-ng-repeat-start="r in oo.pl_sumA.list">
+				<td colspan="2">{{r.col_238}}</td>
+				<td colspan="1">{{r.cnt_cnt}}</td>
+				<td colspan="1"></td>
+				<td>{{r.cnt}}</td>
+			</tr>
+			<tr data-ng-repeat-end>
+				<td colspan="2"></td>
+				<td colspan="1">{{r.sum_cnt}}</td>
+				<td colspan="1"></td>
+				<td>{{r.sum}}</td>
+			</tr>
+			<tr data-ng-repeat-start="r in oo.pl_sum.list" class="w3-border-top">
+				<td colspan="2"></td>
+				<td colspan="1">{{r.cnt_cnt}}</td>
+				<td colspan="1"></td>
+				<td>{{r.cnt}}</td>
+			</tr>
+			<tr data-ng-repeat-end>
+				<td colspan="2"></td>
+				<td colspan="1">{{r.sum_cnt}}</td>
+				<td colspan="1"></td>
+				<td>{{r.sum}}</td>
+			</tr>
+		</tbody>
 		<thead class="w3-blue-grey">
 			<tr class="w3-tiny">
 				<th>Дата-час обстеженя</th>
@@ -10,38 +36,16 @@
 				<th>Пільги</th>
 			</tr>
 		</thead>
-		<tr data-ng-repeat-start="r in oo.pl_sumA.list">
-			<td colspan="2">{{r.col_238}}</td>
-			<td colspan="1">{{r.cnt_cnt}}</td>
-			<td colspan="1"></td>
-			<td>{{r.cnt}}</td>
-		</tr>
-		<tr data-ng-repeat-end >
-			<td colspan="2"></td>
-			<td colspan="1">{{r.sum_cnt}}</td>
-			<td colspan="1"></td>
-			<td>{{r.sum}}</td>
-		</tr>
-		<tr data-ng-repeat-start="r in oo.pl_sum.list" class="w3-border-top">
-			<td colspan="2"></td>
-			<td colspan="1">{{r.cnt_cnt}}</td>
-			<td colspan="1"></td>
-			<td>{{r.cnt}}</td>
-		</tr>
-		<tr data-ng-repeat-end>
-			<td colspan="2"></td>
-			<td colspan="1">{{r.sum_cnt}}</td>
-			<td colspan="1"></td>
-			<td>{{r.sum}}</td>
-		</tr>
-		<tr data-ng-repeat="r in oo.pl.list">
-			<td
-				data-ng-repeat="c in ['col_236', 'groupName','cnt','col_239','sum', 'col_5218']"
-				class="w3-border w13-border-white w3-hover-border-gray"
-				data-ng-class="{'w3-tiny':'col_236'==c}" data-ng-switch="c">
-				<div data-ng-switch-when="col_236">{{r[c] | date:'short'}}</div>
-				<div data-ng-switch-default>{{r[c]}}</div>
-			</td>
-		</tr>
+		<tbody>
+			<tr data-ng-repeat="r in oo.pl.list">
+				<td
+					data-ng-repeat="c in ['col_236', 'groupName','cnt','col_239','sum', 'col_5218']"
+					class="w3-border w13-border-white w3-hover-border-gray"
+					data-ng-class="{'w3-tiny':'col_236'==c}" data-ng-switch="c">
+					<div data-ng-switch-when="col_236">{{r[c] | date:'short'}}</div>
+					<div data-ng-switch-default>{{r[c]}}</div>
+				</td>
+			</tr>
+		</tbody>
 	</table>
 </div>
