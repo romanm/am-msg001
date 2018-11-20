@@ -6,18 +6,17 @@
 		</thead>
 		<tbody>
 			<tr data-ng-repeat-start="r in oo.pl_sumA.list"
-			data-ng-if="'КТ'==r.col_238"
-			>
+				data-ng-if="'КТ'==r.col_238">
 				<td colspan="2">{{r.col_238}} - {{date.seekDay | date :
-		'mediumDate'}}</td>
+					'mediumDate'}}</td>
 				<td colspan="1">{{r.cnt_cnt}}</td>
-				<td colspan="1"></td>
+				<td colspan="1">1</td>
 				<td>{{r.cnt}}</td>
 			</tr>
-			<tr data-ng-repeat-end>
+			<tr data-ng-repeat-end data-ng-if="'КТ'==r.col_238">
 				<td colspan="2"></td>
 				<td colspan="1">{{r.sum_cnt}}</td>
-				<td colspan="1"></td>
+				<td colspan="1">2</td>
 				<td>{{r.sum}}</td>
 			</tr>
 		</tbody>
@@ -42,15 +41,14 @@
 		</thead>
 		<tbody>
 			<tr data-ng-repeat-start="r in oo.pl_sumA.list"
-			data-ng-if="'МРТ'==r.col_238"
-			>
+				data-ng-if="'МРТ'==r.col_238">
 				<td colspan="2">{{r.col_238}} - {{date.seekDay | date :
-		'mediumDate'}}</td>
+					'mediumDate'}}</td>
 				<td colspan="1">{{r.cnt_cnt}}</td>
 				<td colspan="1"></td>
 				<td>{{r.cnt}}</td>
 			</tr>
-			<tr data-ng-repeat-end>
+			<tr data-ng-repeat-end data-ng-if="'МРТ'==r.col_238">
 				<td colspan="2"></td>
 				<td colspan="1">{{r.sum_cnt}}</td>
 				<td colspan="1"></td>
