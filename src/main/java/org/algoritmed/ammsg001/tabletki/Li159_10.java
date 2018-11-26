@@ -104,7 +104,8 @@ public class Li159_10  extends XCommon{
 	}
 	private WebResponse getExcelResponse() throws FailingHttpStatusCodeException, MalformedURLException, IOException {
 		WebClient webClient = getWebClient(false, false);
-		String url = "http://159.224.141.10/auth/login";
+		String url = "http://192.168.0.150/auth/login";
+//		String url = "http://159.224.141.10/auth/login";
 		System.err.println(url);
 		HtmlPage page1 = webClient.getPage(url);
 		// find the login form
