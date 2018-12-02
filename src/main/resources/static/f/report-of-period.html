@@ -64,6 +64,10 @@
 							<button class="w3-border w3-medium"
 							data-ng-click="table_reports.seekMonth()"
 							>ok</button>
+							<div>
+							min
+							max
+							</div>
 						</td>
 					</tr>
 					<tr>
@@ -77,14 +81,40 @@
 		<table>
 			<thead class="w3-blue-grey w3-tiny">
 				<tr>
+					<th colspan="2">Обстеженя/Ім'я
+						місяць:{{table_reports.seek_parameters.month}}</th>
+					<th title="Кількість">*</th>
+					<th title="Сумма">∑</th>
+				</tr>
+			</thead>
+			<tbody>
+				<tr data-ng-repeat-start="tr in table_reports.order_239_236_list"
+					data-ng-if="tr.col_239!=table_reports.order_239_236_list[-1+$index].col_239">
+					<td colspan="2" class="w3-border am-b">{{tr.col_239}}</td>
+					<td>{{table_reports.group_239[tr.col_239].cnt_239}}</td>
+					<td class="w3-border">{{table_reports.group_239[tr.col_239].sum_240}}</td>
+				</tr>
+				<tr data-ng-repeat-end>
+					<td class="w3-tiny">{{tr.col_236 | date:'short'}}</td>
+					<td class="w3-border">
+						{{tr.col_237}}</td>
+					<td colspan="2" class="w3-right-align">{{tr.col_240}}</td>
+				</tr>
+			</tbody>
+		</table>
+		<table>
+			<thead class="w3-blue-grey w3-tiny">
+				<tr>
 					<th>Обстеженя</th>
-					<th>Кількість</th>
+					<th title="Кількість">*</th>
+					<th title="Сумма">∑</th>
 				</tr>
 			</thead>
 			<tbody>
 				<tr data-ng-repeat="tr in table_reports.group_239_list">
 					<td>{{tr.col_239}}</td>
 					<td>{{tr.cnt_239}}</td>
+					<td>{{tr.sum_240}}</td>
 				</tr>
 			</tbody>
 		</table>
