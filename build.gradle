@@ -35,7 +35,7 @@ dependencies {
 	compile 'net.sourceforge.htmlunit:htmlunit'
 	compile 'dom4j:dom4j'
 	compile 'org.webjars:font-awesome:4.7.0'
-	compile 'org.webjars:angularjs:1.7.4'
+	compile 'org.webjars:angularjs:1.7.5'
 	compile 'org.springframework:spring-jdbc'
 	compile 'org.apache.poi:poi:4.0.0'
 	compile 'org.apache.poi:poi-ooxml:4.0.0'

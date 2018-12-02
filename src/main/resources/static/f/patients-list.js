@@ -421,7 +421,7 @@ $scope.lastDbRead.afterRead = function(){
 		o.pl_data.sql = sql.read_table_day_date_desc().replace(':read_table_sql',
 			o.config.sql_read_table_data
 		)
-//		console.log(o.pl_data.sql)
+		console.log(o.pl_data.sql)
 		o.pl_data.afterRead=function(){
 			console.log(o.pl)
 			o.rowMap = {}
