@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html data-ng-app="myApp" data-ng-controller="myCtrl" lang="uk-UA">
+<title>РІС-адмін</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta charset="utf-8" />
+<link rel="shortcut icon" href="/f/img/algoritmed.ico"
+	type="image/x-icon">
+<script src="/webjars/angularjs/1.7.5/angular.min.js"></script>
+<script src="/webjars/angularjs/1.7.5/angular-sanitize.min.js"></script>
+<script src="/webjars/angularjs/1.7.5/i18n/angular-locale_uk.js"></script>
+<script src="/f/report-of-period.js"></script>
+<link rel="stylesheet" href="/f/css/w3.css">
+<link rel="stylesheet"
+	href="/webjars/font-awesome/4.7.0/css/font-awesome.min.css">
+<body class="{{pageVar.colortheme.theme=='night'?'w3-dark-grey':''}}">
+	<div
+		class="w3-row {{pageVar.colortheme.theme=='night'?'w3-blue-grey':'w3-light-grey'}}">
+		<div class="w3-col w3-container" style="width: 20%">
+			<a href="/" class=" w3-btn w3-hover-shadow"> <i
+				class="fa fa-home w3-large w3-border" aria-hidden="true"></i>
+			</a>
+		</div>
+		<div class="w3-col  w3-center" style="width: 50%">
+			<p>РІС-звіти за період <span class="w3-tiny"> сьогодні: {{table_reports.date_today | date :
+			'shortDate'}}</span> </p>
+		</div>
+		<div class="w3-col w3-container w3-right-align" style="width: 30%">
+			<span ng-include="'/f/login-link.html'"> </span>
+		</div>
+	</div>
+	<div class="w3-row w3-tiny w3-container">
+		<div class="w3-col w3-left" style="width: 25%">
+			<a class="w3-btn" href="/f/reports.html">дений звіт</a> <a
+				class="w3-btn" href="/f/report-of-period.html"> місячний звіт </a>
+		</div>
+		<div class="w3-col w3-right" style="width: 15%">
+			<a href="/f/analytics.html{{date.parameterAddDay()}}"
+				class="w3-btn w3-right">Аналітика </a>
+		</div>
+		<div class="w3-rest w3-center w3-border w3-bordered ">
+			<div class="w3-responsive">
+				<table class="w13-centered w3-table "
+					data-ng-repeat="mm12 in [[1,2,3,4,5,6,7,8,9,10,11,12]]">
+					<tr>
+						<td rowspan="2" class="w3-small" style="vertical-align: middle;">
+							<div class="w3-dropdown-hover">
+								2018 - <sup> {{table_reports.group_yy[2018].cnt_yy}} </sup>
+								<div class="w3-dropdown-content w3-border w3-hover-shadow">
+									<span data-ng-repeat="v in table_reports.group_yy_list "
+										class="w3-button" title="{{v.cnt_yy}}">{{v.yy}}
+									</span>
+								</div>
+							</div>
+							<div>
+								<button class="w3-border"
+									data-ng-click="table_reports.seekMonth()">ok</button>
+							</div>
+						</td>
+						<td class="w3-btn" data-ng-repeat="m in mm12"
+						data-ng-click="table_reports.setSeekMonth(m)"
+							data-ng-class="{'w3-green':m==table_reports.seek_parameters.month}"
+						>{{m}}</td>
+						<td rowspan="2" style="vertical-align: middle;">
+							<button class="w3-border w3-medium"
+							data-ng-click="table_reports.seekMonth()"
+							>ok</button>
+						</td>
+					</tr>
+					<tr>
+						<td data-ng-repeat="m in mm12" class="w3-right-alignt">{{table_reports.group_m[m].cnt_m}}</td>
+					</tr>
+				</table>
+			</div>
+		</div>
+	</div>
+	<div class="w3-container">
+		<table>
+			<thead class="w3-blue-grey w3-tiny">
+				<tr>
+					<th>Обстеженя</th>
+					<th>Кількість</th>
+				</tr>
+			</thead>
+			<tbody>
+				<tr data-ng-repeat="tr in table_reports.group_239_list">
+					<td>{{tr.col_239}}</td>
+					<td>{{tr.cnt_239}}</td>
+				</tr>
+			</tbody>
+		</table>
+	</div>
+</body>
+</html>
