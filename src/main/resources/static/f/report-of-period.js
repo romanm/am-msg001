@@ -52,6 +52,7 @@ sql_lib.sql_read_group_239 = function(){
 			"FROM (" + sql_lib.sql_read_wmyy() + ") x " +
 			"WHERE yy=:year AND m=:month GROUP BY col_238,col_239 ORDER BY col_238,col_239"
 }
+
 function read_239($scope){
 	readSql({
 		sql:sql_lib.sql_read_group_239(),
