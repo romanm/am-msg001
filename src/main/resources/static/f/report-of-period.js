@@ -5,10 +5,14 @@ app.controller('myCtrl', function($scope, $http, $interval, $filter) {
 	$scope.table_reports = {}
 	$scope.table_reports.seek_parameters = {}
 	$scope.table_reports.date_today = new Date()
+	$scope.table_reports.seek_parameters.year = $scope.table_reports.date_today.getFullYear()
 	$scope.table_reports.seek_parameters.month = 1+$scope.table_reports.date_today.getMonth()
 	$scope.table_reports.seekMonth = function(){
 		read_239($scope)
 		read_239239_236($scope)
+	}
+	$scope.table_reports.setSeekYear = function(year){
+		$scope.table_reports.seek_parameters.year = year
 	}
 	$scope.table_reports.setSeekMonth = function(month){
 		$scope.table_reports.seek_parameters.month = month
@@ -29,12 +33,14 @@ app.controller('myCtrl', function($scope, $http, $interval, $filter) {
 
 sql_lib.sql_read_order_239_236 = function(){
 	return "SELECT * " +
-	"FROM (" + sql_lib.sql_read_wmyy() + ") x WHERE m=:month ORDER BY col_239,col_236"
+	"FROM (" + sql_lib.sql_read_wmyy() + ") x " +
+	"WHERE yy=:year AND m=:month ORDER BY col_238,col_239,col_236"
 }
 function read_239239_236($scope){
 	readSql({
 		sql:sql_lib.sql_read_order_239_236(),
 		month:$scope.table_reports.seek_parameters.month,
+		year:$scope.table_reports.seek_parameters.year,
 		afterRead:function(response){
 			$scope.table_reports.order_239_236_list = response.data.list
 			console.log($scope.table_reports.order_239_236_list)
@@ -43,12 +49,14 @@ function read_239239_236($scope){
 }
 sql_lib.sql_read_group_239 = function(){
 	return "SELECT col_239, count(col_239) cnt_239, sum(col_240) sum_240 " +
-			"FROM (" + sql_lib.sql_read_wmyy() + ") x WHERE m=:month GROUP BY col_239 ORDER BY col_239"
+			"FROM (" + sql_lib.sql_read_wmyy() + ") x " +
+			"WHERE yy=:year AND m=:month GROUP BY col_238,col_239 ORDER BY col_238,col_239"
 }
 function read_239($scope){
 	readSql({
 		sql:sql_lib.sql_read_group_239(),
 		month:$scope.table_reports.seek_parameters.month,
+		year:$scope.table_reports.seek_parameters.year,
 		afterRead:function(response){
 			console.log(response.data.list)
 			$scope.table_reports.group_239_list = response.data.list

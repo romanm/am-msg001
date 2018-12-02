@@ -47,6 +47,7 @@
 								2018 - <sup> {{table_reports.group_yy[2018].cnt_yy}} </sup>
 								<div class="w3-dropdown-content w3-border w3-hover-shadow">
 									<span data-ng-repeat="v in table_reports.group_yy_list "
+									data-ng-click="table_reports.setSeekYear(v.yy)"
 										class="w3-button" title="{{v.cnt_yy}}">{{v.yy}}
 									</span>
 								</div>
