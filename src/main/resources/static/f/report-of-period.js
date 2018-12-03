@@ -9,6 +9,7 @@ app.controller('myCtrl', function($scope, $http, $interval, $filter) {
 	$scope.table_reports.seek_parameters.month = 1+$scope.table_reports.date_today.getMonth()
 	$scope.table_reports.seekMonth = function(){
 		read_239($scope)
+		read_238($scope)
 		read_239239_236($scope)
 	}
 	$scope.table_reports.setSeekYear = function(year){
@@ -26,6 +27,7 @@ app.controller('myCtrl', function($scope, $http, $interval, $filter) {
 			read_months($scope)
 			read_years($scope)
 			read_239($scope)
+			read_238($scope)
 			read_239239_236($scope)
 		}
 	})
@@ -47,13 +49,38 @@ function read_239239_236($scope){
 		},
 	})
 }
+sql_lib.sql_read_group_238 = function(){
+	return "SELECT col_238, count(col_238) cnt_238, sum(col_240) sum_240 " +
+	"FROM (" + sql_lib.sql_read_wmyy() + ") x " +
+	"WHERE yy=:year AND m=:month GROUP BY col_238 ORDER BY col_238 "
+}
+function read_238($scope){
+//	console.log(sql_lib.sql_read_group_238())
+	readSql({
+		sql:sql_lib.sql_read_group_238(),
+		month:$scope.table_reports.seek_parameters.month,
+		year:$scope.table_reports.seek_parameters.year,
+		afterRead:function(response){
+			console.log(response.data.list)
+			$scope.table_reports.group_238_list = response.data.list
+			$scope.table_reports.group_238 = {}
+			angular.forEach(response.data.list, function(v){
+				if(v.col_238){
+					$scope.table_reports.group_238[v.col_238] = v
+				}
+			})
+			console.log($scope.table_reports.group_238)
+		},
+	})
+}
+
 sql_lib.sql_read_group_239 = function(){
 	return "SELECT col_239, count(col_239) cnt_239, sum(col_240) sum_240 " +
 			"FROM (" + sql_lib.sql_read_wmyy() + ") x " +
 			"WHERE yy=:year AND m=:month GROUP BY col_238,col_239 ORDER BY col_238,col_239"
 }
-
 function read_239($scope){
+//	console.log(sql_lib.sql_read_group_239())
 	readSql({
 		sql:sql_lib.sql_read_group_239(),
 		month:$scope.table_reports.seek_parameters.month,
