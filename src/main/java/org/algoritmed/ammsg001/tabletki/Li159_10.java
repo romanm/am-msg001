@@ -38,6 +38,8 @@ import com.gargoylesoftware.htmlunit.html.HtmlTextInput;
 public class Li159_10  extends XCommon{
 	@Autowired protected Environment env;
 	SimpleDateFormat format = new SimpleDateFormat("dd.MM.yyyy kk:mm"); 
+	SimpleDateFormat format2 = new SimpleDateFormat("yyyy-MM-dd kk:mm"); 
+//	SimpleDateFormat format2 = new SimpleDateFormat("yyyy-MM-ddTHH:mm"); 
 	@GetMapping("/li159-10")
 	public @ResponseBody Map<String, Object> test2() throws FailingHttpStatusCodeException, MalformedURLException, IOException, ParseException {
 		return getDayList();
@@ -93,6 +95,10 @@ public class Li159_10  extends XCommon{
 	private Date putTimestamp(Map<String, Object> rowMap, String col_key, String col_value) throws ParseException {
 		Date ts = format.parse(col_value);
 		rowMap.put(col_key, ts);
+		if("visit_ts".equals(col_key)){
+			String ts2 = format2.format(ts).replace(" ", "T");
+			rowMap.put(col_key+"_str", ts2);
+		}
 		return ts;
 	}
 	private Sheet getSheet() throws FailingHttpStatusCodeException, MalformedURLException, IOException {

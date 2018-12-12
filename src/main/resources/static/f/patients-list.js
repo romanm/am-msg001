@@ -305,7 +305,9 @@ $scope.lastDbRead.afterRead = function(){
 			angular.forEach($scope.dataToImport.rows, function(rowObj){
 				if(true || i++<1){
 //					console.log(rowObj)
-					rowObj.col_236 = $filter('date')(new Date(rowObj.visit_ts), 'yyyy-MM-ddTHH:mm')
+//					var visit_ts = new Date(rowObj.visit_ts)
+//					rowObj.col_236 = $filter('date')(visit_ts, 'yyyy-MM-ddTHH:mm')
+					rowObj.col_236 = rowObj.visit_ts_str
 					rowObj.col_237 = rowObj.patient_pip
 					rowObj.col_238 = rowObj.cabinet.split(' ')[1]
 					rowObj.col_239 = rowObj.examination
@@ -421,7 +423,7 @@ $scope.lastDbRead.afterRead = function(){
 		o.pl_data.sql = sql.read_table_day_date_desc().replace(':read_table_sql',
 			o.config.sql_read_table_data
 		)
-		console.log(o.pl_data.sql)
+		//console.log(o.pl_data.sql)
 		o.pl_data.afterRead=function(){
 			console.log(o.pl)
 			o.rowMap = {}
@@ -747,8 +749,8 @@ $scope.lastDbRead.afterRead = function(){
 			})
 		}
 		$scope.priceCalcHelpData = {}
-	//			console.log($scope.priceCalcHelpData)
-	//			console.log(o.col_239)
+		//			console.log($scope.priceCalcHelpData)
+		console.log(o.col_239)
 		$scope.priceCalcHelpData.examination = {}
 		readSql({
 				examination:o.col_239,
@@ -757,15 +759,45 @@ $scope.lastDbRead.afterRead = function(){
 			$scope.priceCalcHelpData.examination
 		)
 		$scope.priceCalcHelpData.destination = {}
-		console.log(sql.read_examination_prices())
-		console.log(o.col_242)
+//		console.log(sql.read_examination_prices())
+//		console.log(o.col_242)
+		if(o.col_242){
+			readSql({
+				destination:o.col_242,
+				sql:sql.read_destination_procents(),
+			}, $scope.priceCalcHelpData.destination)
+		}
+
 		readSql({
-			destination:o.col_242,
-			sql:sql.read_destination_procents(),
-		}, $scope.priceCalcHelpData.destination)
-
+			sql:$scope.patientList.config.sql_read_table_data+" AND rws.doc_id = "+o.row_id,
+			afterRead:function(response){
+				console.log(response.data)
+				if(response.data.list.length>1){
+					angular.forEach(response.data.list[0], function(v,k){
+						if(k.includes('col_') && k.includes('_id')){
+							if(response.data.list[0][k] != response.data.list[1][k]){
+								var docId_to_delete = Math.max(response.data.list[0][k], response.data.list[1][k])
+								if(!$scope.sql_delete_two_check)
+									$scope.sql_delete_two_check = ''
+								$scope.sql_delete_two_check += 'DELETE FROM doc WHERE doc_id='+docId_to_delete+'; '
+							}
+							
+						}
+					})
+					console.log($scope.sql_delete_two_check)
+					console.log($scope.sql_delete_two_check.length)
+				}
+			},
+		})
 	}
-
+	$scope.click_delete_two_check = function(){
+		console.log($scope.sql_delete_two_check)
+		var data = {
+			sql:$scope.sql_delete_two_check,
+		}
+//		console.log(data)
+		writeSql(data)
+	}
 	$scope.random3=getRandomInt(3)
 });
 
