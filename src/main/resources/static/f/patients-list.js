@@ -309,8 +309,8 @@ console.log('-----lastDbRead.afterRead----------')
 //					var visit_ts = new Date(rowObj.visit_ts)
 //					rowObj.col_236 = $filter('date')(visit_ts, 'yyyy-MM-ddTHH:mm')
 					rowObj.col_236 = rowObj.visit_ts_str
-//					rowObj.col_237 = rowObj.patient_pip
-					rowObj.col_237 = rowObj.patient_pip.replace("'","''")
+					rowObj.col_237 = rowObj.patient_pip
+//					rowObj.col_237 = rowObj.patient_pip.replace("'","''")
 					rowObj.col_238 = rowObj.cabinet.split(' ')[1]
 					rowObj.col_239 = rowObj.examination
 					rowObj.col_241 = rowObj.physician
@@ -320,6 +320,8 @@ console.log('-----lastDbRead.afterRead----------')
 					rowObj.col_33504 = "'"+rowObj.patient_birthdate.split('\.').reverse().toString().replace(/,/g,'-')+"'"
 					rowObj.col_33505 = rowObj.patient_phone
 					var col_data = $scope.patientList.config.json_create_table
+					console.log(sql.read_table_visit()
+							.replace(':read_table_sql', $scope.patientList.config.sql_read_table_data))
 					readSql({
 						sql:sql.read_table_visit()
 							.replace(':read_table_sql', $scope.patientList.config.sql_read_table_data),
