@@ -1,5 +1,6 @@
 package org.algoritmed.ammsg001.tabletki;
 
+import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.MalformedURLException;
@@ -15,6 +16,8 @@ import java.util.Map;
 import org.algoritmed.ammsg001.XCommon;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
+import org.apache.poi.ss.usermodel.Workbook;
+import org.apache.poi.ss.usermodel.WorkbookFactory;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.PropertySource;
@@ -40,10 +43,12 @@ public class Li159_10  extends XCommon{
 	SimpleDateFormat format = new SimpleDateFormat("dd.MM.yyyy kk:mm"); 
 	SimpleDateFormat format2 = new SimpleDateFormat("yyyy-MM-dd kk:mm"); 
 //	SimpleDateFormat format2 = new SimpleDateFormat("yyyy-MM-ddTHH:mm"); 
+
 	@GetMapping("/li159-10")
 	public @ResponseBody Map<String, Object> test2() throws FailingHttpStatusCodeException, MalformedURLException, IOException, ParseException {
 		return getDayList();
 	}
+
 	private Map<String, Object> getDayList() throws MalformedURLException, IOException, ParseException {
 		Map<String, Object> m = new HashMap<>();
 		Map<String, Integer> cols_number = new HashMap<>();
@@ -61,6 +66,7 @@ public class Li159_10  extends XCommon{
 		cols_number.put("patient_birthdate", 5);
 		ArrayList<Map<String, Object>> rows = new ArrayList<>();
 		m.put("rows", rows);
+//		Sheet sheet = getSheet2();
 		Sheet sheet = getSheet();
 		Iterator<Row> rowIterator = sheet.rowIterator();
 		long	min = new Date().getTime(), max = 0, current = 0;
@@ -92,6 +98,7 @@ public class Li159_10  extends XCommon{
 				);
 		return m;
 	}
+
 	private Date putTimestamp(Map<String, Object> rowMap, String col_key, String col_value) throws ParseException {
 		Date ts = format.parse(col_value);
 		rowMap.put(col_key, ts);
@@ -101,6 +108,13 @@ public class Li159_10  extends XCommon{
 		}
 		return ts;
 	}
+
+	private Sheet getSheet2() throws FailingHttpStatusCodeException, MalformedURLException, IOException {
+		Workbook wb = WorkbookFactory.create(new File("/home/roman/algoritmed/git-1/am-msg001-config/"
+				+"report_19.01.2019_19.01.2019.xlsx"));
+		Sheet sheet = wb.getSheetAt(0);
+		return sheet;
+	}
 	private Sheet getSheet() throws FailingHttpStatusCodeException, MalformedURLException, IOException {
 		WebResponse webResponse = getExcelResponse();
 		InputStream contentAsStream = webResponse.getContentAsStream();
@@ -108,6 +122,7 @@ public class Li159_10  extends XCommon{
 		Sheet sheet = workbook.getSheetAt(0);
 		return sheet;
 	}
+
 	private WebResponse getExcelResponse() throws FailingHttpStatusCodeException, MalformedURLException, IOException {
 		WebClient webClient = getWebClient(false, false);
 		String url = "http://192.168.0.150/auth/login";

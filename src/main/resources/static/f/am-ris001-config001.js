@@ -40,8 +40,8 @@ var initConfig = function($scope, $http, $interval){
 				$scope.lastDbRead.lastCallTime = new Date()
 				$scope.lastDbRead.sql =
 					sql.read_table_max_min_date()
-					.replace(':read_table_sql',$scope.patientList.config.sql_read_table_data)
-					readSql($scope.lastDbRead)
+					.replace(':read_table_sql', $scope.patientList.config.sql_read_table_data)
+				readSql($scope.lastDbRead)
 			}
 		}
 	}

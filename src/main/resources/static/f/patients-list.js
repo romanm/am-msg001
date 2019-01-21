@@ -291,6 +291,7 @@ var cntImport={
 }
 
 $scope.lastDbRead.afterRead = function(){
+console.log('-----lastDbRead.afterRead----------')
 //	$scope.lastDbRead.cntImport = cntImport
 		$scope.lastDbRead.cntImport = Object.assign({}, cntImport)
 //		this.importCnt++
@@ -308,7 +309,8 @@ $scope.lastDbRead.afterRead = function(){
 //					var visit_ts = new Date(rowObj.visit_ts)
 //					rowObj.col_236 = $filter('date')(visit_ts, 'yyyy-MM-ddTHH:mm')
 					rowObj.col_236 = rowObj.visit_ts_str
-					rowObj.col_237 = rowObj.patient_pip
+//					rowObj.col_237 = rowObj.patient_pip
+					rowObj.col_237 = rowObj.patient_pip.replace("'","''")
 					rowObj.col_238 = rowObj.cabinet.split(' ')[1]
 					rowObj.col_239 = rowObj.examination
 					rowObj.col_241 = rowObj.physician
@@ -388,7 +390,8 @@ $scope.lastDbRead.afterRead = function(){
 	}
 
 	$scope.lastDbRead.reread = function(){
-		console.log($filter('date')(new Date(this.maxInDB), 'medium'))
+		console.log(this.maxInDB)
+		//console.log($filter('date')(new Date(this.maxInDB), 'medium'))
 		exe_fn.httpGet($scope.lastDbRead.requestToImport)
 	}
 
@@ -423,7 +426,9 @@ $scope.lastDbRead.afterRead = function(){
 		o.pl_data.sql = sql.read_table_day_date_desc().replace(':read_table_sql',
 			o.config.sql_read_table_data
 		)
+		console.log('o.pl_data.sql')
 //		console.log(o.pl_data.sql)
+		test1()
 		o.pl_data.afterRead=function(){
 			console.log(o.pl)
 			o.rowMap = {}
@@ -438,7 +443,12 @@ $scope.lastDbRead.afterRead = function(){
 		$scope.date.setDay_pl_data(o)
 		o.pl = {}
 		readSql(o.pl_data, o.pl)
-	},
+	}
+	var test1 = function(){
+		var pip = "По'допригора Юлія Олександрівна"
+		console.log(pip)
+		console.log(pip.replace("'","''"))
+	}
 	$scope.patientList.col_keys={
 		col_236:'дата-час обстеженя',
 		col_237:' П.І.Б.',
