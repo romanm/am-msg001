@@ -428,9 +428,7 @@ console.log('-----lastDbRead.afterRead----------')
 		o.pl_data.sql = sql.read_table_day_date_desc().replace(':read_table_sql',
 			o.config.sql_read_table_data
 		)
-		console.log('o.pl_data.sql')
-//		console.log(o.pl_data.sql)
-		test1()
+		console.log('o.pl_data.sql\n',o.pl_data.sql)
 		o.pl_data.afterRead=function(){
 			console.log(o.pl)
 			o.rowMap = {}
@@ -445,11 +443,6 @@ console.log('-----lastDbRead.afterRead----------')
 		$scope.date.setDay_pl_data(o)
 		o.pl = {}
 		readSql(o.pl_data, o.pl)
-	}
-	var test1 = function(){
-		var pip = "По'допригора Юлія Олександрівна"
-		console.log(pip)
-		console.log(pip.replace("'","''"))
 	}
 	$scope.patientList.col_keys={
 		col_236:'дата-час обстеженя',
