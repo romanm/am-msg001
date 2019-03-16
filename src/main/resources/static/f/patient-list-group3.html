@@ -1,0 +1,26 @@
+<div data-ng-if="principal.name" class="w3-container">
+	<table data-ng-repeat="o in [patientList]" class="w3-table"
+		style="margin-left: auto; margin-right: auto;">
+		<thead class="w3-tiny w3-gray">
+			<tr>
+				<th>{{patientList.col_group_keys.group_name}}<span
+					title="{{filter.group}}">:
+						{{patientList.col_keys[filter.group]}} </span>
+				</th>
+				<th>{{patientList.col_group_keys.cnt}}<span
+					data-ng-if="patientList.pl.calcAll.cnt">: {{patientList.pl.calcAll.cnt}}</span>
+				</th>
+				<th>{{patientList.col_group_keys.sum}}<span
+					data-ng-if="patientList.pl.calcAll.sum">: {{patientList.pl.calcAll.sum}}</span>
+				</th>
+			</tr>
+		</thead>
+		<tbody>
+			<tr data-ng-repeat="r in o.pl.list">
+				<td class="w3-border w3-border-gray">{{r.groupName}}</td>
+				<td class="w3-border w3-border-gray">{{r.cnt}}</td>
+				<td class="w3-border w3-border-gray">{{r.sum}}</td>
+			</tr>
+		</tbody>
+	</table>
+</div>

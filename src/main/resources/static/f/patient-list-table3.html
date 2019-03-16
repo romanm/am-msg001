@@ -1,0 +1,29 @@
+<div>
+	<table data-ng-repeat="o in [patientList]" class="w3-table"
+		style="margin-left: auto; margin-right: auto;">
+		<tr class="w3-tiny w3-gray">
+			<th data-ng-repeat="(ck,cv) in o.col_keys" title="{{ck}}"
+				data-ng-switch="cv">{{cv}}</th>
+		</tr>
+		<tr data-ng-repeat="tr in o.pl.list"
+			data-ng-class="{'w3-green':tr.inserted}">
+			<td data-ng-repeat="(ck,cv) in o.col_keys" data-ng-switch="ck"
+				data-ng-class="{'w3-green':tr[ck+'_update']==1}"
+				class="w3-border w3-border-gray w3-hover-border-gray">
+				<div data-ng-switch-when="col_236"
+					title="{{tr[ck] | date : 'longDate'}}">{{tr[ck] | date :
+					'shortDate' }} {{tr[ck] | date : 'HH:mm'}}</div>
+				<div data-ng-switch-when="col_240">
+					<div data-ng-include="'/f/patient-modal2.html'"></div>
+				</div>
+				<div data-ng-switch-when="col_242">
+					<span title="{{tr.col_415}}"
+						data-ng-bind-html="highlight(tr[ck], patientList.seek)"></span> <span
+						class="w3-tiny" data-ng-if="tr.col_14207">чек:{{tr.col_14207}}</span>
+				</div>
+				<div data-ng-switch-default
+					data-ng-bind-html="highlight(tr[ck], patientList.seek)"></div>
+			</td>
+		</tr>
+	</table>
+</div>
