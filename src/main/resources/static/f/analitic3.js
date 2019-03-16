@@ -1,7 +1,7 @@
 app.controller('myCtrl', function($scope, $http, $interval, $filter) {
 	initApp($scope, $http)
 	initConfig($scope, $http, $interval)
-	initFilter($scope, $http)
+	initFilter($scope, $http, $filter)
 	$scope.filter.fromDate = ''+new Date().getDate()
 
 	console.log($scope,$scope.filter)
@@ -16,6 +16,14 @@ app.controller('myCtrl', function($scope, $http, $interval, $filter) {
 	})
 	$scope.patientList = {}
 	$scope.patientList.config = {}
+	readSql({
+		sql:sql.read_table_config()+' AND doctype=20',
+		tableId:235,
+		afterRead:function(response){
+			$scope.patientList.config.json_create_table = JSON.parse(response.data.list[0].docbody)
+			console.log($scope.patientList.config.json_create_table)
+		}
+	})
 
 	$scope.patientList.col_group_keys={
 		group_name:'імʼя групи',
@@ -35,7 +43,7 @@ app.controller('myCtrl', function($scope, $http, $interval, $filter) {
 
 })
 
-var initFilter = function($scope, $http){
+var initFilter = function($scope, $http, $filter){
 	console.log(' - initFilter - ')
 	$scope.filter = {}
 	$scope.filter.filterOnPayment = function(sourceObject,addObjectName){
@@ -168,12 +176,13 @@ var initFilter = function($scope, $http){
 		console.log(123)
 		$scope.filter.filterToWinExcellCsv()
 	}
-	$scope.filter.filterToWinExcellCsv = function(){
+	$scope.filter.filterToWinExcellCsv001 = function(){
+		console.log(234)
 		var csvFile = ''
-//		angular.forEach($scope.patientList.col_keys, function(v,k){
-//			csvFile += v.trim()+';'
-////			csvFile += v.trim()+','
-//		})
+		angular.forEach($scope.patientList.col_keys, function(v,k){
+			csvFile += v.trim()+';'
+//			csvFile += v.trim()+','
+		})
 //			console.log($scope.patientList.config.json_create_table)
 		angular.forEach($scope.patientList.config.json_create_table, function(vCol,kn){
 //			console.log(vCol)
@@ -181,9 +190,11 @@ var initFilter = function($scope, $http){
 			csvFile += vCol.fieldname.trim()+';'
 		})
 		csvFile += '\r\n'
-		console.log($scope.patientList.config.json_create_table)
+//		console.log(csvFile)
+//		console.log($scope.patientList.config.json_create_table)
 		angular.forEach($scope.patientList.pl.list, function(v){
 			angular.forEach($scope.patientList.config.json_create_table, function(vCol,kn){
+//			angular.forEach($scope.patientList.col_keys, function(vCol,kn){
 				var k = 'col_'+kn
 			//angular.forEach($scope.patientList.col_keys, function(vCol,k){
 				var vC
@@ -203,7 +214,7 @@ var initFilter = function($scope, $http){
 			})
 			csvFile += '\r\n'
 		})
-//		console.log(csvFile)
+		console.log(csvFile)
 		var ts = new Date().toISOString().split('\.')[0]
 //		loadVarAsFile(csvFileUTF16, 'export-'+ts+'.csv', 'text/csv;charset=UTF-16LE;')
 //		console.log(ts)
