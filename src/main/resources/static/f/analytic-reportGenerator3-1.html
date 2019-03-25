@@ -2,64 +2,6 @@
 	<div class="w3-row">
 		<div class="w3-col w3-container" style="width: 80%">
 			Вибірка
-			<table>
-				<tr>
-					<td><button class="w3-border"
-							ng-click="filter.filterOnDateClean()">Скасувати</button>
-						{{gui.filterOnDate}} з</td>
-					<td><input class="w3-border am-width-100pr" type="text"
-						data-ng-blur="filter.blurDate('fromDate')"
-						data-ng-change="filter.checkDate('fromDate')"
-						data-ng-model="filter.fromDate" placeholder="дд-мм-рр"> </td>
-						<td>до</td>
-					<td><input data-ng-blur="filter.blurDate('toDate')"
-						data-ng-change="filter.checkDate('toDate')" class="w3-border am-width-100pr"
-						type="text" data-ng-model="filter.toDate" placeholder="дд-мм-рр"></td>
-					<td><button class="w3-border"
-							ng-click="filter.filterOnPayment()">OK</button></td>
-				</tr>
-				<tr>
-					<td><button class="w3-border"
-							data-ng-click="filter.filterOnPayTypeClean()">Скасувати</button></td>
-					<td><select class="w3-border am-width-100pr"
-						ng-model="filter.payment_type">
-							<option data-ng-repeat="x in pageVar.site_config.payment_type"
-								value="{{x.name}}">{{x.name}}</option>
-					</select></td>
-					<td colspan="2"><span
-						data-ng-if="true||filter.payment_type"> <span class="am-b">∑</span>
-							{{filter.payment_type_sum()}}
-					</span></td>
-				</tr>
-				<tr>
-					<td><button class="w3-border"
-							ng-click="filter.filterOnPaymentClean()">Скасувати</button></td>
-					<td><input class="w3-border am-width-100pr" type="number"
-						data-ng-model="filter.minPayment" placeholder="min"></td>
-					<td></td>
-					<td><input class="w3-border am-width-100pr" type="number"
-						data-ng-model="filter.maxPayment" placeholder="max"></td>
-				</tr>
-				<tr>
-					<td><button class="w3-border "
-							data-ng-click="filter.filterOnApparatClean()">Скасувати</button></td>
-					<td><select class="w3-border am-width-100pr" ng-model="filter.apparat_type">
-							<option data-ng-repeat="x in ['КТ','МРТ']" value="{{x}}">{{x}}</option>
-					</select></td>
-				</tr>
-				<tr>
-					<td><button class="w3-border"
-							data-ng-click="filter.filterOnPrivilegeClean()">Скасувати</button></td>
-					<td><select class="w3-border am-width-100pr"
-						ng-model="filter.payment_privilege">
-							<option
-								data-ng-repeat="x in pageVar.site_config.payment_privileges"
-								value="{{x.name}}">{{x.name}}</option>
-					</select></td>
-				</tr>
-			</table>
-			<!-- 
-			
 			<div>
 				<button class="w3-border" ng-click="filter.filterOnDateClean()">Скасувати</button>
 				{{gui.filterOnDate}} з <input class="w3-border" type="text"
@@ -107,9 +49,6 @@
 						value="{{x.name}}">{{x.name}}</option>
 				</select>
 			</div>
-			
-			 -->
-			
 			<div>
 				Згрупувати по: <a href="#"
 					data-ng-click="filter.filterGroup('col_237')"

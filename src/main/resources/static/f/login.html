@@ -3,7 +3,8 @@
 <title>РІС-адмін</title>
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta charset="utf-8" />
-<link rel="shortcut icon" href="/f/img/algoritmed.ico" type="image/x-icon">
+<link rel="shortcut icon" href="/f/img/algoritmed.ico"
+	type="image/x-icon">
 <script src="/webjars/angularjs/1.7.7/angular.min.js"></script>
 <script src="/webjars/angularjs/1.7.7/angular-sanitize.min.js"></script>
 <script src="/webjars/angularjs/1.7.7/i18n/angular-locale_uk.js"></script>
@@ -15,7 +16,8 @@
 <link rel="stylesheet"
 	href="/webjars/font-awesome/4.7.0/css/font-awesome.min.css">
 <body class="{{pageVar.colortheme.theme=='night'?'w3-dark-grey':''}}">
-	<div class="w3-row {{pageVar.colortheme.theme=='night'?'w3-blue-grey':'w3-light-grey'}}">
+	<div
+		class="w3-row {{pageVar.colortheme.theme=='night'?'w3-blue-grey':'w3-light-grey'}}">
 		<div class="w3-col w3-container" style="width: 20%">
 			<a href="/" class=" w3-btn w3-hover-shadow"> <i
 				class="fa fa-home w3-large w3-border" aria-hidden="true"></i>
@@ -40,7 +42,7 @@
 				<div class="w3-row">
 					<div class="w3-col m3 l3 s3 w3-small">Ім’я користувача</div>
 					<div class="w3-col m9 l9 s9">
-					<!-- 
+						<!-- 
 						<input class="w3-border am-width-100pr" name="user"
 					 -->
 						<input class="w3-border am-width-100pr" name="username"
@@ -55,15 +57,15 @@
 					</div>
 				</div>
 			</div>
-			
+
 			<br>
 			<div>
 				<input class="w3-btn w3-border w3-round" value="Увійти"
 					type="submit"> <a ng-if="principal.name"
 					class="w3-btn w3-border w3-round ng-scope" href="/logout">
-					Вийти з логін </a>
+					Вийти з логін </a> 
 			</div>
-			
+
 		</form>
 	</div>
 

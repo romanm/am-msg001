@@ -445,13 +445,13 @@ console.log('-----lastDbRead.afterRead----------')
 		readSql(o.pl_data, o.pl)
 	}
 	$scope.patientList.col_keys={
-		col_236:'дата-час обстеженя',
+		col_236:'дата-час обстеження',
 		col_237:' П.І.Б.',
-		col_238:' аппарат ',
+		col_238:' апарат ',
 		col_239:' дослідження ',
 		col_240:' вартість ',
 		col_241:' лікар ',
-		col_242:' ЗОЗ направленя ',
+		col_242:' ЗОЗ направлення ',
 	}
 
 	if('analytics'==$scope.request.pathNameValue){
