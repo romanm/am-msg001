@@ -119,6 +119,16 @@ var initFilter = function($scope, $http, $filter){
 		console.log($scope.patientList.pl)
 	}
 	
+
+	$scope.filter.payment_type_sum = function(){
+		var sum = 0
+		if($scope.patientList.pl)
+		angular.forEach($scope.patientList.pl.list,function(v,k){
+			sum +=v.col_240
+		})
+		return sum
+	}
+	
 	$scope.filter.filterGroup = function(col_nnn){
 		console.log(col_nnn)
 		if(this.group != col_nnn)
