@@ -26,9 +26,8 @@
 							<option data-ng-repeat="x in pageVar.site_config.payment_type"
 								value="{{x.name}}">{{x.name}}</option>
 					</select></td>
-					<td colspan="2"><span
-						data-ng-if="true||filter.payment_type"> <span class="am-b">∑</span>
-							{{filter.payment_type_sum()}}
+					<td colspan="2"><span data-ng-if="true||filter.payment_type">
+							<span class="am-b">∑</span> {{filter.payment_type_sum()}}
 					</span></td>
 				</tr>
 				<tr>

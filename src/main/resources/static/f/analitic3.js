@@ -94,7 +94,8 @@ var initFilter = function($scope, $http, $filter){
 		}
 		if(this.group){
 			this.sql = sql.read_table_group_col(this.group).replace(':read_table_sql',this.sql)
-			console.log(this.group, '\n', this.sql)
+			console.log('--basic SQL---')
+//			console.log(this.group, '\n', this.sql)
 		}
 //		console.log(this)
 //		console.log(this.sql)
@@ -121,11 +122,14 @@ var initFilter = function($scope, $http, $filter){
 	
 
 	$scope.filter.payment_type_sum = function(){
+		if($scope.filter.group)
+			return $scope.patientList.pl.calcAll.sum
 		var sum = 0
-		if($scope.patientList.pl)
-		angular.forEach($scope.patientList.pl.list,function(v,k){
-			sum +=v.col_240
-		})
+		if($scope.patientList.pl){
+			angular.forEach($scope.patientList.pl.list,function(v,k){
+				sum +=v.col_240
+			})
+		}
 		return sum
 	}
 	
