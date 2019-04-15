@@ -21,9 +21,10 @@ app.controller('myCtrl', function($scope, $http, $interval, $filter) {
 //			$scope.date.setDay_pl_data(o)
 			o.pl_data.sql = sql.read_table_day_date_desc()
 			.replace(':read_table_sql',o.config.sql_read_table_data)
-			var sqlGroup = sql.read_table_group_col('col_237')
+//			var sqlGroup = sql.read_table_group_col('col_237')
+			var sqlGroup = sql.read_table_group_col_238_237()
 			o.pl_data.sql = sqlGroup.replace(':read_table_sql',o.pl_data.sql)
-			//console.log(o.pl_data.sql)
+			console.log(o.pl_data.sql)
 			o.pl_data.afterRead=function(){
 				console.log(o.pl)
 			}
