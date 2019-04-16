@@ -135,7 +135,7 @@ app.controller('myCtrl', function($scope, $http, $interval, $filter) {
 			})
 	}
 	$scope.ekkr.config.read_paymentId = function(){
-		$scope.ekkr.config.ask_paymentId("SELECT CURRVAL('paymentId')", "currentPaymentId")
+		$scope.ekkr.config.ask_paymentId("SELECT CURRVAL('paymentid')", "currentPaymentId")
 	}
 	$scope.ekkr.config.ask_paymentId = function(sql, sql_var){
 		readSql({
@@ -556,7 +556,7 @@ console.log('-----lastDbRead.afterRead----------')
 	}
 	
 	$scope.pageVar.makeCheckFile = function(){
-		$scope.ekkr.config.ask_paymentId("SELECT NEXTVAL('paymentId')", "nextPaymentId")
+		$scope.ekkr.config.ask_paymentId("SELECT NEXTVAL('paymentid')", "nextPaymentId")
 	}
 	$scope.pageVar.saveCheckFile = function(){
 		
@@ -730,7 +730,7 @@ console.log('-----lastDbRead.afterRead----------')
 		}
 	}
 	$scope.pageVar.openEditRow = function(o){
-		$scope.ekkr.config.ask_paymentId("SELECT NEXTVAL('paymentId')", "nextPaymentId")
+		$scope.ekkr.config.ask_paymentId("SELECT NEXTVAL('paymentid')", "nextPaymentId")
 		this.ngStyleModal = {display:'block'}
 		console.log(o)
 		console.log(o.col_236)
