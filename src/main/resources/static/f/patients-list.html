@@ -65,9 +65,21 @@
 			'mediumDate'}} <a href="?addDay={{date.addDayUrl(1)}}"
 				class="w3-btn w3-padding-small">></a> <a href="?"
 				class="w3-btn w3-padding-small"> сьогодні: {{date.today | date :
-				'shortDate'}} </a>
+				'shortDate'}} </a> <span data-ng-if="pl_data_duplex.list.length>0"
+				class="w3-dropdown-click">
+				<button class="w3-border"
+					data-ng-click="pl_data_duplex.open =!pl_data_duplex.open">Тест
+					Ні пустишкам</button>
+				<div class="w3-dropdown-content w3-border"
+					data-ng-class="{'w3-show':pl_data_duplex.open}">
+					Тестуем видалити всі пустишки за один раз
+					<button class="w3-border"
+						data-ng-click="pl_data_duplex.removeAllDuplex()">Видалити</button>
+				</div>
+			</span>
 			<div class="w3-right w3-small">
-				<a href="/f/reports.html{{date.parameterAddDay()}}" class="w3-btn">Звіти </a>
+				<a href="/f/reports.html{{date.parameterAddDay()}}" class="w3-btn">Звіти
+				</a>
 			</div>
 		</div>
 	</div>

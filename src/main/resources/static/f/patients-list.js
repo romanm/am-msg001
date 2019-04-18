@@ -428,7 +428,7 @@ console.log('-----lastDbRead.afterRead----------')
 		o.pl_data.sql = sql.read_table_day_date_desc().replace(':read_table_sql',
 			o.config.sql_read_table_data
 		)
-		console.log('o.pl_data.sql\n',o.pl_data.sql)
+		//console.log('o.pl_data.sql\n',o.pl_data.day,o.pl_data.sql,o.pl_data)
 		o.pl_data.afterRead=function(){
 			console.log(o.pl)
 			o.rowMap = {}
@@ -443,6 +443,39 @@ console.log('-----lastDbRead.afterRead----------')
 		$scope.date.setDay_pl_data(o)
 		o.pl = {}
 		readSql(o.pl_data, o.pl)
+		var data_duplex_sql = "SELECT x.* FROM ( \n" +
+		"SELECT parent, reference,  count(*) c, min(doc_id) min_id, max(doc_id) max_id FROM ( \n" +
+		"SELECT d.* FROM doc d \n" +
+		"where parent in (SELECT d.parent FROM timestamp t, doc d \n" +
+		"where timestamp_id=doc_id and MONTH(t.value)=4 AND YEAR(t.value)=2019 AND DAY(t.value)=17) \n" +
+		") group by parent, reference \n" +
+		") x \n" +
+		"left join string s1 on s1.string_id=min_id \n" +
+		"left join string s2 on s2.string_id=max_id \n" +
+		"left join integer i1 on i1.integer_id=min_id \n" +
+		"left join integer i2 on i2.integer_id=max_id \n" +
+		"where c>1 and reference in (240,18972) \n" +
+		"and (s1.value=s2.value \n" +
+		"or i1.value=i2.value)"
+		$scope.pl_data_duplex = {}
+		$scope.pl_data_duplex.sql = data_duplex_sql
+		$scope.date.setDay_to_obj($scope.pl_data_duplex)
+		console.log($scope.pl_data_duplex)
+		$scope.pl_data_duplex.removeAllDuplex = function(){
+			var removeAllDuplex = {}
+			removeAllDuplex.sql = "delete from doc where doc_id in (SELECT min_id FROM (" +data_duplex_sql+"))"
+			$scope.date.setDay_to_obj(removeAllDuplex)
+			console.log($scope.pl_data_duplex.list.length, $scope.pl_data_duplex.list)
+			removeAllDuplex.dataAfterSave = function(response){
+				console.log(response.data)
+			}
+			writeSql(removeAllDuplex)
+		}
+		$scope.pl_data_duplex.afterRead = function(response){
+			$scope.pl_data_duplex.list = response.data.list
+			console.log($scope.pl_data_duplex.list.length, $scope.pl_data_duplex.list)
+		}
+		readSql($scope.pl_data_duplex)
 	}
 	$scope.patientList.col_keys={
 		col_236:'дата-час обстеження',
@@ -786,7 +819,6 @@ console.log('-----lastDbRead.afterRead----------')
 									$scope.sql_delete_two_check = ''
 								$scope.sql_delete_two_check += 'DELETE FROM doc WHERE doc_id='+docId_to_delete+'; '
 							}
-							
 						}
 					})
 					console.log($scope.sql_delete_two_check)
@@ -800,8 +832,8 @@ console.log('-----lastDbRead.afterRead----------')
 		var data = {
 			sql:$scope.sql_delete_two_check,
 		}
-//		console.log(data)
-		writeSql(data)
+		console.log(data.sql)
+//		writeSql(data)
 	}
 	$scope.random3=getRandomInt(3)
 });
