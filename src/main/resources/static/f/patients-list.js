@@ -444,19 +444,19 @@ console.log('-----lastDbRead.afterRead----------')
 		o.pl = {}
 		readSql(o.pl_data, o.pl)
 		var data_duplex_sql = "SELECT x.* FROM ( \n" +
-		"SELECT parent, reference,  count(*) c, min(doc_id) min_id, max(doc_id) max_id FROM ( \n" +
+		"SELECT parent, reference, COUNT(*) c, MIN(doc_id) min_id, MAX(doc_id) max_id FROM ( \n" +
 		"SELECT d.* FROM doc d \n" +
-		"where parent in (SELECT d.parent FROM timestamp t, doc d \n" +
-		"where timestamp_id=doc_id and MONTH(t.value)=4 AND YEAR(t.value)=2019 AND DAY(t.value)=17) \n" +
-		") group by parent, reference \n" +
-		") x \n" +
-		"left join string s1 on s1.string_id=min_id \n" +
-		"left join string s2 on s2.string_id=max_id \n" +
-		"left join integer i1 on i1.integer_id=min_id \n" +
-		"left join integer i2 on i2.integer_id=max_id \n" +
-		"where c>1 and reference in (240,18972) \n" +
-		"and (s1.value=s2.value \n" +
-		"or i1.value=i2.value)"
+		"WHERE parent IN (SELECT d.parent FROM timestamp t, doc d \n" +
+		"WHERE timestamp_id=doc_id AND MONTH(t.value)=:month AND YEAR(t.value)=:year AND DAY(t.value)=:day) \n" +
+		") GROUP BY parent, reference ) x \n" +
+		"LEFT JOIN string s1 ON s1.string_id=min_id \n" +
+		"LEFT JOIN string s2 ON s2.string_id=max_id \n" +
+		"LEFT JOIN integer i1 ON i1.integer_id=min_id \n" +
+		"LEFT JOIN integer i2 ON i2.integer_id=max_id \n" +
+		"WHERE c>1 AND reference IN (240,18972) \n" +
+		"AND (s1.value=s2.value \n" +
+		"OR i1.value=i2.value)"
+		console.log(data_duplex_sql)
 		$scope.pl_data_duplex = {}
 		$scope.pl_data_duplex.sql = data_duplex_sql
 		$scope.date.setDay_to_obj($scope.pl_data_duplex)
