@@ -428,7 +428,7 @@ console.log('-----lastDbRead.afterRead----------')
 		o.pl_data.sql = sql.read_table_day_date_desc().replace(':read_table_sql',
 			o.config.sql_read_table_data
 		)
-		//console.log('o.pl_data.sql\n',o.pl_data.day,o.pl_data.sql,o.pl_data)
+		console.log('o.pl_data.sql\n',o.pl_data.day,o.pl_data.sql,o.pl_data)
 		o.pl_data.afterRead=function(){
 			console.log(o.pl)
 			o.rowMap = {}
@@ -463,7 +463,7 @@ console.log('-----lastDbRead.afterRead----------')
 		console.log($scope.pl_data_duplex)
 		$scope.pl_data_duplex.removeAllDuplex = function(){
 			var removeAllDuplex = {}
-			removeAllDuplex.sql = "delete from doc where doc_id in (SELECT min_id FROM (" +data_duplex_sql+"))"
+			removeAllDuplex.sql = "DELETE FROM doc WHERE doc_id IN (SELECT min_id FROM (" +data_duplex_sql+"))"
 			$scope.date.setDay_to_obj(removeAllDuplex)
 			console.log($scope.pl_data_duplex.list.length, $scope.pl_data_duplex.list)
 			removeAllDuplex.dataAfterSave = function(response){
@@ -698,6 +698,7 @@ console.log('-----lastDbRead.afterRead----------')
 		if(!$scope.pageVar.o.col_14207)
 			$scope.pageVar.paymentData_F_P = v
 	}
+
 	$scope.pageVar.saveEKKR = function(){
 		if(this.o.col_14207){
 			console.error('--фіскальна реєстрація вже виконана---- checkId = '+this.o.col_14207)
