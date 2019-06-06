@@ -105,10 +105,14 @@
 					| <a data-ng-class="{'w3-green':pageVar.paymentData_F_P.no==0}"
 					data-ng-disabled="pageVar.o.col_14207" href="#"
 					data-ng-click="pageVar.setPaymentData_F_P(pageVar.site_config.payment_type[2])">{{pageVar.site_config.payment_type[2].name}}</a>
+				</span> <span data-ng-if="pay_double">
+					<button class="w3-red w3-border"
+					data-ng-click="pay_double.openDelDialog=!pay_double.openDelDialog"
+					>Видалити лишній запис форми
+						оплати</button>
+						{{pay_double.openDelDialog}}
 				</span>
 			</div>
-			a1
-			{{pageVar.site_config.payment_type}}
 			<p>&nbsp;</p>
 			<div class="w3-tiny">
 				<span class="am-b" style="text-decoration: underline;">

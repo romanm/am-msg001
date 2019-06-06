@@ -85,11 +85,12 @@ var initFilter = function($scope, $http, $filter){
 			this.fromDate_sql = this.fromDate_ts.toISOString().split('T')[0]
 			if(!this.toDate){
 				this.toDate_ts = new Date(this.fromDate_ts)
+				this.toDate_ts.setDate(this.toDate_ts.getDate() + 1)
 			}
-//			this.toDate_ts.setDate(this.toDate_ts.getDate()+1)
+//		this.toDate_ts.setDate(this.toDate_ts.getDate()+1)
 			this.toDate_ts.setDate(this.toDate_ts.getDate())
 			this.toDate_sql = this.toDate_ts.toISOString().split('T')[0]
-			console.log(this.toDate,this.toDate_ts , this.toDate_sql)
+			console.log(this.toDate, this.toDate_ts , this.toDate_sql)
 			this.sql = sql.read_table_betweenDates().replace(':read_table_sql',this.sql)
 		}
 		if(this.group){

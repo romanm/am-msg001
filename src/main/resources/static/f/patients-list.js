@@ -807,6 +807,23 @@ console.log('-----lastDbRead.afterRead----------')
 			}, $scope.priceCalcHelpData.destination)
 		}
 
+		var sql_pay_double = "SELECT * FROM doc " +
+		" LEFT JOIN string ON doc_id = string_id " +
+		" WHERE reference = 18972 AND parent = "+o.row_id
+		console.log(sql_pay_double)
+
+		readSql({
+			sql:sql_pay_double,
+			afterRead:function(response){
+				if(response.data.list.length>1){
+					$scope.pay_double = {
+						list:response.data.list
+					}
+					console.log($scope.pay_double)
+				}
+			}
+		})
+
 		readSql({
 			sql:$scope.patientList.config.sql_read_table_data+" AND rws.doc_id = "+o.row_id,
 			afterRead:function(response){
