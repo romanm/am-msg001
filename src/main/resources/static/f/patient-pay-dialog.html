@@ -112,6 +112,17 @@
 						оплати</button>
 						{{pay_double.openDelDialog}}
 				</span>
+				<div class="w3-yellow" data-ng-if="more_pays.list.length>1">
+					Видаліть одну з двох оплат: <span class="w3-btn"
+						data-ng-click="more_pays.id_to_del=mp.doc_id"
+						data-ng-class="{'w3-red':more_pays.id_to_del==mp.doc_id}"
+						data-ng-repeat="mp in more_pays.list"> {{mp.value}} </span>
+					<button 
+					data-ng-click="more_pays.delById()"
+					data-ng-if="more_pays.id_to_del">дійсно
+						видалити</button>
+				</div>
+
 			</div>
 			<p>&nbsp;</p>
 			<div class="w3-tiny">

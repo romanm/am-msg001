@@ -807,6 +807,30 @@ console.log('-----lastDbRead.afterRead----------')
 			}, $scope.priceCalcHelpData.destination)
 		}
 
+		var sql_more_pays = "SELECT * FROM doc " +
+				"left join integer on integer_id=doc_id " +
+				"where parent = " +o.row_id +
+				" and reference = 240"
+				console.log(sql_more_pays)
+		readSql({
+			sql:sql_more_pays,
+			afterRead:function(response){
+				$scope.more_pays = {
+					list:response.data.list
+				}
+				$scope.more_pays.delById = function(){
+					console.log($scope.more_pays)
+					var data = {
+						sql : "DELETE FROM doc WHERE doc_id = " + $scope.more_pays.id_to_del,
+						dataAfterSave:function(response){
+							console.log(response)
+						}
+					}
+					writeSql(data)
+				}
+			}
+		})
+		
 		var sql_pay_double = "SELECT * FROM doc " +
 		" LEFT JOIN string ON doc_id = string_id " +
 		" WHERE reference = 18972 AND parent = "+o.row_id
