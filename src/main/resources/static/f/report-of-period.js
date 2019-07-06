@@ -81,7 +81,7 @@ sql_lib.sql_read_group_239 = function(){
 			"WHERE yy=:year AND m=:month GROUP BY col_238,col_239 ORDER BY col_238,col_239"
 }
 function read_239($scope){
-	console.log(sql_lib.sql_read_group_239())
+//	console.log(sql_lib.sql_read_group_239())
 	readSql({
 		sql:sql_lib.sql_read_group_239(),
 		month:$scope.table_reports.seek_parameters.month,
@@ -211,7 +211,7 @@ function read_months($scope){
 		year:$scope.table_reports.seek_parameters.year,
 		afterRead:function(response){
 //			console.log(response.data.list)
-			console.log($scope.table_reports.seek_parameters.year, sql_lib.sql_read_group_m())
+			//console.log($scope.table_reports.seek_parameters.year, sql_lib.sql_read_group_m())
 //			console.log(sql_lib.sql_read_wmyy())
 			$scope.table_reports.group_m_list = response.data.list
 			$scope.table_reports.group_m = {}
