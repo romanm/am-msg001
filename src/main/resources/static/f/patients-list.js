@@ -127,12 +127,12 @@ app.controller('myCtrl', function($scope, $http, $interval, $filter) {
 		if($scope.ekkr.config.newPaymentId
 		> $scope.ekkr.config.currentPaymentId
 		) writeSql({
-				sql : 'ALTER SEQUENCE paymentid RESTART WITH '
-					+ $scope.ekkr.config.newPaymentId,
-					dataAfterSave:function(response){
-						$scope.ekkr.config.read_paymentId()
-					}
-			})
+			sql : 'ALTER SEQUENCE paymentid RESTART WITH '
+				+ $scope.ekkr.config.newPaymentId,
+			dataAfterSave:function(response){
+				$scope.ekkr.config.read_paymentId()
+			}
+		})
 	}
 	$scope.ekkr.config.read_paymentId = function(){
 		$scope.ekkr.config.ask_paymentId("SELECT CURRVAL('paymentid')", "currentPaymentId")
@@ -664,6 +664,7 @@ console.log('-----lastDbRead.afterRead----------')
 		col_data[18972] = $scope.patientList.config.json_create_table[18972]
 		$scope.pageVar.writeUpdate(col_data, this.o)
 	}
+
 	$scope.pageVar.writeUpdate = function(col_data, rowObj){
 		col_data.nextDbIdCounter = 3
 		col_data.sql_row = ''
@@ -693,6 +694,7 @@ console.log('-----lastDbRead.afterRead----------')
 		}
 		writeSql(data)
 	}
+
 	$scope.pageVar.paymentData_F_P = {no:0}
 	$scope.pageVar.setPaymentData_F_P = function(v){
 		if(!$scope.pageVar.o.col_14207)

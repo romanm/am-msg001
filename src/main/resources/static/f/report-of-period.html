@@ -48,10 +48,11 @@
 					<tr>
 						<td rowspan="2" class="w3-small" style="vertical-align: middle;">
 							<div class="w3-dropdown-hover">
-								2018 - <sup> {{table_reports.group_yy[2018].cnt_yy}} </sup>
+							{{table_reports.prog_yy.year}}
+								 - <sup> {{table_reports.group_yy[2018].cnt_yy}} </sup>
 								<div class="w3-dropdown-content w3-border w3-hover-shadow">
 									<span data-ng-repeat="v in table_reports.group_yy_list "
-									data-ng-click="table_reports.setSeekYear(v.yy)"
+									data-ng-click="table_reports.prog_yy.setYear(v.yy)"
 										class="w3-button" title="{{v.cnt_yy}}">{{v.yy}}
 									</span>
 								</div>

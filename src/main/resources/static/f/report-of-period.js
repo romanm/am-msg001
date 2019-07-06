@@ -180,25 +180,34 @@ function read_years($scope){
 		afterRead:function(response){
 //			console.log(response.data.list)
 			$scope.table_reports.group_yy_list = response.data.list
+			$scope.table_reports.prog_yy = {year:new Date().getFullYear()}
+			$scope.table_reports.setSeekYear($scope.table_reports.prog_yy.year)
+			$scope.table_reports.prog_yy.setYear = function(year){
+				console.log(year)
+				$scope.table_reports.prog_yy.year = year
+				$scope.table_reports.setSeekYear(year)
+			}
 			$scope.table_reports.group_yy = {}
 			angular.forEach(response.data.list, function(v){
 				if(v.yy){
 					$scope.table_reports.group_yy[v.yy] = v
 				}
 			})
-//			console.log($scope.table_reports.group_yy)
+			console.log($scope.table_reports.group_yy)
 		},
 	})
 }
 
 sql_lib.sql_read_group_m = function(){
-	return "SELECT m, COUNT(m) cnt_m FROM (" + sql_lib.sql_read_wmyy() + ") x GROUP BY m ORDER BY m DESC"
+	return "SELECT m, COUNT(m) cnt_m FROM (" + sql_lib.sql_read_wmyy() + ") x WHERE yy=:year GROUP BY m ORDER BY m DESC"
 }
 function read_months($scope){
 	readSql({
 		sql:sql_lib.sql_read_group_m(),
+		year:$scope.table_reports.seek_parameters.year,
 		afterRead:function(response){
 //			console.log(response.data.list)
+//			console.log(sql_lib.sql_read_group_m())
 			$scope.table_reports.group_m_list = response.data.list
 			$scope.table_reports.group_m = {}
 			angular.forEach(response.data.list, function(v){
