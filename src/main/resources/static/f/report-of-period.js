@@ -8,6 +8,7 @@ app.controller('myCtrl', function($scope, $http, $interval, $filter) {
 	$scope.table_reports.seek_parameters.year = $scope.table_reports.date_today.getFullYear()
 	$scope.table_reports.seek_parameters.month = 1+$scope.table_reports.date_today.getMonth()
 	$scope.table_reports.seekMonth = function(){
+		console.log($scope.table_reports.seek_parameters)
 		read_239($scope)
 		read_238($scope)
 		read_239239_236($scope)
@@ -80,7 +81,7 @@ sql_lib.sql_read_group_239 = function(){
 			"WHERE yy=:year AND m=:month GROUP BY col_238,col_239 ORDER BY col_238,col_239"
 }
 function read_239($scope){
-//	console.log(sql_lib.sql_read_group_239())
+	console.log(sql_lib.sql_read_group_239())
 	readSql({
 		sql:sql_lib.sql_read_group_239(),
 		month:$scope.table_reports.seek_parameters.month,
@@ -186,6 +187,7 @@ function read_years($scope){
 				console.log(year)
 				$scope.table_reports.prog_yy.year = year
 				$scope.table_reports.setSeekYear(year)
+				read_months($scope)
 			}
 			$scope.table_reports.group_yy = {}
 			angular.forEach(response.data.list, function(v){
@@ -199,7 +201,9 @@ function read_years($scope){
 }
 
 sql_lib.sql_read_group_m = function(){
-	return "SELECT m, COUNT(m) cnt_m FROM (" + sql_lib.sql_read_wmyy() + ") x WHERE yy=:year GROUP BY m ORDER BY m DESC"
+	return "SELECT m, COUNT(m) cnt_m FROM (SELECT * FROM (" + sql_lib.sql_read_wmyy() + ") WHERE yy=:year) x GROUP BY m ORDER BY m DESC"
+//	return "SELECT m, COUNT(m) cnt_m FROM (" + sql_lib.sql_read_wmyy() + ") x GROUP BY m ORDER BY m DESC"
+//	return "SELECT m, COUNT(m) cnt_m FROM (" + sql_lib.sql_read_wmyy() + ") x WHERE yy=:year GROUP BY m ORDER BY m DESC"
 }
 function read_months($scope){
 	readSql({
@@ -207,7 +211,8 @@ function read_months($scope){
 		year:$scope.table_reports.seek_parameters.year,
 		afterRead:function(response){
 //			console.log(response.data.list)
-//			console.log(sql_lib.sql_read_group_m())
+			console.log($scope.table_reports.seek_parameters.year, sql_lib.sql_read_group_m())
+//			console.log(sql_lib.sql_read_wmyy())
 			$scope.table_reports.group_m_list = response.data.list
 			$scope.table_reports.group_m = {}
 			angular.forEach(response.data.list, function(v){
