@@ -701,7 +701,7 @@ console.log('-----lastDbRead.afterRead----------')
 			$scope.pageVar.paymentData_F_P = v
 	}
 
-	$scope.pageVar.saveEKKR = function(){
+	$scope.pageVar.saveEKKR2 = function(){
 		var sql = "SELECT * FROM doc " +
 		"LEFT JOIN integer ON integer_id=doc_id " +
 		"WHERE parent = :row_id AND reference=14207"
@@ -716,9 +716,9 @@ console.log('-----lastDbRead.afterRead----------')
 				}
 			}
 		})
-		
 	}
-	$scope.pageVar.saveEKKR2 = function(){
+
+	$scope.pageVar.saveEKKR = function(){
 		if(this.o.col_14207){
 			console.error('--фіскальна реєстрація вже виконана---- checkId = '+this.o.col_14207)
 		}else if($scope.pageVar.paymentData_F_P.no>0){
