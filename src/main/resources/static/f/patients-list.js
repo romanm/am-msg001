@@ -716,7 +716,7 @@ console.log('-----lastDbRead.afterRead----------')
 				console.log(!response.data.list[0])
 				if(!response.data.list[0]){
 					console.log("$scope.pageVar.saveEKKR2")
-					$scope.pageVar.saveEKKR2
+					$scope.pageVar.saveEKKR2()
 				}
 			}
 		})
