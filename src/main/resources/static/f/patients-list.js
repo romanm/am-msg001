@@ -690,6 +690,7 @@ console.log('-----lastDbRead.afterRead----------')
 				|| response.data.list6
 				if(list)
 					$scope.pageVar.o = list[0]
+				saveEKKR_in_process = false
 			},
 		}
 		writeSql(data)
@@ -718,7 +719,14 @@ console.log('-----lastDbRead.afterRead----------')
 		})
 	}
 
+	var saveEKKR_in_process = false
 	$scope.pageVar.saveEKKR = function(){
+		if(!saveEKKR_in_process){
+			saveEKKR_in_process = true
+			pageVar.saveEKKR1()
+		}
+	}
+	$scope.pageVar.saveEKKR1 = function(){
 		if(this.o.col_14207){
 			console.error('--фіскальна реєстрація вже виконана---- checkId = '+this.o.col_14207)
 		}else if($scope.pageVar.paymentData_F_P.no>0){
