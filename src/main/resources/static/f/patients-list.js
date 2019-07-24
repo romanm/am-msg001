@@ -702,17 +702,20 @@ console.log('-----lastDbRead.afterRead----------')
 			$scope.pageVar.paymentData_F_P = v
 	}
 
-	$scope.pageVar.saveEKKR2 = function(){
+	$scope.pageVar.saveEKKR = function(){
 		var sql = "SELECT * FROM doc " +
 		"LEFT JOIN integer ON integer_id=doc_id " +
 		"WHERE parent = :row_id AND reference=14207"
-		console.log(sql, this.o)
+		console.log(sql, this.o.row_id, this.o)
 		readSql({
 			sql:sql,
 			row_id:this.o.row_id,
 			afterRead:function(response){
+				console.log(response.data)
 				console.log(response.data.list[0])
+				console.log(!response.data.list[0])
 				if(!response.data.list[0]){
+					console.log("$scope.pageVar.saveEKKR2")
 					$scope.pageVar.saveEKKR2
 				}
 			}
@@ -723,14 +726,16 @@ console.log('-----lastDbRead.afterRead----------')
 	$scope.pageVar.saveEKKR1 = function(){
 		if(!saveEKKR_in_process){
 			saveEKKR_in_process = true
-			pageVar.saveEKKR1()
+			pageVar.saveEKKR12()
 		}
 	}
 
-	$scope.pageVar.saveEKKR = function(){
+	$scope.pageVar.saveEKKR2 = function(){
+		console.log("$scope.pageVar.saveEKKR2")
 		if(this.o.col_14207){
 			console.error('--фіскальна реєстрація вже виконана---- checkId = '+this.o.col_14207)
 		}else if($scope.pageVar.paymentData_F_P.no>0){
+			console.log("$scope.pageVar.saveEKKR2")
 			var toPay = this.toPay()
 			var service = this.o.col_239
 			var code = $scope.ekkr.config.nextPaymentId
