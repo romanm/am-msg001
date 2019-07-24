@@ -720,13 +720,14 @@ console.log('-----lastDbRead.afterRead----------')
 	}
 
 	var saveEKKR_in_process = false
-	$scope.pageVar.saveEKKR = function(){
+	$scope.pageVar.saveEKKR1 = function(){
 		if(!saveEKKR_in_process){
 			saveEKKR_in_process = true
 			pageVar.saveEKKR1()
 		}
 	}
-	$scope.pageVar.saveEKKR1 = function(){
+
+	$scope.pageVar.saveEKKR = function(){
 		if(this.o.col_14207){
 			console.error('--фіскальна реєстрація вже виконана---- checkId = '+this.o.col_14207)
 		}else if($scope.pageVar.paymentData_F_P.no>0){
