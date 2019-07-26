@@ -902,6 +902,7 @@ console.log('-----lastDbRead.afterRead----------')
 			},
 		})
 	}
+
 	$scope.click_delete_two_check = function(){
 		console.log($scope.sql_delete_two_check)
 		var data = {
@@ -910,6 +911,7 @@ console.log('-----lastDbRead.afterRead----------')
 		console.log(data.sql)
 		writeSql(data)
 	}
+
 	$scope.random3=getRandomInt(3)
 });
 
