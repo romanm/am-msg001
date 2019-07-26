@@ -908,7 +908,7 @@ console.log('-----lastDbRead.afterRead----------')
 			sql:$scope.sql_delete_two_check,
 		}
 		console.log(data.sql)
-//		writeSql(data)
+		writeSql(data)
 	}
 	$scope.random3=getRandomInt(3)
 });
