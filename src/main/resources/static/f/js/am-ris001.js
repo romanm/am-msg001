@@ -106,7 +106,11 @@ function build_sqlJ2c_cell_write_parameters(col_data, v, n){
 	var cell_v
 	if('string'==col_data[n].fieldtype){
 //		cell_v = "'"+v+"'"
-		cell_v = "'"+v.replace("'","''")+"'"
+		var v1 = v.replace("'","''")
+		v1 = v1.replace("'","''")
+		v1 = v1.replace("'","''")
+		v1 = v1.replace("'","''")
+		cell_v = "'"+v1+"'"
 		cell_v = cell_v.replace(';',':')
 	}else
 	if('timestamp'==col_data[n].fieldtype){
