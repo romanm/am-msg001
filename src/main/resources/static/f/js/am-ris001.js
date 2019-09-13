@@ -107,9 +107,9 @@ function build_sqlJ2c_cell_write_parameters(col_data, v, n){
 	if('string'==col_data[n].fieldtype){
 //		cell_v = "'"+v+"'"
 		var v1 = v.replace("'","''")
-		v1 = v1.replace("'","''")
-		v1 = v1.replace("'","''")
-		v1 = v1.replace("'","''")
+//		v1 = v1.replace("'","''")
+//		v1 = v1.replace("'","''")
+//		v1 = v1.replace("'","''")
 		cell_v = "'"+v1+"'"
 		cell_v = cell_v.replace(';',':')
 	}else
