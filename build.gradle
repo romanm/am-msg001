@@ -1,6 +1,6 @@
 buildscript {
 	ext {
-		springBootVersion = '2.1.8.RELEASE'
+		springBootVersion = '2.2.0.RELEASE'
 //		springBootVersion = '2.1.0.RELEASE'
 	}
 	repositories {
@@ -35,13 +35,13 @@ dependencies {
 	compile 'net.sourceforge.htmlunit:htmlunit'
 	compile 'dom4j:dom4j'
 	compile 'org.webjars:font-awesome:4.7.0'
-	compile 'org.webjars:angularjs:1.7.7'
+	compile 'org.webjars:angularjs:1.7.8'
 	compile 'org.springframework:spring-jdbc'
 	compile 'org.apache.poi:poi:4.0.0'
 	compile 'org.apache.poi:poi-ooxml:4.0.0'
 //	compile 'org.apache.poi:poi:3.17'
 	//compile 'org.apache.poi:poi-ooxml:3.17'
-	runtime('com.h2database:h2:1.4.199')
+	runtime('com.h2database:h2:1.4.200')
 	runtimeOnly('org.postgresql:postgresql')
 	testCompile('org.springframework.boot:spring-boot-starter-test')
 	testCompile('io.projectreactor:reactor-test')
