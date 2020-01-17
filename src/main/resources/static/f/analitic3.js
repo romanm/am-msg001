@@ -144,6 +144,7 @@ var initFilter = function($scope, $http, $filter){
 
 	$scope.filter.blurDate = function(dateName){
 		var date = this.checkDate(dateName)
+		console.log(dateName, date)
 		if(!date)
 			return
 		var s = date.getDate()+'-'+(date.getMonth()+1)+'-'+date.getFullYear()
@@ -163,6 +164,9 @@ var initFilter = function($scope, $http, $filter){
 			var m = checkDateSplit[1]*1-1
 			date.setMonth(m)
 	//			date.setDate(checkDateSplit[2])
+		}
+		if(checkDateSplit[2] && checkDateSplit[2].length==4){
+			date.setFullYear(checkDateSplit[2])
 		}
 		date.setDate(checkDateSplit[0])
 		console.log(date.toISOString())
