@@ -151,6 +151,7 @@ var initFilter = function($scope, $http, $filter){
 		this[dateName+'_ts'] = date
 		this[dateName] = s
 	}
+
 	$scope.filter.checkDate = function(dateName){
 		var date = new Date()
 		date.setHours(10)
