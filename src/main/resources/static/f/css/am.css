@@ -1,2 +1,8 @@
 .am-b{ font-weight:bold; }
 .am-width-100pr{ width: 100%; }
+
+@media print {
+	.am-no-print, .am-no-print * {
+		display: none !important;
+	}
+}

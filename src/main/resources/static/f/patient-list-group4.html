@@ -1,0 +1,167 @@
+<div data-ng-if="principal.name" class="w3-container">
+	<div data-ng-repeat="r in oo.pl_sumA.list">
+		{{r.col_238}}
+
+		<table style="border-collapse: collapse;">
+			<thead class="w3-blue-grey"
+				data-ng-include="'/f/patient-list-group-thead.html'">
+			</thead>
+			<tbody>
+				<tr>
+					<td colspan="2">{{r.col_238}} - {{date.seekDay | date :
+						'mediumDate'}}</td>
+					<td colspan="1">{{r.cnt_cnt}}</td>
+					<td colspan="1" class="w3-tiny">cnt</td>
+					<td>{{r.cnt}}</td>
+				</tr>
+				<tr>
+					<td colspan="2"></td>
+					<td colspan="1">{{r.sum_cnt}}</td>
+					<td colspan="1" class="w3-tiny">sum</td>
+					<td>{{r.sum}}</td>
+				</tr>
+			</tbody>
+		</table>
+		
+	</div>
+
+	<table style="border-collapse: collapse;">
+		<thead class="w3-blue-grey"
+			data-ng-include="'/f/patient-list-group-thead.html'">
+		</thead>
+		<tbody>
+			<tr data-ng-repeat-start="r in oo.pl_sumA.list"
+				data-ng-if="'КТ'==r.col_238">
+				<td colspan="2">{{r.col_238}} - {{date.seekDay | date :
+					'mediumDate'}}</td>
+				<td colspan="1">{{r.cnt_cnt}}</td>
+				<td colspan="1">1</td>
+				<td>{{r.cnt}}</td>
+			</tr>
+			<tr data-ng-repeat-end data-ng-if="'КТ'==r.col_238">
+				<td colspan="2"></td>
+				<td colspan="1">{{r.sum_cnt}}</td>
+				<td colspan="1">2</td>
+				<td>{{r.sum}}</td>
+			</tr>
+		</tbody>
+		<tbody>
+			<tr data-ng-repeat="r in oo.pl.list"
+			data-ng-if="'КТ'==r.col_238"
+			>
+				<td
+					data-ng-repeat="c in ['col_236', 'groupName','cnt','col_239','sum', 'col_5218']"
+					class="w3-border w13-border-white w3-hover-border-gray"
+					data-ng-class="{'w3-tiny':'col_236'==c}" data-ng-switch="c">
+					<div data-ng-switch-when="col_236">{{r[c] | date:'short'}}</div>
+					<div data-ng-switch-default>{{r[c]}}</div>
+				</td>
+			</tr>
+		</tbody>
+	</table>
+
+	<table style="border-collapse: collapse;page-break-before: always;">
+		<thead class="w3-blue-grey"
+			data-ng-include="'/f/patient-list-group-thead.html'">
+		</thead>
+		<tbody>
+			<tr data-ng-repeat-start="r in oo.pl_sumA.list"
+				data-ng-if="'МРТ'==r.col_238">
+				<td colspan="2">{{r.col_238}} - {{date.seekDay | date :
+					'mediumDate'}}</td>
+				<td colspan="1">{{r.cnt_cnt}}</td>
+				<td colspan="1"></td>
+				<td>{{r.cnt}}</td>
+			</tr>
+			<tr data-ng-repeat-end data-ng-if="'МРТ'==r.col_238">
+				<td colspan="2"></td>
+				<td colspan="1">{{r.sum_cnt}}</td>
+				<td colspan="1"></td>
+				<td>{{r.sum}}</td>
+			</tr>
+		</tbody>
+		<tbody>
+			<tr data-ng-repeat="r in oo.pl.list"
+			data-ng-if="'МРТ'==r.col_238"
+			>
+				<td
+					data-ng-repeat="c in ['col_236', 'groupName','cnt','col_239','sum', 'col_5218']"
+					class="w3-border w13-border-white w3-hover-border-gray"
+					data-ng-class="{'w3-tiny':'col_236'==c}" data-ng-switch="c">
+					<div data-ng-switch-when="col_236">{{r[c] | date:'short'}}</div>
+					<div data-ng-switch-default>{{r[c]}}</div>
+				</td>
+			</tr>
+		</tbody>
+	</table>
+
+<table style="border-collapse: collapse;page-break-before: always;">
+		<thead class="w3-blue-grey"
+			data-ng-include="'/f/patient-list-group-thead.html'">
+		</thead>
+		<tbody>
+			<tr data-ng-repeat-start="r in oo.pl_sumA.list"
+				data-ng-if="'500'==r.col_238">
+				<td colspan="2">{{r.col_238}} - {{date.seekDay | date :
+					'mediumDate'}}</td>
+				<td colspan="1">{{r.cnt_cnt}}</td>
+				<td colspan="1"></td>
+				<td>{{r.cnt}}</td>
+			</tr>
+			<tr data-ng-repeat-end data-ng-if="'500'==r.col_238">
+				<td colspan="2"></td>
+				<td colspan="1">{{r.sum_cnt}}</td>
+				<td colspan="1"></td>
+				<td>{{r.sum}}</td>
+			</tr>
+		</tbody>
+		<tbody>
+			<tr data-ng-repeat="r in oo.pl.list"
+			data-ng-if="'500'==r.col_238"
+			>
+				<td
+					data-ng-repeat="c in ['col_236', 'groupName','cnt','col_239','sum', 'col_5218']"
+					class="w3-border w13-border-white w3-hover-border-gray"
+					data-ng-class="{'w3-tiny':'col_236'==c}" data-ng-switch="c">
+					<div data-ng-switch-when="col_236">{{r[c] | date:'short'}}</div>
+					<div data-ng-switch-default>{{r[c]}}</div>
+				</td>
+			</tr>
+		</tbody>
+	</table>
+
+
+	<table style="border-collapse: collapse;page-break-before: always;">
+		<tbody>
+			<tr data-ng-repeat-start="r in oo.pl_sumA.list">
+				<td colspan="2">{{r.col_238}}</td>
+				<td colspan="1">{{r.cnt_cnt}}</td>
+				<td colspan="1"></td>
+				<td>{{r.cnt}}</td>
+			</tr>
+			<tr data-ng-repeat-end>
+				<td colspan="2"></td>
+				<td colspan="1">{{r.sum_cnt}}</td>
+				<td colspan="1"></td>
+				<td>{{r.sum}}</td>
+			</tr>
+			<tr data-ng-repeat-start="r in oo.pl_sum.list" class="w3-border-top">
+				<td colspan="2">{{date.seekDay | date :
+		'mediumDate'}}</td>
+				<td colspan="1">{{r.cnt_cnt}}</td>
+				<td colspan="1"></td>
+				<td>{{r.cnt}}</td>
+			</tr>
+			<tr data-ng-repeat-end>
+				<td colspan="2"></td>
+				<td colspan="1">{{r.sum_cnt}}</td>
+				<td colspan="1"></td>
+				<td>{{r.sum}}</td>
+			</tr>
+		</tbody>
+		<thead class="w3-blue-grey"
+			data-ng-include="'/f/patient-list-group-thead.html'">
+		</thead>
+	</table>
+
+</div>
